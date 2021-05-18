@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+
+<html lang="fr-FR"><head>
+<title>{% block title %}Déconnecté | Site d'administration de Django{% endblock title %}</title>
+<link rel="stylesheet" type="text/css" href="/static/admin/css/base.css">
+
+
+
+
+    <meta name="viewport" content="user-scalable=no, width=device-width, initial-scale=1.0, maximum-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="/static/admin/css/responsive.css">
+
+
+<meta name="robots" content="NONE,NOARCHIVE">
+</head>
+
+
+<body class="" data-admin-utc-offset="0">
+
+<!-- Container -->
+<div id="container">
+
+
+    <!-- Header -->
+    <div id="header">
+        <div id="branding">
+
+<h1 id="site-name"><a href="/admin/">{% block h1 %} Administration de Django  {% endblock h1 %}</a></h1>
+
+        </div>
+
+
+
+
+    </div>
+    <!-- END Header -->
+    <div class="breadcrumbs"><a href="/admin/"> {% block h2 %}Accueil {% endblock h2 %}</a></div>
+
+
+
+
+
+
+    <!-- Content -->
+    <div id="content" class="colM">
+
+
+
+<p>{% block h3 %}Merci pour le temps que vous avez accordé à ce site aujourd'hui.{% endblock h3 %}</p>
+
+
+
+        <br class="clear">
+    </div>
+    <!-- END Content -->
+
+    <div id="footer"></div>
+</div>
+<!-- END Container -->
+
+
+
+</body></html>

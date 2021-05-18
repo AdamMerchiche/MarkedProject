@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %} Connectez-vous à votre profil{% endblock title %}</title>
+</head>
+<body>
+    <div>{% block h1 %} Veuillez rentrer vos identifiants : {% endblock h1 %}</div>
+    <div>{% block h3 %}
+    <form method="post" action="{% url 'login' %}">
+    {% csrf_token %}
+    {{ form }}
+    <input type="submit" value="login">
+    <input type="hidden" name="next" value="{{ next }}">
+        {% endblock h3 %}
+    </form>
+    </div>
+</body>
+</html>
