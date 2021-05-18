@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+{% extends "base.html" %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title  %}ACCUEIL : Voici la liste de vos communautés préférées !{% endblock title %}</title>
+</head>
+<body>
+<div>{% block h1 %} Bienvenue sur votre page ! {% endblock h1 %}</div>
+<div class="breadcrumbs"><a href="/accounts/login"> {% block h2 %}Déconnexion {% endblock h2 %}</a></div>
+{% block h3 %}
+    {% for communaute in communaute_abo %}
+        <div class="communaute">
+            <p> Nom :{{ communaute.name }}</p>
+            <p>Abonnés :
+                {% for u in communaute.abonnes.all%}
+                    {{u.get_full_name}}
+                {% endfor %}</p>
+
+        </div>
+    {% endfor %}
+{% endblock h3 %}
+</body>
+</html>

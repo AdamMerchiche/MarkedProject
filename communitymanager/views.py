@@ -2,8 +2,25 @@ from django.contrib.auth import authenticate, login
 from .forms import*
 from django.contrib.auth import logout
 from django.shortcuts import render, redirect
+from .models import*
+from django.contrib.auth.models import User
+
 
 # Create your views here.
+
+def communautes(request):
+    communaute = Communaute.objects.all()
+    user = User.objects.all()
+    if (user in communaute.abonnes.object.all()): #finir ca ici
+        return render(request,'communitymanager/communautes.html', {'communaute_abo': communaute})
+
+
+def list_communautes(request):
+    communautes = Communaute.objects.all()
+    return render(request, 'communitymanager/list_communautes.html', {'communaute': communautes})
+
+
+
 """def deconnexion(request):
     logout(request)
     return redirect(reverse(connexion))
