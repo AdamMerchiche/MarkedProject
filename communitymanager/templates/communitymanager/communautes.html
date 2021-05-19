@@ -10,6 +10,7 @@
 <div class="breadcrumbs"><a href="/accounts/login"> {% block h2 %}Déconnexion {% endblock h2 %}</a></div>
 {% block h3 %}
     {% for communaute in communaute_abo %}
+        {% include 'communitymanager/abonnement.html' %}
         <div class="communaute">
             <p> Nom :{{ communaute.name }}</p>
             <p>Abonnés :

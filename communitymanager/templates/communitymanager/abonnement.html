@@ -1,0 +1,14 @@
+<h1>Abonnés</h1>
+    <form action="{% url "communautes" %}" method="post">
+    {% for communaute in communautes %}
+        {% for user in communaute.abonnes.all %}
+             <input type="submit" value="Se désabonner !"/>
+        {% endfor %}
+    {% endfor %}
+    {% csrf_token %}
+    {{ form.as_p }}
+    <input type="submit" value="S'abonner !"/>
+    </form>
+
+
+

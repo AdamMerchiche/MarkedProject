@@ -4,15 +4,19 @@ from django.contrib.auth import logout
 from django.shortcuts import render, redirect
 from .models import*
 from django.contrib.auth.models import User
+from django.http import HttpResponse
 
 
 # Create your views here.
 
 def communautes(request):
-    communaute = Communaute.objects.all()
+    communautes = Communaute.objects.all()
     user = User.objects.all()
-    if (user in communaute.abonnes.objects.all()): #finir ca ici
-        return render(request,'communitymanager/communautes.html', {'communaute_abo': communaute})
+    for communaute in communautes:
+        if (user in communaute.abonnes.all()): #finir ca ici
+            return render(request,'communitymanager/communautes.html', {'communaute_abo': communautes})
+        else:
+            return render(request,'communitymanager/communautes.html', {'communaute_abo': communautes})
 
 def list_communautes(request):
     communautes = Communaute.objects.all()
@@ -22,8 +26,11 @@ def statut(request):
     form = Abonnement(request.Post or None)
     communautes = Communaute.objects.all()
     if form.is_valid():
+        user = User()
         communautes = Communaute.objects.filter(form.cleaned_data['statut'])
-    return render(request, 'communitymanager/communautes.html', {'communautes': communautes, 'form': form})
+        for communaute in communautes:
+            communaute.abonnes.add(user)
+    return render(request, 'communitymanager/abonnement.html', {'communautes': communautes, 'form': form})
 
 
 """def deconnexion(request):
