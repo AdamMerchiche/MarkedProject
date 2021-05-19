@@ -11,14 +11,19 @@ from django.contrib.auth.models import User
 def communautes(request):
     communaute = Communaute.objects.all()
     user = User.objects.all()
-    if (user in communaute.abonnes.object.all()): #finir ca ici
+    if (user in communaute.abonnes.objects.all()): #finir ca ici
         return render(request,'communitymanager/communautes.html', {'communaute_abo': communaute})
-
 
 def list_communautes(request):
     communautes = Communaute.objects.all()
     return render(request, 'communitymanager/list_communautes.html', {'communaute': communautes})
 
+def statut(request):
+    form = Abonnement(request.Post or None)
+    communautes = Communaute.objects.all()
+    if form.is_valid():
+        communautes = Communaute.objects.filter(form.cleaned_data['statut'])
+    return render(request, 'communitymanager/communautes.html', {'communautes': communautes, 'form': form})
 
 
 """def deconnexion(request):

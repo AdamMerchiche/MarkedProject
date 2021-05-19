@@ -5,5 +5,6 @@ from django.contrib.auth.models import User
 class Communaute(models.Model):
     name = models.CharField(max_length =30)
     abonnes= models.ManyToManyField(User)
+    statut = models.BooleanField()
     def __str__(self):
         return self.name
