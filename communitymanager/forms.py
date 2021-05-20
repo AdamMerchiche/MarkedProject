@@ -8,8 +8,8 @@ class ConnexionForm(forms.Form):
     password= forms.CharField(label="Mot de passe", widget = forms.PasswordInput)
 
 class Abonnement(forms.Form):
-    statut = forms.BooleanField(label = "Abonné")
+    is_abonne = forms.BooleanField(label = "is_abonne")
     def clean(self):
         cleaned_data = super(Abonnement, self).clean()
-        statut = cleaned_data.get("statut")
+        is_abonne = cleaned_data.get("is_abonne")
         return cleaned_data

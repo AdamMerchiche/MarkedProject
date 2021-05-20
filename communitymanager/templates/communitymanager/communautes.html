@@ -15,7 +15,7 @@
             <p> Nom :{{ communaute.name }}</p>
             <p>Abonnés :
                 {% for u in communaute.abonnes.all%}
-                    {{u.get_full_name}}
+                    {{u.get_username}}
                 {% endfor %}</p>
 
         </div>

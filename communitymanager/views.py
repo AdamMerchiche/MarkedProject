@@ -1,8 +1,7 @@
 from django.contrib.auth import authenticate, login
-from .forms import*
+from .forms import *
 from django.contrib.auth import logout
-from django.shortcuts import render, redirect
-from .models import*
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.models import User
 from django.http import HttpResponse
 
@@ -11,49 +10,30 @@ from django.http import HttpResponse
 
 def communautes(request):
     communautes = Communaute.objects.all()
-    user = User.objects.all()
     for communaute in communautes:
-        if (user in communaute.abonnes.all()): #finir ca ici
-            return render(request,'communitymanager/communautes.html', {'communaute_abo': communautes})
+        if (request.user in communaute.abonnes.all()):  # finir ca ici
+            return render(request, 'communitymanager/communautes.html', {'communaute_abo': communautes})
         else:
-            return render(request,'communitymanager/communautes.html', {'communaute_abo': communautes})
+            return render(request, 'communitymanager/communautes.html', {'communaute_abo': communautes})
+
 
 def list_communautes(request):
     communautes = Communaute.objects.all()
     return render(request, 'communitymanager/list_communautes.html', {'communaute': communautes})
 
+
 def statut(request):
-    form = Abonnement(request.Post or None)
     communautes = Communaute.objects.all()
-    if form.is_valid():
-        user = User()
-        communautes = Communaute.objects.filter(form.cleaned_data['statut'])
-        for communaute in communautes:
-            communaute.abonnes.add(user)
-    return render(request, 'communitymanager/abonnement.html', {'communautes': communautes, 'form': form})
-
-
-"""def deconnexion(request):
-    logout(request)
-    return redirect(reverse(connexion))
-
-
-
-def connexion(request):
-    error = False
-    if request.method =="POST":
-        form = ConnexionForm(request.POST)
-        if form.is_valid():
-            username=form.cleaned_data["username"]
-            password=form.cleaned_data["password"]
-            user = authenticate(username=username, password=password) #on check si les données sont bien correctes pour l'utilisateur
-
-            if user:
-                login(request, user)
-            else:
-                error=True
+    is_abonne = False
+    for communaute in communautes:
+        print(communaute)
+        if request.user in communaute.abonnes.all():
+            print(communaute.abonnes.all())
+            is_abonne = False
+            communaute.abonnes == communaute.abonnes.exclude(username=request.user)
         else:
-            form=ConnexionForm()
-    return render(request, 'communitymanager/connexion.html', locals())"""
-
-
+            is_abonne = True
+            print(communaute.abonnes.all())
+            communaute.abonnes.all() == communaute.abonnes.add(request.user)
+            communaute.abonnes.all().save()
+    return render(request, 'communitymanager/abonnement.html', {'communautes': communautes, 'is_abonne': is_abonne})
