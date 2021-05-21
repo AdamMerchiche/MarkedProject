@@ -1,10 +1,9 @@
 <!DOCTYPE html>
 <html>
-{% for communaute in communautes %}
-    <form action="{% url "communautes" %}" method="post">
+    <form action="{% url "list_communautes" %}" method="post">
             {{ is_subd }}
-            {% if not is_subd %}
-                <form action="{% url "communautes" %}" method="post">
+            {% if is_subd %}
+                <form action="{% url "list_communautes" %}" method="post">
                 <input type="submit" value="Désabonnez-vous de {{ communaute }} " ></input>
                 {{ communaute.abonne.remove.request.user}}
             {% else%}
@@ -13,5 +12,4 @@
             {% endif %}
         {% csrf_token %}
     </form>
-{% endfor %}
 </html>

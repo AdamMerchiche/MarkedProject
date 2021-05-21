@@ -85,8 +85,8 @@ DATABASES = {
     }
 }
 
-LOGIN_REDIRECT_URL = '/communitymanager/communautes'
-LOGOUT_REDIRECT_URL = '/admin'
+LOGIN_REDIRECT_URL = '/communitymanager/list_communautes'
+LOGOUT_REDIRECT_URL = '/accounts/login'
 
 # Password validation
 # https://docs.djangoproject.com/en/2.1/ref/settings/#auth-password-validators

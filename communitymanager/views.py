@@ -9,15 +9,10 @@ from django.http import HttpResponse
 
 # Create your views here.
 
-def communautes(request):
-    communautes = Communaute.objects.all() # finir ca ici
-    return render(request, 'communitymanager/communautes.html', {'communaute_abo': communautes})
-
-
 
 def list_communautes(request):
     communautes = Communaute.objects.all()
-    return render(request, 'communitymanager/list_communautes.html', {'communaute': communautes})
+    return render(request, 'communitymanager/list_communautes.html', {'communautes': communautes})
 
 def statut(request):
     communautes = Communaute.objects.all()
@@ -30,6 +25,13 @@ def statut(request):
             communaute.abonnes.add(request.user)
             is_subd = True
     return render(request, 'communitymanager/abonnement.html', {'communautes': communautes,'is_subd':is_subd})
+
+def communaute(request, communaute_id):
+    return render(request, 'communitymanager/communaute.html', {'posts': Post.objects.filter(communaute_id= communaute_id)})
+
+
+
+
 
 
 """def statut(request):

@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title  %} Voici la liste des POSTS !{% endblock title %}</title>
+</head>
+<body>
+<div>{% block h1 %} POSTS de la Communauté! {% endblock h1 %}</div>
+<a href="communitymanager/list_communautes"> {% block h2 %}Retour à la liste des Communautés {% endblock h2 %}</a>
+{% block h3 %}
+    {% for post in posts %}
+        <p>{{ post.title }} </p>
+            <p class="infos"> Desription : {{ post.description }},</p>
+            <p class="infos"> Date du post :{{ post.date_creation }}</p>
+            <p class="infos"> Priorité : {{ post.priorite }} </p>
+            <p class="infos"> Auteur : {{ post.auteur }}</p>
+    {% endfor %}
+        </div>
+{% endblock h3 %}
+</body>

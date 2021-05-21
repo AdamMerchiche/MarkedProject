@@ -9,7 +9,7 @@
 <div>{% block h1 %} Bienvenue sur votre page ! {% endblock h1 %}</div>
 <div class="breadcrumbs"><a href="/accounts/login"> {% block h2 %}Déconnexion {% endblock h2 %}</a></div>
 {% block h3 %}
-    {% for communaute in communaute_abo %}
+    {% for communaute in communautes %}
         {% include 'communitymanager/abonnement.html' %}
         <div class="communaute">
             <p> Nom :{{ communaute.name }}</p>
@@ -17,7 +17,7 @@
                 {% for u in communaute.abonnes.all%}
                     {{u.get_username}}
                 {% endfor %}</p>
-
+        <p><a href="{% url "communaute" communaute_id=communaute.id %}">Lire les Posts</a>
         </div>
     {% endfor %}
 {% endblock h3 %}
