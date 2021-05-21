@@ -1,15 +1,17 @@
+<!DOCTYPE html>
+<html>
 {% for communaute in communautes %}
     <form action="{% url "communautes" %}" method="post">
+            {{ is_subd }}
+            {% if not is_subd %}
+                <form action="{% url "communautes" %}" method="post">
+                <input type="submit" value="Désabonnez-vous de {{ communaute }} " ></input>
+                {{ communaute.abonne.remove.request.user}}
+            {% else%}
+                <input type="submit" value="Abonnez-vous à {{ communaute }} "/>
+                {{ communaute.abonne.add.request.user}}
+            {% endif %}
         {% csrf_token %}
-        {% if is_abonne %}
-            <button type="submit" value="Abonné" > Abonnez-vous à {{ communaute }} </button>
-            aie
-        {% endif %}
-        {% if not is_abonne %}
-            <button type="submit"  value="Pas abonné" >Désabonnez-vous de {{ communaute }}</button>
-            aie aie
-        {% endif %}
     </form>
 {% endfor %}
-
-
+</html>
