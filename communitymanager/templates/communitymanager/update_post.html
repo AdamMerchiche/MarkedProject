@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title  %} Mofifiez votre POST!{% endblock title %}</title>
+</head>
+<body>
+{% block h3 %}{% if envoi %}Votre post a bien été modifié !{% endif %}
+EDITEZ votre Post !
+<form action="{% url "update_post"%}" method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <input type="submit" value="Modifiez votre POST..." />
+</form>
+{% endblock h3 %}
+</body>

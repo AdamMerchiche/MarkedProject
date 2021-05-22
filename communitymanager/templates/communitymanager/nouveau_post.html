@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title  %} Voici la liste des posts !{% endblock title %}</title>
+</head>
+{% block h1 %}Formulez votre POST{% endblock h1 %}
+{% block h2 %}Retour à la communauté{% endblock h2 %}
+<body>
+{% block h3 %}{% if envoi %}Votre post a bien été envoyé !{% endif %}
+Formulez votre Post !
+<form action="{% url "nouveau_post"%}" method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <input type="submit" value="Ajoutez un POST..." />
+</form>
+{% endblock h3 %}
+</body>

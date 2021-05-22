@@ -9,6 +9,7 @@
 <div>{% block h1 %} Bienvenue sur votre page ! {% endblock h1 %}</div>
 <div class="breadcrumbs"><a href="/accounts/login"> {% block h2 %}Déconnexion {% endblock h2 %}</a></div>
 {% block h3 %}
+    {% include 'communitymanager/nouveau_post.html' %}
     {% for communaute in communautes %}
         {% include 'communitymanager/abonnement.html' %}
         <div class="communaute">

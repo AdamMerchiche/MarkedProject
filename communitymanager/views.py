@@ -6,6 +6,7 @@ from django.contrib.auth.models import User
 from django.http import HttpResponse
 from django.utils import timezone
 from .models import*
+from django.contrib.auth.decorators import login_required
 
 
 
@@ -39,15 +40,29 @@ def nouveau_commentaire(request):
     form = CommentaireForm(
         request.POST)
     if form.is_valid():
-        form.save(commit=False)
-        form.auteur = request.user
         form.save()
         envoi = True
     return render(request, 'communitymanager/nouveau_commentaire.html', locals())
 
+def nouveau_post(request):
+    form = PostForm(
+        request.POST)
+    if form.is_valid():
+        form.save()
+        envoi = True
+    return render(request, 'communitymanager/nouveau_post.html', locals())
 
-
-
+@login_required
+def update_post(request):
+    posts = Post.objects.filter(auteur_id =request.user.id)
+    for post in posts :
+        form = UpdateForm(
+            request.POST, instance=post)
+        if form.is_valid():
+            post = form.save(commit=False)
+            post.save()
+            envoi = True
+    return render(request, 'communitymanager/update_post.html', locals())
 
 
 

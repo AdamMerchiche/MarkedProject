@@ -16,8 +16,11 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 
+import communitymanager.views
+
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('', communitymanager.views.list_communautes),
     path('communitymanager/', include('communitymanager.urls')),
     path('accounts/', include('django.contrib.auth.urls')),
 ]

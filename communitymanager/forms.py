@@ -18,4 +18,14 @@ class Abonnement(forms.Form):
 class CommentaireForm(forms.ModelForm):
     class Meta:
         model = Commentaire
-        exclude = ["auteur"]
+        fields = "__all__"
+
+class PostForm(forms.ModelForm):
+    class Meta:
+        model = Post
+        fields = "__all__"
+
+class UpdateForm(forms.ModelForm):
+    class Meta:
+        model = Post
+        exclude = ["auteur", "communaute", "date_creation"]

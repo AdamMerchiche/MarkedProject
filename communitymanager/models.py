@@ -19,10 +19,10 @@ class Post(models.Model):
     description = models.CharField(max_length = 250)
     title = models.CharField(max_length = 250, blank = True)
     date_creation = models.DateTimeField(default=timezone.now,
-                                verbose_name="Date du commentaire")
-    evenementiel = models.BooleanField(default= False)
+                                verbose_name="Date du Post")
+    evenementiel = models.BooleanField(default= False, blank=True)
     date_evenement = models.DateTimeField(default=timezone.now,
-                                         verbose_name="Date de l'évenement")
+                                         verbose_name="Date de l'évenement", blank = True)
     communaute = models.ForeignKey(Communaute, on_delete="models.CASCADE")
     priorite = models.ForeignKey(Priorite, on_delete="models.CASCADE")
     auteur = models.ForeignKey(User, on_delete= "models.CASCADE")

@@ -9,5 +9,7 @@ urlpatterns = [
     path('communaute/<int:communaute_id>/', views.communaute, name="communaute"),
     path('communaute/post/<int:post_id>', views.post, name="post"),
     path('communaute/post/nouveau_commentaire', views.nouveau_commentaire, name="nouveau_commentaire"),
+    path('communaute/nouveau_post', views.nouveau_post, name="nouveau_post"),
+    path('communaute/update_post/', views.update_post, name="update_post"),
 
 ]

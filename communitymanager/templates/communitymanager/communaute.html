@@ -16,7 +16,15 @@
             <p class="infos"> Priorité : {{ post.priorite }} </p>
             <p class="infos"> Auteur : {{ post.auteur }}</p>
         <p><a href="{% url "post" post_id=post.id %}">Lire les Commentaires</a></p>
+        <p><a href="{% url "update_post" %}">Updatez votre Post</a></p>
+
+        {% include 'communitymanager/update_post.html' %}
+
     {% endfor %}
+    {% if not posts %}
+        Créer le premier post de la communauté ?
+        {% include 'communitymanager/nouveau_post.html' %}
+    {% endif %}
         </div>
 {% endblock h3 %}
 </body>
