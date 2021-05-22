@@ -1,6 +1,7 @@
 from .models import*
 from django import forms
 from django.contrib.auth.models import User
+from django.utils import timezone
 
 
 class ConnexionForm(forms.Form):
@@ -13,3 +14,8 @@ class Abonnement(forms.Form):
         cleaned_data = super(Abonnement, self).clean()
         is_abonne = cleaned_data.get("is_abonne")
         return cleaned_data
+
+class CommentaireForm(forms.ModelForm):
+    class Meta:
+        model = Commentaire
+        exclude = ["auteur"]

@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+{% extends "base.html" %}
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -14,6 +15,7 @@
             <p class="infos"> Date du post :{{ post.date_creation }}</p>
             <p class="infos"> Priorité : {{ post.priorite }} </p>
             <p class="infos"> Auteur : {{ post.auteur }}</p>
+        <p><a href="{% url "post" post_id=post.id %}">Lire les Commentaires</a></p>
     {% endfor %}
         </div>
 {% endblock h3 %}

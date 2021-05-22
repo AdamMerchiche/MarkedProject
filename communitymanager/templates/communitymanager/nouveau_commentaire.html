@@ -1,0 +1,20 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title  %} Voici la liste des commentaires !{% endblock title %}</title>
+</head>
+<body>
+{% block h3 %}{% if envoi %}Votre commentaire a bien été envoyé !{% endif %}
+Formulez votre commentaire !
+<form action="{% url "nouveau_commentaire"%}" method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <input type="submit" value="Ajoutez un commentaire..." />
+</form>
+{% endblock h3 %}
+</body>
+
+
+

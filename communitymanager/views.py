@@ -4,6 +4,9 @@ from django.contrib.auth import logout
 from django.shortcuts import render, redirect
 from django.contrib.auth.models import User
 from django.http import HttpResponse
+from django.utils import timezone
+from .models import*
+
 
 
 
@@ -28,6 +31,23 @@ def statut(request):
 
 def communaute(request, communaute_id):
     return render(request, 'communitymanager/communaute.html', {'posts': Post.objects.filter(communaute_id= communaute_id)})
+
+def post(request, post_id):
+    return render(request, 'communitymanager/post.html', {'commentaires': Commentaire.objects.filter(post_id= post_id)})
+
+def nouveau_commentaire(request):
+    form = CommentaireForm(
+        request.POST)
+    if form.is_valid():
+        form.save(commit=False)
+        form.auteur = request.user
+        form.save()
+        envoi = True
+    return render(request, 'communitymanager/nouveau_commentaire.html', locals())
+
+
+
+
 
 
 

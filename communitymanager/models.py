@@ -26,3 +26,12 @@ class Post(models.Model):
     communaute = models.ForeignKey(Communaute, on_delete="models.CASCADE")
     priorite = models.ForeignKey(Priorite, on_delete="models.CASCADE")
     auteur = models.ForeignKey(User, on_delete= "models.CASCADE")
+
+class Commentaire(models.Model):
+    date_creation = models.DateTimeField(default=timezone.now,
+                                         verbose_name="Date du commentaire")
+    contenu = models.CharField(max_length=250)
+    auteur = models.ForeignKey(User, on_delete= "models.CASCADE")
+    post = models.ForeignKey(Post, on_delete= "models.CASCADE")
+
+
