@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Voici les posts récemment publiés ! </title>
+</head>
+<body>
+    {% for post in posts %}
+        <h2> {{ post.title }}</h2>
+        Description : {{ post.description |linebreaks}}<br/>
+        Auteur : {{ post.auteur }}
+    {% endfor %}
+</body>
+</html>

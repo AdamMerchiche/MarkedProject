@@ -9,7 +9,7 @@
 <body>
 {% block h3 %}{% if envoi %}Votre post a bien été modifié !{% endif %}
 EDITEZ votre Post !
-<form action="{% url "update_post"%}" method="post">
+<form action="{% url "update_post" post_id=post.id%}" method="post">
     {% csrf_token %}
     {{ form.as_p }}
     <input type="submit" value="Modifiez votre POST..." />

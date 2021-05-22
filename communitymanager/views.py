@@ -53,20 +53,28 @@ def nouveau_post(request):
     return render(request, 'communitymanager/nouveau_post.html', locals())
 
 @login_required
-def update_post(request):
-    posts = Post.objects.filter(auteur_id =request.user.id)
-    for post in posts :
+def update_post(request, post_id):
+    post = Post.objects.get(id=post_id) #Corriger ici, y'a un problème, quand on
+    # modifie un article ca modifie tou s les articles de l'auteur
+    if post.auteur==request.user:
         form = UpdateForm(
             request.POST, instance=post)
         if form.is_valid():
             post = form.save(commit=False)
             post.save()
             envoi = True
+    else:
+        return HttpResponse("Vous n'êtes pas l'auteur de ce POST. Vous ne pouvez donc pas le modifier. ")
     return render(request, 'communitymanager/update_post.html', locals())
 
 
-
-
+def see_posts(request): ##ici je retourne tous les posts que l'auteur a écrit.
+    #une fois que j'aurai compris comment prendre en compte l'abonnement, je mettrai tous les posts des communautés abonnées de l'utilisateur.
+    return render(
+        request,
+        'communitymanager/see_posts.html',
+        {"posts": Post.objects.filter(auteur=request.user)}
+    )
 
 
 """def statut(request):
