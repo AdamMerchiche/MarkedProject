@@ -16,16 +16,22 @@ class Priorite(models.Model):
         return self.labels
 
 class Post(models.Model):
-    description = models.CharField(max_length = 250)
-    title = models.CharField(max_length = 250, blank = True)
+    description = models.CharField(max_length = 25000)
+    title = models.CharField(max_length = 250, blank = False)
     date_creation = models.DateTimeField(default=timezone.now,
-                                verbose_name="Date du Post")
+                                verbose_name="Date du post", blank=True)
     evenementiel = models.BooleanField(default= False, blank=True)
-    date_evenement = models.DateTimeField(default=timezone.now,
-                                         verbose_name="Date de l'évenement", blank = True)
+    if evenementiel:
+        date_evenement = models.DateTimeField(default=timezone.now,
+                                              verbose_name="Date de l'évenement", blank=True)
     communaute = models.ForeignKey(Communaute, on_delete="models.CASCADE")
     priorite = models.ForeignKey(Priorite, on_delete="models.CASCADE")
     auteur = models.ForeignKey(User, on_delete= "models.CASCADE")
+    class Meta:
+        """Classe qui caractérise le comportement des modèles : verbose =
+        ce que représente le modèle ; ordering = ordre par défaut de la sélection. """
+        ordering = ['date_creation']
+
 
 class Commentaire(models.Model):
     date_creation = models.DateTimeField(default=timezone.now,

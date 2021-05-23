@@ -18,35 +18,46 @@ def list_communautes(request):
     communautes = Communaute.objects.all()
     return render(request, 'communitymanager/list_communautes.html', {'communautes': communautes})
 
-def statut(request):
-    communautes = Communaute.objects.all()
+def statut(request, communaute_id):
+    communaute = Communaute.objects.get(id=communaute_id)
     is_subd = False
-    for communaute in communautes:
-        if communaute.abonnes.filter(username=request.user).exists():
-            communaute.abonnes.remove(request.user)
-            is_subd = False
-        else:
-            communaute.abonnes.add(request.user)
-            is_subd = True
-    return render(request, 'communitymanager/abonnement.html', {'communautes': communautes,'is_subd':is_subd})
+    sauvegarde=False
+    if communaute.abonnes.filter(username=request.user).exists():
+        communaute.abonnes.remove(request.user)
+        communaute.save()
+        is_subd = False
+        sauvegarde=True
+    else:
+        communaute.abonnes.add(request.user)
+        communaute.save()
+        is_subd = True
+        sauvegarde=True
+    return render(request, 'communitymanager/abonnement.html',locals())
+
+@login_required
+def list_abonnements(request):
+    return render(request, 'communitymanager/list_abonnements.html', {'communautes': Communaute.objects.filter(abonnes= request.user)})
+
 
 def communaute(request, communaute_id):
     return render(request, 'communitymanager/communaute.html', {'posts': Post.objects.filter(communaute_id= communaute_id)})
-
+@login_required
 def post(request, post_id):
     return render(request, 'communitymanager/post.html', {'commentaires': Commentaire.objects.filter(post_id= post_id)})
 
+@login_required
 def nouveau_commentaire(request):
     form = CommentaireForm(
-        request.POST)
+        request.POST or None)
     if form.is_valid():
         form.save()
         envoi = True
     return render(request, 'communitymanager/nouveau_commentaire.html', locals())
 
+@login_required
 def nouveau_post(request):
     form = PostForm(
-        request.POST)
+        request.POST, initial={'auteur_id':request.user.id})
     if form.is_valid():
         form.save()
         envoi = True
@@ -75,6 +86,9 @@ def see_posts(request): ##ici je retourne tous les posts que l'auteur a écrit.
         'communitymanager/see_posts.html',
         {"posts": Post.objects.filter(auteur=request.user)}
     )
+
+
+
 
 
 """def statut(request):

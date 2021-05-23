@@ -1,5 +1,4 @@
 {% extends "base.html" %}
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -7,6 +6,8 @@
     <title>{% block title  %} Mofifiez votre POST!{% endblock title %}</title>
 </head>
 <body>
+<div>{% block h1 %} Updatez votre POST! {% endblock h1 %}</div>
+ {% block h2 %}<a href="{% url "post" post_id=post.id%}">Retour aux POSTs de la communauté {% endblock h2 %}</a>
 {% block h3 %}{% if envoi %}Votre post a bien été modifié !{% endif %}
 EDITEZ votre Post !
 <form action="{% url "update_post" post_id=post.id%}" method="post">

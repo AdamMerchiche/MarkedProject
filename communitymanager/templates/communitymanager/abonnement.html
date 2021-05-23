@@ -1,15 +1,17 @@
 <!DOCTYPE html>
 <html>
+    {% if sauvegarde%} Votre abonnement a bien été pris en compte !!    {% endif %}
     <form action="{% url "list_communautes" %}" method="post">
-            {{ is_subd }}
-            {% if is_subd %}
-                <form action="{% url "list_communautes" %}" method="post">
-                <input type="submit" value="Désabonnez-vous de {{ communaute }} " ></input>
-                {{ communaute.abonne.remove.request.user}}
-            {% else%}
-                <input type="submit" value="Abonnez-vous à {{ communaute }} "/>
-                {{ communaute.abonne.add.request.user}}
-            {% endif %}
-        {% csrf_token %}
+        {% if not is_subd %}
+            <input type="submit" value="Désabonnez-vous de"{{communaute_id}}  ></input>
+            {% csrf_token %}
+        {% endif %}
+
+        {% if is_subd%}
+            <input type="submit" value="Abonnez-vous à {{communaute_id.get_name}} "/>
+            {% csrf_token %}
+        {% endif %}
+
     </form>
 </html>
+

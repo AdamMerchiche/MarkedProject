@@ -1,14 +1,26 @@
 <!DOCTYPE html>
+{% extends "base.html" %}
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Voici les posts récemment publiés ! </title>
+    <title>{% block title %}Voici les posts récemment publiés !{% endblock title %} </title>
 </head>
 <body>
+<div>{% block h1 %} Vos POSTs! {% endblock h1 %}</div>
+ {% block h2 %}<a href="list_communautes">Retour à la liste des Communautés {% endblock h2 %}</a>
+{% block h3 %}
     {% for post in posts %}
         <h2> {{ post.title }}</h2>
         Description : {{ post.description |linebreaks}}<br/>
-        Auteur : {{ post.auteur }}
+        Auteur : {{ post.auteur|linebreaks }}
+        Date du post : {{ post.date_creation|linebreaks }}
+        Évenementiel : {{ post.evenementiel|linebreaks }}
+        {% if post.evenementiel %}
+        Date de l'évenement: {{ post.date_evenement|linebreaks }}
+        {% endif %}
+        Communaute : {{ post.communaute|linebreaks }}
+        Priorite : {{ post.priorite|linebreaks }}
     {% endfor %}
+{% endblock h3 %}
 </body>
 </html>

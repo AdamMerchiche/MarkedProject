@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+{% load staticfiles %}
 
 <html lang="fr-FR"><head>
 <title>{% block title %}Déconnecté | Site d'administration de Django{% endblock title %}</title>
@@ -35,6 +36,8 @@
     </div>
     <!-- END Header -->
     <div class="breadcrumbs"><a href="/accounts/login"> {% block h2 %}Accueil {% endblock h2 %}</a></div>
+    <link rel=”stylesheet” href=”{% static 'css/menu.css' %}”>
+
 
 
 
