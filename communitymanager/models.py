@@ -22,8 +22,8 @@ class Post(models.Model):
                                 verbose_name="Date du post", blank=True)
     evenementiel = models.BooleanField(default= False, blank=True)
     if evenementiel:
-        date_evenement = models.DateTimeField(default=timezone.now,
-                                              verbose_name="Date de l'évenement", blank=True)
+        date_evenement = models.DateTimeField(default=None,
+                                              verbose_name="Date de l'évenement", blank=True, null=True)
     communaute = models.ForeignKey(Communaute, on_delete="models.CASCADE")
     priorite = models.ForeignKey(Priorite, on_delete="models.CASCADE")
     auteur = models.ForeignKey(User, on_delete= "models.CASCADE")

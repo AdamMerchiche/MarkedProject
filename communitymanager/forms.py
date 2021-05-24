@@ -20,6 +20,7 @@ class CommentaireForm(forms.ModelForm):
         model = Commentaire
         fields = "__all__"
 
+
 class PostForm(forms.ModelForm):
     class Meta:
         model = Post

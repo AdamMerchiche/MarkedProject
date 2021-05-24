@@ -49,6 +49,7 @@ def post(request, post_id):
 def nouveau_commentaire(request):
     form = CommentaireForm(
         request.POST or None)
+    form.fields['auteur'].choices = [(request.user.id, request.user.username)]
     if form.is_valid():
         form.save()
         envoi = True
@@ -57,7 +58,8 @@ def nouveau_commentaire(request):
 @login_required
 def nouveau_post(request):
     form = PostForm(
-        request.POST, initial={'auteur_id':request.user.id})
+        request.POST or None)
+    form.fields['auteur'].choices = [(request.user.id, request.user.username)]
     if form.is_valid():
         form.save()
         envoi = True
