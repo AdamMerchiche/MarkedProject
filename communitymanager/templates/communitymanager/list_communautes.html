@@ -18,11 +18,11 @@
                     {{u.get_username}}-
                 {% endfor %}</p>
         {% if request.user in communaute.abonnes.all %}
-            <a span  href="{% url 'abonnements' communaute.id %}"><i class="fas fa-heart"></i></a>
+            <a span  href="{% url 'abonnements' communaute.id %}"><i class="fas fa-heart pull-right"></i></a>
             <p><a href="{% url "communaute" communaute.id %}">Lire les Posts</a>
 
         {% else %}
-            <a span  href="{% url 'abonnements' communaute.id %}"><i class="far fa-heart"></i> </a>
+            <a span  href="{% url 'abonnements' communaute.id %}"><i class="far fa-heart pull-right"></i> </a>
 
         {% endif %}
         </div>

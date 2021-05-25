@@ -10,27 +10,45 @@
 {% block h3 %}
     <p>
     </p>
-    {% for commentaire in commentaires %}
-        <div class="comment-widgets">
-        <div class="comment-text w-100">
-            <h3 class="m-b-15 d-block"><b>{{ post.title }}</b></h3>
-            <h6 class="font-medium text-left"> <i class="fas fa-user-edit"></i> {{ commentaire.auteur }}</h6>
-            <span class="m-b-15 d-block"> {{ commentaire.contenu }} </span>
-            <div class="comment-footer"><span class="text-muted float-right"><i class="fas fa-calendar-week"></i> {{ commentaire.date_creation }}</span>
+    <div class="media border p-4 bg-light">
+        <div class="media-body text-dark">
+            <h4><i class="fas fa-user-edit"></i> {{ post.auteur }} <small><i>{{ post.date_creation }}</i></small></h4>
+            <p>{{ post.description }}</p>
+            <h4 class="font-medium text-left"><i
+                    class="fas fa-glass-cheers"></i>
+                {{ post.evenementiel|linebreaks }}
+                {% if post.evenementiel %}
+                    <i class="fas fa-calendar-week"></i>
+                    {{ post.date_evenement|linebreaks }}
+                {% endif %}</h4>
+            <h4 class="font-medium text-left"> Priorite
+                {{ post.priorite|linebreaks }}</h4>
+            <div class="comment-footer"><span class="text-muted float-right"> <i
+                    class="fas fa-users"></i>{{ post.communaute|linebreaks }}
+
             </div>
         </div>
-                <hr class="my-4"/>
-
+    </div>
+    {% for commentaire in commentaires %}
+        <div class="media p-3">
+            <div class="media-body">
+                <h4><i class="fas fa-user-edit"></i> {{ commentaire.auteur }}
+                    <small><i>{{ commentaire.date_creation }}</i></small></h4>
+                <p>{{ commentaire.contenu }}</p>
+            </div>
+        </div>
+        <hr class="my-4"/>
     {% endfor %}
-<div> Commentez!</div>
-{% if envoi %}Votre commentaire a bien été envoyé !{% endif %}
-<form action="{% url "post" post.id %}" method="post">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <input type="submit" value="Ajoutez un commentaire..."/>
-</form>
+
+    <div> Commentez!</div>
+    {% if envoi %}Votre commentaire a bien été envoyé !{% endif %}
+    <form action="{% url "post" post.id %}" method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <input type="submit" value="Ajoutez un commentaire..."/>
+    </form>
 
 
-</div>
+    </div>
 {% endblock h3 %}
 </body>

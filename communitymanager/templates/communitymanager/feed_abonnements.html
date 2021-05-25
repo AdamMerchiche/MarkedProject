@@ -11,32 +11,41 @@
     <hr class="my-4"/>
 {% block h3 %}
     {% for post in posts %}
-        <div class="comment-widgets">
-        <div class=" comment-text w-100">
-            <h4 class="m-b-15 d-block"><b>{{ post.title }} <a span href="{% url 'update_post' post.id %}"><i
-                    class="far fa-edit"></i></a></b></h4>
-            <h4 class="font-medium text-left"><i class="fas fa-user-edit"></i>
-                {{ post.auteur|linebreaks }}</h4>
-            <div class="comment-widgets"><h4 class="font-medium text-left"><i class="fas fa-glass-cheers"></i>
-                {{ post.evenementiel|linebreaks }}
-                {% if post.evenementiel %}
-                    <i class="fas fa-calendar-week"></i>
-                    {{ post.date_evenement|linebreaks }}
-                {% endif %}</h4>
-              <span class="m-b-15 d-block"> {{ post.description |linebreaks }}
-              </span> </div>
-            <h4 class="font-medium text-left"> Priorite
-                 {{ post.priorite|linebreaks }}</h4>
-                    <div class="comment-footer"><span class="text-muted float-right"><i
-                    class="fas fa-calendar-week"></i> {{ post.date_creation|linebreaks }} <i
-                    class="fas fa-users"></i>{{ post.communaute }}</span>
-               </div>
+        <div class="row d-flex justify-content-center mt-100 mb-100">
+            <div class="col-lg-7">
+                <div class="card bg-light mb-3">
+                    <div class="comment-widgets">
+                        <div class=" comment-text w-100">
+                            <h4 class="m-b-15 d-block"><b>{{ post.title }} <a span
+                                                                              href="{% url 'update_post' post.id %}"><i
+                                    class="far fa-edit"></i></a></b></h4>
+                            <h4 class="font-medium text-left"><i class="fas fa-user-edit"></i>
+                                {{ post.auteur|linebreaks }}</h4>
+                            <div class="comment-widgets"><h4 class="font-medium text-left"><i
+                                    class="fas fa-glass-cheers"></i>
+                                {{ post.evenementiel|linebreaks }}
+                                {% if post.evenementiel %}
+                                    <i class="fas fa-calendar-week"></i>
+                                    {{ post.date_evenement|linebreaks }}
+                                {% endif %}</h4>
+                                <span class="m-b-15 d-block"> {{ post.description |linebreaks }}
+              </span></div>
+                            <h4 class="font-medium text-left"> Priorite
+                                {{ post.priorite|linebreaks }}</h4>
+                            <div class="comment-footer"><span class="text-muted float-right"><i
+                                    class="fas fa-calendar-week"></i> {{ post.date_creation|linebreaks }} <i
+                                    class="fas fa-users"></i>{{ post.communaute|linebreaks }}
+                                <p><a href="{% url "post" post_id=post.id %}">Lire les Commentaires</a></p> </span>
+</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
         <hr class="my-4"/>
-
-
     {% endfor %}
+            </div>
 {% endblock h3 %}
 </body>
 </html>
