@@ -8,20 +8,14 @@
 </head>
 <hr>
 <div>{% block h1 %} Bienvenue {{ request.user.get_username }},  sur la page des communautés  ! {% endblock h1 %}</div>
-<div class="breadcrumbs"><a href="/accounts/logout"> {% block h2 %}<i class="fas fa-sign-out-alt"></i> {% endblock h2 %}</a></div>
 {% block h3 %}
-        <!-- CSS CUSTOM -->
-<link rel=”stylesheet” href=”{% static 'css/menu.css' %}”>
-        <a span  href="{% url 'nouveau_post' %}">Créez votre post ! |</a>
-        <a span  href="{% url 'feed_abonnements' %}">Votre feed ?  |</a>
-        <a span  href="{% url 'see_posts' %}">Voir l'ensemble de vos oeuvres ?  |</a>
 
     {% for communaute in communautes %}
-        <div class="communaute">
-            <p> Nom :{{ communaute.name }}</p>
-            <p>Abonnés :
+        <div class="communaute table-hover">
+            <h1><b>{{ communaute.name }}</b> </h1>
+            <p><i class="fas fa-users"></i>
                 {% for u in communaute.abonnes.all%}
-                    {{u.get_username}}
+                    {{u.get_username}}-
                 {% endfor %}</p>
         {% if request.user in communaute.abonnes.all %}
             <a span  href="{% url 'abonnements' communaute.id %}"><i class="fas fa-heart"></i></a>

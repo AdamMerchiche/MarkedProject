@@ -24,22 +24,37 @@
 
 
     <!-- Header -->
-    <div id="header">
-        <div id="branding">
+    <div class= ' h-50 bg-dark bg-center ' id="header">
+        <div  id="branding "class=" text-center ">
 
-            <h1 id="site-name">{% block h1 %} Administration de Django  {% endblock h1 %}</h1>
+            <h1 id="site-name" class="text-white " >{% block h1 %} Administration de Django  {% endblock h1 %}</h1>
 
         </div>
 
 
     </div>
     <!-- END Header -->
-    <div class="breadcrumbs"><a href="/accounts/login"> {% block h2 %}Accueil {% endblock h2 %}</a></div>
+    <div class="breadcrumbs bg-secondary"><a href="/accounts/login"> {% block h2 %}{% endblock h2 %}
+    </a>
+    <nav class="navbar navbar-expand-sm bg-transparent navbar-white pull-right ">
+        <a class="navbar-brand  " href="/accounts/logout"><i class="fas fa-sign-out-alt "></i></a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="collapsibleNavbar">
+            <ul class="navbar-nav ml-auto ">
+                    <a class="nav-link" href="{% url 'nouveau_post' %}">Postez !</a>
+                    <a class="nav-link" href="{% url 'feed_abonnements' %}">Votre feed</a>
+                    <a class="nav-link" href="{% url 'list_communautes' %}">Communautes</a>
+                    <a class="nav-link" href="{% url 'see_posts' %}">Vos Créations</a>
+
+            </ul>
+        </div>
+    </nav></div>
     <link rel=”stylesheet” href=”{% static 'css/menu.css' %}”>
 
-
     <!-- Content -->
-    <div id="content" class="colM">
+    <div id="content" class="colM text-center">
 
 
         <p>{% block h3 %}Merci pour le temps que vous avez accordé à ce site aujourd'hui.{% endblock h3 %}</p>

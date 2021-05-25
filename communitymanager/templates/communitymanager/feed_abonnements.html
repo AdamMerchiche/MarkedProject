@@ -3,34 +3,38 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>{% block title  %}ACCUEIL : Voici la liste de vos communautés préférées !{% endblock title %}</title>
+    <title>{% block title %}ACCUEIL : Voici la liste de vos communautés préférées !{% endblock title %}</title>
 </head>
 <body>
 <div>{% block h1 %} Bienvenue {{ request.user.get_username }} sur votre page  ! {% endblock h1 %}</div>
-<div class="breadcrumbs"><a href="/accounts/logout"> {% block h2 %}<i class="fas fa-sign-out-alt"></i> {% endblock h2 %}</a></div>
+
+    <hr class="my-4"/>
 {% block h3 %}
-        <a span  href="{% url 'nouveau_post' %}">Créez votre post |</a>
-        <a span  href="{% url 'list_communautes' %}">Liste des communautés |</a>
-        <a span  href="{% url 'see_posts' %}">Voir l'ensemble de vos posts |</a>
-            <hr class="my-4"/>
-
     {% for post in posts %}
-        <div class="communaute">
-             <h2> {{ post.title }}</h2>
-        Description : {{ post.description |linebreaks}}<br/>
-        Auteur : {{ post.auteur|linebreaks }}
-        Date du post : {{ post.date_creation|linebreaks }}
-        Évenementiel : {{ post.evenementiel|linebreaks }}
-        {% if post.evenementiel %}
-        Date de l'évenement: {{ post.date_evenement|linebreaks }}
-        {% endif %}
-        Communaute : {{ post.communaute|linebreaks }}
-        Priorite : {{ post.priorite|linebreaks }}
-
-        {% if post.auteur == request.user%}
-            <a span  href="{% url 'update_post' post.id %}">Modifiez votre post |</a>
-        {% endif %}
+        <div class="comment-widgets">
+        <div class=" comment-text w-100">
+            <h4 class="m-b-15 d-block"><b>{{ post.title }} <a span href="{% url 'update_post' post.id %}"><i
+                    class="far fa-edit"></i></a></b></h4>
+            <h4 class="font-medium text-left"><i class="fas fa-user-edit"></i>
+                {{ post.auteur|linebreaks }}</h4>
+            <div class="comment-widgets"><h4 class="font-medium text-left"><i class="fas fa-glass-cheers"></i>
+                {{ post.evenementiel|linebreaks }}
+                {% if post.evenementiel %}
+                    <i class="fas fa-calendar-week"></i>
+                    {{ post.date_evenement|linebreaks }}
+                {% endif %}</h4>
+              <span class="m-b-15 d-block"> {{ post.description |linebreaks }}
+              </span> </div>
+            <h4 class="font-medium text-left"> Priorite
+                 {{ post.priorite|linebreaks }}</h4>
+                    <div class="comment-footer"><span class="text-muted float-right"><i
+                    class="fas fa-calendar-week"></i> {{ post.date_creation|linebreaks }} <i
+                    class="fas fa-users"></i>{{ post.communaute }}</span>
+               </div>
+            </div>
+        </div>
         <hr class="my-4"/>
+
 
     {% endfor %}
 {% endblock h3 %}

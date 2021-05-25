@@ -11,16 +11,19 @@ from django.contrib.auth.decorators import login_required
 
 
 
-# Create your views here.
+@login_required
 def home(request):
     communautes = Communaute.objects.filter(abonnes=request.user)
     posts = Post.objects.filter(communaute__abonnes=request.user)
     return render(request, 'communitymanager/feed_abonnements.html', locals())
 
+@login_required
 def list_communautes(request):
     communautes = Communaute.objects.all()
     return render(request, 'communitymanager/list_communautes.html', {'communautes': communautes})
 
+
+@login_required
 def statut(request, communaute_id):
     communaute = Communaute.objects.get(id=communaute_id)
     if request.user in communaute.abonnes.all():
@@ -88,7 +91,7 @@ def update_post(request, post_id):
         return HttpResponse("Vous n'êtes pas l'auteur de ce POST. Vous ne pouvez donc pas le modifier. ")
     return render(request, 'communitymanager/update_post.html', locals())
 
-
+@login_required
 def see_posts(request): ##ici je retourne tous les posts que l'auteur a écrit.
     #une fois que j'aurai compris comment prendre en compte l'abonnement, je mettrai tous les posts des communautés abonnées de l'utilisateur.
     return render(

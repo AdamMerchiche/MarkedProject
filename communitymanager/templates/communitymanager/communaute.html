@@ -7,17 +7,18 @@
 </head>
 <body>
 <div>{% block h1 %} POSTS de la Communauté {{ posts.communaute_id.get_name }}! {% endblock h1 %}</div>
- {% block h2 %}<a href="/communitymanager/list_communautes">Retour à la liste des Communautés {% endblock h2 %}</a>
 {% block h3 %}
     {% for post in posts %}
-        <p>{{ post.title }} </p>
+        <div class="table table-hover">
+        <h1><b>{{ post.title }}</b> </h1>
             <p class="infos"> Desription : {{ post.description }},</p>
-            <p class="infos"> Date du post :{{ post.date_creation }}</p>
+            <p class="infos"> <i class="fas fa-calendar-week"></i> {{ post.date_creation }}</p>
             <p class="infos"> Priorité : {{ post.priorite }} </p>
             <p class="infos"> Auteur : {{ post.auteur }}</p>
         <p><a href="{% url "post" post_id=post.id %}">Lire les Commentaires</a></p>
         <p><a href="{% url "update_post" post_id=post.id %}"><i class="far fa-edit"></i></a></p>
         <hr class="my-4"/>
+        </div>
     {% endfor %}
     {% if not posts %}
         Créer le premier post de la communauté ?

@@ -38,5 +38,9 @@ class Commentaire(models.Model):
     contenu = models.TextField()
     auteur = models.ForeignKey(User, on_delete= "models.CASCADE")
     post = models.ForeignKey(Post, on_delete= "models.CASCADE")
+    class Meta:
+        """Classe qui caractérise le comportement des modèles : verbose =
+        ce que représente le modèle ; ordering = ordre par défaut de la sélection. """
+        ordering = ['date_creation']
 
 

@@ -7,22 +7,31 @@
 </head>
 <body>
 <div>{% block h1 %} Vos POSTs! {% endblock h1 %}</div>
- {% block h2 %}<a href="list_communautes">Retour à la liste des Communautés {% endblock h2 %}</a>
 {% block h3 %}
-    {% for post in posts %}
-        <h2> {{ post.title }}</h2>
-        Description : {{ post.description |linebreaks}}<br/>
-        Auteur : {{ post.auteur|linebreaks }}
-        Date du post : {{ post.date_creation|linebreaks }}
-        Évenementiel : {{ post.evenementiel|linebreaks }}
-        {% if post.evenementiel %}
-        Date de l'évenement: {{ post.date_evenement|linebreaks }}
-        {% endif %}
-        Communaute : {{ post.communaute|linebreaks }}
-        Priorite : {{ post.priorite|linebreaks }}
-        <a span  href="{% url 'update_post' post.id %}"><i class="far fa-edit"></i></a>
-                <hr class="my-4"/>
-
+           {% for post in posts %}
+     <div class="comment-widgets">
+        <div class=" comment-text w-100">
+            <h4 class="m-b-15 d-block"><b>{{ post.title }} <a span href="{% url 'update_post' post.id %}"><i
+                    class="far fa-edit"></i></a></b></h4>
+            <h4 class="font-medium text-left"><i class="fas fa-user-edit"></i>
+                {{ post.auteur|linebreaks  }}</h4>
+            <div class="comment-widgets"><h4 class="font-medium text-left"><i class="fas fa-glass-cheers"></i>
+                {{ post.evenementiel|linebreaks }}
+                {% if post.evenementiel %}
+                    <i class="fas fa-calendar-week"></i>
+                    {{ post.date_evenement|linebreaks }}
+                {% endif %}</h4>
+              <span class="m-b-15 d-block"> {{ post.description |linebreaks }}
+              </span> </div>
+            <h4 class="font-medium text-left"> Priorite
+                 {{ post.priorite|linebreaks }}</h4>
+                    <div class="comment-footer"><span class="text-muted float-right"><i
+                    class="fas fa-calendar-week"></i> {{ post.date_creation|linebreaks }} <i
+                    class="fas fa-users"></i>{{ post.communaute }}</span>
+               </div>
+            </div>
+        </div>
+        <hr class="my-4"/>
     {% endfor %}
 {% endblock h3 %}
 </body>

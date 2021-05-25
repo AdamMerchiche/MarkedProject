@@ -34,8 +34,8 @@ class PostForm(forms.ModelForm):
         evenementiel = cleaned_data['evenementiel']
         date_evenement= cleaned_data["date_evenement"]
 
-        if evenementiel and date_evenement==None :
-            raise forms.ValidationError("Vous devez inscrire une date d'évenement")
+        if (evenementiel and date_evenement==None) or (not evenementiel and date_evenement!=None):
+            raise forms.ValidationError("Vous devez inscrire une date d'évenement ou cochez l'option évenement")
         return cleaned_data
 
 class UpdateForm(forms.ModelForm):

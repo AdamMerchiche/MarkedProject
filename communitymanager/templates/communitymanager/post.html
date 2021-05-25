@@ -3,30 +3,34 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>{% block title  %} Voici la liste des commentaires !{% endblock title %}</title>
+    <title>{% block title %} Voici la liste des commentaires !{% endblock title %}</title>
 </head>
 <body>
 <div>{% block h1 %} Commentaires du POST! {% endblock h1 %}</div>
- {% block h2 %}<a href="/communitymanager/feed_abonnements">Retour à votre feed {% endblock h2 %}</a>
 {% block h3 %}
     <p>
     </p>
     {% for commentaire in commentaires %}
-        <p>{{ post.title }} </p>
-            <p class="infos"> Contenu : {{ commentaire.contenu }},</p>
-            <p class="infos"> Auteur : {{ commentaire.auteur   }}</p>
-            <p class="infos"> Date : {{ commentaire.date_creation }}</p>
-        <hr class="my-4"/>
+        <div class="comment-widgets">
+        <div class="comment-text w-100">
+            <h3 class="m-b-15 d-block"><b>{{ post.title }}</b></h3>
+            <h6 class="font-medium text-left"> <i class="fas fa-user-edit"></i> {{ commentaire.auteur }}</h6>
+            <span class="m-b-15 d-block"> {{ commentaire.contenu }} </span>
+            <div class="comment-footer"><span class="text-muted float-right"><i class="fas fa-calendar-week"></i> {{ commentaire.date_creation }}</span>
+            </div>
+        </div>
+                <hr class="my-4"/>
+
     {% endfor %}
-          <div> Commentez!</div>
+<div> Commentez!</div>
 {% if envoi %}Votre commentaire a bien été envoyé !{% endif %}
 <form action="{% url "post" post.id %}" method="post">
     {% csrf_token %}
     {{ form.as_p }}
-    <input type="submit" value="Ajoutez un commentaire..." />
+    <input type="submit" value="Ajoutez un commentaire..."/>
 </form>
 
 
-        </div>
+</div>
 {% endblock h3 %}
 </body>
