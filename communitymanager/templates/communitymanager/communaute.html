@@ -16,8 +16,8 @@
             <p class="infos"> Priorité : {{ post.priorite }} </p>
             <p class="infos"> Auteur : {{ post.auteur }}</p>
         <p><a href="{% url "post" post_id=post.id %}">Lire les Commentaires</a></p>
-        <p><a href="{% url "update_post" post_id=post.id %}">Updatez votre Post</a></p>
-
+        <p><a href="{% url "update_post" post_id=post.id %}"><i class="far fa-edit"></i></a></p>
+        <hr class="my-4"/>
     {% endfor %}
     {% if not posts %}
         Créer le premier post de la communauté ?

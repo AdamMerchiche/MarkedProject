@@ -20,6 +20,9 @@
         {% endif %}
         Communaute : {{ post.communaute|linebreaks }}
         Priorite : {{ post.priorite|linebreaks }}
+        <a span  href="{% url 'update_post' post.id %}"><i class="far fa-edit"></i></a>
+                <hr class="my-4"/>
+
     {% endfor %}
 {% endblock h3 %}
 </body>

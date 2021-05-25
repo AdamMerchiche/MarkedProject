@@ -7,7 +7,7 @@
 </head>
 <body>
 <div>{% block h1 %} Commentaires du POST! {% endblock h1 %}</div>
-<a href="communitymanager/list_communautes"> {% block h2 %}Retour à la liste des Communautés {% endblock h2 %}</a>
+ {% block h2 %}<a href="/communitymanager/feed_abonnements">Retour à votre feed {% endblock h2 %}</a>
 {% block h3 %}
     <p>
     </p>
@@ -16,8 +16,16 @@
             <p class="infos"> Contenu : {{ commentaire.contenu }},</p>
             <p class="infos"> Auteur : {{ commentaire.auteur   }}</p>
             <p class="infos"> Date : {{ commentaire.date_creation }}</p>
+        <hr class="my-4"/>
     {% endfor %}
-          {% include 'communitymanager/nouveau_commentaire.html' %}
+          <div> Commentez!</div>
+{% if envoi %}Votre commentaire a bien été envoyé !{% endif %}
+<form action="{% url "post" post.id %}" method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <input type="submit" value="Ajoutez un commentaire..." />
+</form>
+
 
         </div>
 {% endblock h3 %}

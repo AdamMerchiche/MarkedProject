@@ -20,7 +20,7 @@ import communitymanager.views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', communitymanager.views.list_communautes),
+    path('', communitymanager.views.home),
     path('communitymanager/', include('communitymanager.urls')),
     path('accounts/', include('django.contrib.auth.urls')),
 ]

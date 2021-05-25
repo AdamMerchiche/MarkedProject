@@ -16,14 +16,13 @@ class Priorite(models.Model):
         return self.labels
 
 class Post(models.Model):
-    description = models.CharField(max_length = 25000)
+    description = models.TextField()
     title = models.CharField(max_length = 250, blank = False)
     date_creation = models.DateTimeField(default=timezone.now,
                                 verbose_name="Date du post", blank=True)
     evenementiel = models.BooleanField(default= False, blank=True)
-    if evenementiel:
-        date_evenement = models.DateTimeField(default=None,
-                                              verbose_name="Date de l'évenement", blank=True, null=True)
+    date_evenement = models.DateTimeField(verbose_name="Date de l'évenement", blank=True, null=True)
+
     communaute = models.ForeignKey(Communaute, on_delete="models.CASCADE")
     priorite = models.ForeignKey(Priorite, on_delete="models.CASCADE")
     auteur = models.ForeignKey(User, on_delete= "models.CASCADE")
@@ -36,7 +35,7 @@ class Post(models.Model):
 class Commentaire(models.Model):
     date_creation = models.DateTimeField(default=timezone.now,
                                          verbose_name="Date du commentaire")
-    contenu = models.CharField(max_length=250)
+    contenu = models.TextField()
     auteur = models.ForeignKey(User, on_delete= "models.CASCADE")
     post = models.ForeignKey(Post, on_delete= "models.CASCADE")
 

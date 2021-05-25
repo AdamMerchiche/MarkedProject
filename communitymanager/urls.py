@@ -12,6 +12,6 @@ urlpatterns = [
     path('communaute/nouveau_post/', views.nouveau_post, name="nouveau_post"),
     path('communaute/update_post/<int:post_id>', views.update_post, name="update_post"),
     path('see_posts', views.see_posts, name="see_posts"),
-    path('list_abonnements', views.list_abonnements, name="list_abonnements"),
+    path('feed_abonnements', views.home, name="feed_abonnements"),
 
 ]

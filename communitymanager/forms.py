@@ -26,7 +26,20 @@ class PostForm(forms.ModelForm):
         model = Post
         fields = "__all__"
 
+    def clean(self):
+        """
+        Validates a new album only if it's not a duplicate
+        """
+        cleaned_data = super(PostForm, self).clean()
+        evenementiel = cleaned_data['evenementiel']
+        date_evenement= cleaned_data["date_evenement"]
+
+        if evenementiel and date_evenement==None :
+            raise forms.ValidationError("Vous devez inscrire une date d'évenement")
+        return cleaned_data
+
 class UpdateForm(forms.ModelForm):
     class Meta:
         model = Post
         exclude = ["auteur", "communaute", "date_creation"]
+

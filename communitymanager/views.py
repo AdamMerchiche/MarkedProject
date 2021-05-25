@@ -12,7 +12,10 @@ from django.contrib.auth.decorators import login_required
 
 
 # Create your views here.
-
+def home(request):
+    communautes = Communaute.objects.filter(abonnes=request.user)
+    posts = Post.objects.filter(communaute__abonnes=request.user)
+    return render(request, 'communitymanager/feed_abonnements.html', locals())
 
 def list_communautes(request):
     communautes = Communaute.objects.all()
@@ -20,30 +23,34 @@ def list_communautes(request):
 
 def statut(request, communaute_id):
     communaute = Communaute.objects.get(id=communaute_id)
-    is_subd = False
-    sauvegarde=False
-    if communaute.abonnes.filter(username=request.user).exists():
+    if request.user in communaute.abonnes.all():
         communaute.abonnes.remove(request.user)
-        communaute.save()
-        is_subd = False
-        sauvegarde=True
     else:
         communaute.abonnes.add(request.user)
-        communaute.save()
-        is_subd = True
-        sauvegarde=True
-    return render(request, 'communitymanager/abonnement.html',locals())
+    return redirect ('list_communautes')
 
 @login_required
 def list_abonnements(request):
-    return render(request, 'communitymanager/list_abonnements.html', {'communautes': Communaute.objects.filter(abonnes= request.user)})
+    return render(request, 'communitymanager/feed_abonnements.html', {'communautes': Communaute.objects.filter(abonnes= request.user)})
 
 
 def communaute(request, communaute_id):
     return render(request, 'communitymanager/communaute.html', {'posts': Post.objects.filter(communaute_id= communaute_id)})
 @login_required
 def post(request, post_id):
-    return render(request, 'communitymanager/post.html', {'commentaires': Commentaire.objects.filter(post_id= post_id)})
+    post=Post.objects.get(id=post_id)
+    commentaires = Commentaire.objects.filter(post_id = post_id)
+    form = CommentaireForm(request.POST or None)
+    form.fields['auteur'].choices = [(request.user.id, request.user.username)]
+    form.fields['post'].choices = [(post_id, post.title)]
+
+    if form.is_valid():
+        commentaire = form.save()
+        commentaire.post_id=post_id
+        commentaire.auteur_id=request.user.id
+        commentaire.save()
+        envoi = True
+    return render(request, 'communitymanager/post.html', locals())
 
 @login_required
 def nouveau_commentaire(request):
@@ -53,13 +60,15 @@ def nouveau_commentaire(request):
     if form.is_valid():
         form.save()
         envoi = True
-    return render(request, 'communitymanager/nouveau_commentaire.html', locals())
+    return render(request, 'communitymanager/post.html', locals())
 
 @login_required
 def nouveau_post(request):
     form = PostForm(
         request.POST or None)
+    communautes = Communaute.objects.filter(abonnes=request.user)
     form.fields['auteur'].choices = [(request.user.id, request.user.username)]
+    form.fields['communaute'].choices = [(communaute.id, communaute.name) for communaute in communautes]
     if form.is_valid():
         form.save()
         envoi = True
@@ -69,11 +78,10 @@ def nouveau_post(request):
 def update_post(request, post_id):
     post = Post.objects.get(id=post_id) #Corriger ici, y'a un problème, quand on
     # modifie un article ca modifie tou s les articles de l'auteur
-    if post.auteur==request.user:
-        form = UpdateForm(
-            request.POST, instance=post)
+    if post.auteur == request.user:
+        form = UpdateForm(request.POST or None, instance=post)
         if form.is_valid():
-            post = form.save(commit=False)
+            post = form.save()
             post.save()
             envoi = True
     else:

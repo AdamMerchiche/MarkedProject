@@ -8,24 +8,32 @@
 </head>
 <hr>
 <div>{% block h1 %} Bienvenue {{ request.user.get_username }},  sur la page des communautés  ! {% endblock h1 %}</div>
-<div class="breadcrumbs"><a href="/accounts/login"> {% block h2 %}Déconnexion {% endblock h2 %}</a></div>
+<div class="breadcrumbs"><a href="/accounts/logout"> {% block h2 %}<i class="fas fa-sign-out-alt"></i> {% endblock h2 %}</a></div>
 {% block h3 %}
         <!-- CSS CUSTOM -->
 <link rel=”stylesheet” href=”{% static 'css/menu.css' %}”>
-        <a span  href="{% url 'nouveau_post' %}">Créez votre post |</a>
-        <a span  href="{% url 'list_abonnements' %}">Liste de vos abonnements |</a>
-        <a span  href="{% url 'see_posts' %}">Voir l'ensemble de vos posts |</a>
+        <a span  href="{% url 'nouveau_post' %}">Créez votre post ! |</a>
+        <a span  href="{% url 'feed_abonnements' %}">Votre feed ?  |</a>
+        <a span  href="{% url 'see_posts' %}">Voir l'ensemble de vos oeuvres ?  |</a>
 
     {% for communaute in communautes %}
-        {% include 'communitymanager/abonnement.html' with communaute_id='communaute.id' only %}
         <div class="communaute">
             <p> Nom :{{ communaute.name }}</p>
             <p>Abonnés :
                 {% for u in communaute.abonnes.all%}
                     {{u.get_username}}
                 {% endfor %}</p>
-        <p><a href="{% url "communaute" communaute_id=communaute.id %}">Lire les Posts</a>
+        {% if request.user in communaute.abonnes.all %}
+            <a span  href="{% url 'abonnements' communaute.id %}"><i class="fas fa-heart"></i></a>
+            <p><a href="{% url "communaute" communaute.id %}">Lire les Posts</a>
+
+        {% else %}
+            <a span  href="{% url 'abonnements' communaute.id %}"><i class="far fa-heart"></i> </a>
+
+        {% endif %}
         </div>
+                <hr class="my-4"/>
+
     {% endfor %}
 {% endblock h3 %}
 </body>
