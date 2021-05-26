@@ -3,17 +3,24 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>{% block title  %} Mofifiez votre POST!{% endblock title %}</title>
+    <title>{% block title %} Mofifiez votre POST!{% endblock title %}</title>
 </head>
 <body>
 <div>{% block h1 %} Updatez votre POST! {% endblock h1 %}</div>
-<a href="{% url "post" post_id=post.id%}">Retour aux POSTs de la communauté </a>
+<a href="{% url "post" post_id=post.id %}">Retour aux POSTs de la communauté </a>
 {% block h3 %}{% if envoi %}Votre post a bien été modifié !{% endif %}
-EDITEZ votre Post !
-<form action="{% url "update_post" post_id=post.id%}" method="post">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <input type="submit" value="Modifiez votre POST..." />
-</form>
+    EDITEZ votre Post !
+    {% if alert_flag %}
+        <script>alert("Vous n'êtes pas le créateur de ce POST! Retournez à votre feed.")
+        window.location.href = " http://127.0.0.1:8000/communitymanager/feed_abonnements"
+        </script>
+    {% endif %}
+    {% if not alert_flag %}
+        <form action="{% url "update_post" post_id=post.id %}" method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <input type="submit" value="Modifiez votre POST..."/>
+        </form>
+    {% endif %}
 {% endblock h3 %}
 </body>

@@ -6,10 +6,8 @@
     <title>{% block title %} Voici la liste des commentaires !{% endblock title %}</title>
 </head>
 <body>
-<div>{% block h1 %} Commentaires du POST! {% endblock h1 %}</div>
+<div>{% block h1 %} Commentaires de {{ post.title }}! {% endblock h1 %}</div>
 {% block h3 %}
-    <p>
-    </p>
     <div class="media border p-4 bg-light">
         <div class="media-body text-dark">
             <h4><i class="fas fa-user-edit"></i> {{ post.auteur }} <small><i>{{ post.date_creation }}</i></small></h4>
@@ -24,8 +22,7 @@
             <h4 class="font-medium text-left"> Priorite
                 {{ post.priorite|linebreaks }}</h4>
             <div class="comment-footer"><span class="text-muted float-right"> <i
-                    class="fas fa-users"></i>{{ post.communaute|linebreaks }}
-
+                    class="fas fa-users"></i>{{ post.communaute|linebreaks }}</span>
             </div>
         </div>
     </div>

@@ -1,5 +1,7 @@
 <!DOCTYPE html>
-{% load staticfiles %}
+{% load static %}
+<! -- HTML de base, que l'on fera hérité des templates de l'application. On s'inspire ici du modèle de Django,
+tout en ajoutant dnas les templates de l'application, des fonctionnalités intéressantes-->
 
 <html lang="fr-FR">
 <head>
@@ -9,8 +11,8 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
     <link rel="stylesheet" type="text/css" href="/static/admin/css/base.css">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/priority.css' %}"/>
     <title>{% block title %}Déconnecté | Site d'administration de Django{% endblock title %}</title>
-
 
 
     <meta name="robots" content="NONE,NOARCHIVE">
@@ -24,39 +26,36 @@
 
 
     <!-- Header -->
-    <div class= ' h-50 bg-dark bg-center ' id="header">
-        <div  id="branding "class=" text-center ">
+    <div class=' h-50 bg-dark bg-center' id="header">
+        <div id="branding " class=" text-center ">
 
-            <h1 id="site-name" class="text-white " >{% block h1 %} Administration de Django  {% endblock h1 %}</h1>
+            <h1 id="site-name" class="text-white ">{% block h1 %} Administration de Django  {% endblock h1 %}</h1>
 
         </div>
 
 
     </div>
     <!-- END Header -->
-    <div class="breadcrumbs bg-secondary"><a href="/accounts/login"> {% block h2 %}{% endblock h2 %}
+    <div class="  breadcrumbs bg-secondary"><a href="/accounts/login"> {% block h2 %}{% endblock h2 %}
     </a>
-    <nav class="navbar navbar-expand-sm bg-transparent navbar-white pull-right ">
-        <a class="navbar-brand  " href="/accounts/logout"><i class="fas fa-sign-out-alt "></i></a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="collapsibleNavbar">
-            <ul class="navbar-nav ml-auto ">
-                    <a class="nav-link" href="{% url 'nouveau_post' %}">Postez !</a>
+        <nav class="navbar navbar-expand-sm bg-transparent navbar-white pull-right ">
+            <a class="navbar-brand" href="/accounts/logout"><i class="fas fa-sign-out-alt "></i></a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="collapsibleNavbar">
+                <ul class="navbar-nav ml-auto ">
+                    <a class="nav-link" href="{% url 'nouveau_post' %}"><i
+                            class="far fa-edit"></i></a>
                     <a class="nav-link" href="{% url 'feed_abonnements' %}">Votre feed</a>
                     <a class="nav-link" href="{% url 'list_communautes' %}">Communautes</a>
                     <a class="nav-link" href="{% url 'see_posts' %}">Vos Créations</a>
-
-            </ul>
-        </div>
-    </nav></div>
-    <link rel=”stylesheet” href=”{% static 'css/menu.css' %}”>
-
+                </ul>
+            </div>
+        </nav>
+    </div>
     <!-- Content -->
     <div id="content" class="colM text-center">
-
-
         <p>{% block h3 %}Merci pour le temps que vous avez accordé à ce site aujourd'hui.{% endblock h3 %}</p>
 
 

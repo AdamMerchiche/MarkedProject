@@ -1,14 +1,11 @@
-
 <body>
 <div>{% block h1 %} Commentez! {% endblock h1 %}</div>
 {% block h3 %}{% if envoi %}Votre commentaire a bien été envoyé !{% endif %}
-<form action="{% url "nouveau_commentaire"  %}" method="post">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <input type="submit" value="Ajoutez un commentaire..." />
-</form>
+    <form action="{% url "nouveau_commentaire" %}" method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <input type="submit" value="Ajoutez un commentaire..."/>
+    </form>
 {% endblock h3 %}
 </body>
 
-
-©

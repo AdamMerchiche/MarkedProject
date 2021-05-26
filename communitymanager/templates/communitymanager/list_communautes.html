@@ -4,7 +4,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>{% block title  %}ACCUEIL : Voici la liste de vos communautés préférées !{% endblock title %}</title>
+    <title>{% block title %}ACCUEIL : Voici la liste de vos communautés préférées !{% endblock title %}</title>
 </head>
 <hr>
 <div>{% block h1 %} Bienvenue {{ request.user.get_username }},  sur la page des communautés  ! {% endblock h1 %}</div>
@@ -12,21 +12,21 @@
 
     {% for communaute in communautes %}
         <div class="communaute table-hover">
-            <h1><b>{{ communaute.name }}</b> </h1>
+            <h1><b>{{ communaute.name }}</b></h1>
             <p><i class="fas fa-users"></i>
-                {% for u in communaute.abonnes.all%}
-                    {{u.get_username}}-
+                {% for u in communaute.abonnes.all %}
+                    {{ u.get_username }}-
                 {% endfor %}</p>
-        {% if request.user in communaute.abonnes.all %}
-            <a span  href="{% url 'abonnements' communaute.id %}"><i class="fas fa-heart pull-right"></i></a>
-            <p><a href="{% url "communaute" communaute.id %}">Lire les Posts</a>
+            {% if request.user in communaute.abonnes.all %}
+                <a span href="{% url 'abonnements' communaute.id %}"><i class="fas fa-heart pull-right"></i></a>
+                <p><a href="{% url "communaute" communaute.id %}">Lire les Posts</a>
 
-        {% else %}
-            <a span  href="{% url 'abonnements' communaute.id %}"><i class="far fa-heart pull-right"></i> </a>
+            {% else %}
+                <a span href="{% url 'abonnements' communaute.id %}"><i class="far fa-heart pull-right"></i> </a>
 
-        {% endif %}
+            {% endif %}
         </div>
-                <hr class="my-4"/>
+        <hr class="my-4"/>
 
     {% endfor %}
 {% endblock h3 %}

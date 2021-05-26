@@ -8,44 +8,50 @@
 <body>
 <div>{% block h1 %} Bienvenue {{ request.user.get_username }} sur votre page  ! {% endblock h1 %}</div>
 
-    <hr class="my-4"/>
+<hr class="my-4"/>
 {% block h3 %}
     {% for post in posts %}
-        <div class="row d-flex justify-content-center mt-100 mb-100">
-            <div class="col-lg-7">
-                <div class="card bg-light mb-3">
-                    <div class="comment-widgets">
-                        <div class=" comment-text w-100">
-                            <h4 class="m-b-15 d-block"><b>{{ post.title }} <a span
-                                                                              href="{% url 'update_post' post.id %}"><i
-                                    class="far fa-edit"></i></a></b></h4>
-                            <h4 class="font-medium text-left"><i class="fas fa-user-edit"></i>
-                                {{ post.auteur|linebreaks }}</h4>
-                            <div class="comment-widgets"><h4 class="font-medium text-left"><i
-                                    class="fas fa-glass-cheers"></i>
-                                {{ post.evenementiel|linebreaks }}
-                                {% if post.evenementiel %}
-                                    <i class="fas fa-calendar-week"></i>
-                                    {{ post.date_evenement|linebreaks }}
-                                {% endif %}</h4>
-                                <span class="m-b-15 d-block"> {{ post.description |linebreaks }}
-              </span></div>
-                            <h4 class="font-medium text-left"> Priorite
-                                {{ post.priorite|linebreaks }}</h4>
-                            <div class="comment-footer"><span class="text-muted float-right"><i
-                                    class="fas fa-calendar-week"></i> {{ post.date_creation|linebreaks }} <i
-                                    class="fas fa-users"></i>{{ post.communaute|linebreaks }}
-                                <p><a href="{% url "post" post_id=post.id %}">Lire les Commentaires</a></p> </span>
-</span>
-                            </div>
-                        </div>
+        <! -- CSS pour afficher les posts dans un format spécifique-->
+        <div class="row">
+            <div class="col-sm-4">
+                <h4 class="m-b-15 d-block"><b>
+                    <p class="text-left">Priorite
+                        {{ post.priorite }}
+                    <div class="comment-widgets"> {% if post.evenementiel %}
+                        <h4 class="font-medium text-left"><i
+                                class="fas fa-glass-cheers"></i>
+                            EVENT<br>
+                            <i class="fas fa-calendar-week"></i>
+                            {{ post.date_evenement }}</h4>
+                    {% endif %}
                     </div>
+                    </p>
+                </b></h4>
+            </div>
+            <div class="col-lg-4">
+                <h4 class="m-b-15 d-block"><b>
+                    <p class="text-center">
+                        {{ post.title }}
+                        <a span
+                           href="{% url 'update_post' post.id %}"><i
+                                class="far fa-edit"></i></a></b></h4>
+                <span class="m-b-15 d-block"> <p class="text-justify">{{ post.description |linebreaks }}</p>
+              </span></div>
+            <div class="col-sm-4">
+
+                <div class="comment-footer"><span class="text-muted float-right"><i
+                        class="fas fa-calendar-week"></i> {{ post.date_creation|linebreaks }} <i
+                        class="fas fa-users"></i>{{ post.communaute|linebreaks }}
+                        <i class="fas fa-user-edit"></i>
+                    {{ post.auteur }}
+                                <p><a href="{% url "post" post_id=post.id %}">Lire les Commentaires</a></p> </span>
+                    </span>
                 </div>
             </div>
         </div>
         <hr class="my-4"/>
     {% endfor %}
-            </div>
+    </div>
 {% endblock h3 %}
 </body>
 </html>
