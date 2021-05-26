@@ -48,7 +48,8 @@ def commentaire(request, post_id):
         (request.user.id, request.user.username)]  # On limite le choix de l'auteur à l'utilisateur uniquement.
     # On ne peut de fait, pas créer de post si l'authentification n'est pas faite.
     form.fields['post'].choices = [(post_id,
-                                    post.title)]  # On limite le choix du POST que l'abonné commente. Il ne peut commenter que le POST sur lequel il se trouve.
+                                    post.title)]  # On limite le choix du POST que l'abonné commente.
+    # Il ne peut commenter que le POST sur lequel il se trouve.
 
     if form.is_valid():
         commentaire = form.save()

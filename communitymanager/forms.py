@@ -1,7 +1,5 @@
 from .models import *
 from django import forms
-from django.contrib.auth.models import User
-from django.utils import timezone
 
 
 # Formulaire permettant la création d'un commentaire.
@@ -32,6 +30,7 @@ class PostForm(forms.ModelForm):
 
 # On a fait le choix ici de créer une formulaire pour la modification du POST. Des alternatives auraient pu être trouvées (en utilisant le même formulaire que pour la création d'un POST)
 # Néanmoins, il parait intéressant de créer une formulaire à part, notamment pour exclure certaines variables.
+
 class ModificationPostForm(forms.ModelForm):
     class Meta:
         model = Post
@@ -40,4 +39,5 @@ class ModificationPostForm(forms.ModelForm):
         # En effet, l'utilisateur ne pourra modifier l'auteur d'un POST qu'il a lui même écrit.
         # De la même façon, un POST est partagé sur une communauté précise, et ne doit pas être changé.
         # La date de création apparait ici plutôt
-        # comme un choix du designer d'application. On choisira de laisser la date de création puisque par définition nous ne recréons pas le POST.
+        # comme un choix du designer d'application. On choisira de laisser la date de création
+        # puisque par définition nous ne recréons pas le POST.
