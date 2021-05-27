@@ -1,0 +1,9 @@
+List of changes/add to do:
+
+- Formulaire de commentaire doit s'effacer après submit (see Guilhem)
+- Cacher la bar de navigation quand déconnecté
+- Animations CSS (see Guilhem)
+- Centraliser code pour submit_post (see Claire)
+- Dans formulaire post: 
+	- utiliser datalist pour communauté (see Guilhem)
+	- changer date_evenement (see Form et template de Guilhem)
