@@ -7,6 +7,7 @@
 </head>
 <body>
     <div>{% block h1 %} Veuillez rentrer vos identifiants : {% endblock h1 %}</div>
+    {% block navbar %}{% endblock %}
     <div>{% block h3 %}
     <form method="post" action="{% url 'login' %}">
     {% csrf_token %}
