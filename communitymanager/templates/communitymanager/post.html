@@ -37,8 +37,8 @@
               </span></div>
             <div class="col-sm-4">
 
-                <div class="comment-footer"><span class="text-muted float-right"><i
-                        class="fas fa-calendar-week"></i> {{ post.date_creation|linebreaks }} <i
+                <div class="comment-footer"><span class="text-muted float-right"><i class="far fa-clock"></i>
+                    {{ post.date_creation|timesince:date_now|linebreaks }} <i
                         class="fas fa-users"></i>{{ post.communaute|linebreaks }}
                         <i class="fas fa-user-edit"></i>
                     {{ post.auteur }}
@@ -63,7 +63,7 @@
     {% if envoi %}Votre commentaire a bien été envoyé !{% endif %}
     <form action="{% url "post" post.id %}" method="post">
         {% csrf_token %}
-        {{ form.as_p }}
+        <p>{{ form.contenu}}</p>
         <input type="submit" value="Ajoutez un commentaire..."/>
     </form>
 

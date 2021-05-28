@@ -11,7 +11,7 @@
 {% block h3 %}
 
     {% for communaute in communautes %}
-        <div class="communaute table-hover">
+        <div class="communaute table-hover slideIn">
             <h1><b>{{ communaute.name|capfirst }}</b></h1>
             <p><i class="fas fa-users"></i>
                 {% for u in communaute.abonnes.all %}

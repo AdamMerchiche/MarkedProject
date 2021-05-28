@@ -6,7 +6,7 @@ from django import forms
 class CommentaireForm(forms.ModelForm):
     class Meta:
         model = Commentaire
-        exclude = ["date_creation"]  # on décidera d'exclure la date de création,
+        exclude = ["date_creation","post","auteur"]  # on décidera d'exclure la date de création,
         # ne permettant pas à l'utilisateur d'inscrire un commentaire dans le temps.
 
 

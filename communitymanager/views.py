@@ -7,6 +7,8 @@ from django.contrib.auth.decorators import login_required
 # Renvoie le feed d'un utilisateur, avec tous les posts des communautés auxquelles il est abonné
 @login_required(login_url='/accounts/login/')
 def accueil(request):
+    date_now = timezone.now()
+
     communautes = Communaute.objects.filter(abonnes=request.user)
     posts = Post.objects.filter(communaute__abonnes=request.user)
     return render(request, 'communitymanager/feed_abonnements.html', locals())
@@ -15,6 +17,8 @@ def accueil(request):
 # Renvoie la liste de toutes les communautés
 @login_required(login_url='/accounts/login/')
 def liste_communautes(request):
+    date_now = timezone.now()
+
     communautes = Communaute.objects.all()
     return render(request, 'communitymanager/list_communautes.html', {'communautes': communautes})
 
@@ -22,6 +26,8 @@ def liste_communautes(request):
 # Permet à l'utilisateur de s'abonner ou se désabonner d'une communauté
 @login_required(login_url='/accounts/login/')
 def abonner(request, communaute_id):
+    date_now = timezone.now()
+
     communaute = Communaute.objects.get(id=communaute_id)
     if request.user in communaute.abonnes.all():
         communaute.abonnes.remove(request.user)
@@ -34,27 +40,22 @@ def abonner(request, communaute_id):
 @login_required(login_url='/accounts/login/')
 def communaute(request, communaute_id):
     return render(request, 'communitymanager/communaute.html',
-                  {'posts': Post.objects.filter(communaute_id=communaute_id)})
+                  {'posts': Post.objects.filter(communaute_id=communaute_id),"date_now":timezone.now()})
 
 
 # Permet à l'utilisateur connecté de créer un commentaire. Il sera prérempli au niveau de la section Auteur,
 # et POST.
 @login_required(login_url='/accounts/login/')
 def commentaire(request, post_id):
+    date_now = timezone.now()
     post = Post.objects.get(id=post_id)
     commentaires = Commentaire.objects.filter(post_id=post_id)
     form = CommentaireForm(request.POST or None)
-    form.fields['auteur'].choices = [
-        (request.user.id, request.user.username)]  # On limite le choix de l'auteur à l'utilisateur uniquement.
-    # On ne peut de fait, pas créer de post si l'authentification n'est pas faite.
-    form.fields['post'].choices = [(post_id,
-                                    post.title)]  # On limite le choix du POST que l'abonné commente.
-    # Il ne peut commenter que le POST sur lequel il se trouve.
 
     if form.is_valid():
-        commentaire = form.save()
-        commentaire.post_id = post_id
-        commentaire.auteur_id = request.user.id
+        commentaire = form.save(commit=False)
+        commentaire.post = post
+        commentaire.auteur = request.user
         commentaire.save()
         form = CommentaireForm()
         envoi = True
@@ -66,6 +67,8 @@ def commentaire(request, post_id):
 # communautés auxquelles il est abonné.
 @login_required(login_url='/accounts/login/')
 def nouveau_post(request):
+    date_now = timezone.now()
+
     form = PostForm(
         request.POST or None)
     communautes = Communaute.objects.filter(abonnes=request.user)
@@ -87,6 +90,8 @@ def nouveau_post(request):
 # si la modification du POST est lancée par un autre utilisateur que l'auteur.
 @login_required(login_url='/accounts/login/')
 def modification_post(request, post_id):
+    date_now = timezone.now()
+
     post = Post.objects.get(id=post_id)
     alert_flag = True
     if post.auteur == request.user:
@@ -108,5 +113,5 @@ def voir_posts(request):
     return render(
         request,
         'communitymanager/see_posts.html',
-        {"posts": Post.objects.filter(auteur=request.user)}
+        {"posts": Post.objects.filter(auteur=request.user),"date_now":timezone.now()}
     )
