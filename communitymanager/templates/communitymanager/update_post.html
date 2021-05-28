@@ -8,8 +8,8 @@
 <body>
 <div>{% block h1 %} Updatez votre POST! {% endblock h1 %}</div>
 <a href="{% url "post" post_id=post.id %}">Retour aux POSTs de la communauté </a>
-{% block h3 %}{% if envoi %}Votre post a bien été modifié !{% endif %}
-    EDITEZ votre Post !
+{% block h3 %}{% if envoi %}Votre post a bien été modifié !{% else %}
+    EDITEZ votre Post !{% endif %}
     {% if alert_flag %}
         <script>alert("Vous n'êtes pas le créateur de ce POST! Retournez à votre feed.")
         window.location.href = " http://127.0.0.1:8000/communitymanager/feed_abonnements"

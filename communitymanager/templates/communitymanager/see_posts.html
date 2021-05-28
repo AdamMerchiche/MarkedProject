@@ -29,7 +29,7 @@
             <div class="col-lg-4">
                 <h4 class="m-b-15 d-block"><b>
                     <p class="text-center">
-                        {{ post.title }}
+                        {{ post.title|capfirst }}
                         <a span
                            href="{% url 'update_post' post.id %}"><i
                                 class="far fa-edit"></i></a></b></h4>

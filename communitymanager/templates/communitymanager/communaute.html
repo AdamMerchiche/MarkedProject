@@ -12,7 +12,7 @@
         <! -- CSS pour afficher les posts dans un format spécifique-->
         <div class="row">
             <div class="col-sm-4">
-                <h4 class="m-b-15 d-block"><b>
+                <h4 class="m-b-15 d-block "><b>
                     <p class="text-left">Priorite
                         {{ post.priorite }}
                     <div class="comment-widgets"> {% if post.evenementiel %}
@@ -29,10 +29,11 @@
             <div class="col-lg-4">
                 <h4 class="m-b-15 d-block"><b>
                     <p class="text-center">
-                        {{ post.title }}
+                        {{ post.title|capfirst }}
+                        {% if user == post.auteur %}
                         <a span
                            href="{% url 'update_post' post.id %}"><i
-                                class="far fa-edit"></i></a></b></h4>
+                                class="far fa-edit"></i></a>{% endif %}</b></h4>
                 <span class="m-b-15 d-block"> <p class="text-justify">{{ post.description |linebreaks }}</p>
               </span></div>
             <div class="col-sm-4">

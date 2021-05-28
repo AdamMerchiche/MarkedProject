@@ -12,7 +12,7 @@
 
     {% for communaute in communautes %}
         <div class="communaute table-hover">
-            <h1><b>{{ communaute.name }}</b></h1>
+            <h1><b>{{ communaute.name|capfirst }}</b></h1>
             <p><i class="fas fa-users"></i>
                 {% for u in communaute.abonnes.all %}
                     {{ u.get_username }}-

@@ -1,0 +1,20 @@
+.slideIn{
+    animation: myAnim 1s ease 1 -300ms normal forwards;
+}
+
+.slideInContenu{
+    animation: myAnim 1500ms ease 1 -300ms normal forwards;
+}
+
+@keyframes myAnim {
+  0% {
+    opacity: 0;
+    transform: translateX(-250px);
+  }
+
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
