@@ -56,6 +56,7 @@ def commentaire(request, post_id):
         commentaire.post_id = post_id
         commentaire.auteur_id = request.user.id
         commentaire.save()
+        form = CommentaireForm()
         envoi = True
     return render(request, 'communitymanager/post.html', locals())
 
