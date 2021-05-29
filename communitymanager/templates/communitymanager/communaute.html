@@ -14,7 +14,7 @@
     {# Section pour créer un nouveau post s'il n'y en a pas #}
     {% if not posts %}
         Créer le premier post de la communauté ?
-        {% include 'communitymanager/nouveau_post.html' %}
+        <a href="{% url 'nouveau_post'  %}"><i class="far fa-edit"></i></a>
     {% endif %}
 
 {% endblock h3 %}
