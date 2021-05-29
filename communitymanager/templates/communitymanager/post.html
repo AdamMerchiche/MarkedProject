@@ -1,53 +1,15 @@
-<!DOCTYPE html>
 {% extends "base.html" %}
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>{% block title %} Voici la liste des commentaires !{% endblock title %}</title>
-</head>
-<body>
-<div>{% block h1 %} Commentaires de {{ post.title }}! {% endblock h1 %}</div>
-{% block h3 %}
-    <div class="bg-light">
-        <div class="row">
-            <div class="col-sm-4 bg-light">
-                <h4 class="m-b-15 d-block"><b>
-                    <p class="text-left">Priorite
-                        {{ post.priorite }}
-                    <div class="comment-widgets"> {% if post.evenementiel %}
-                        <h4 class="font-medium text-left"><i
-                                class="fas fa-glass-cheers"></i>
-                            EVENT<br>
-                            <i class="fas fa-calendar-week"></i>
-                            {{ post.date_evenement }}</h4>
-                    {% endif %}
-                    </div>
-                    </p>
-                </b></h4>
-            </div>
-            <div class="col-lg-4">
-                <h4 class="m-b-15 d-block"><b>
-                    <p class="text-center">
-                        {{ post.title|capfirst }}
-                        {% if user == post.auteur %}
-                        <a span
-                           href="{% url 'update_post' post.id %}"><i
-                                class="far fa-edit"></i></a>{% endif %}</b></h4>
-                <span class="m-b-15 d-block"> <p class="text-justify">{{ post.description |linebreaks }}</p>
-              </span></div>
-            <div class="col-sm-4">
 
-                <div class="comment-footer"><span class="text-muted float-right"><i class="far fa-clock"></i>
-                    {{ post.date_creation|timesince:date_now|linebreaks }} <i
-                        class="fas fa-users"></i>{{ post.communaute|linebreaks }}
-                        <i class="fas fa-user-edit"></i>
-                    {{ post.auteur }}
-                    </span>
-                </div>
-            </div>
-        </div>
-        <hr class="my-4"/>
-    </div>
+{% block title %} Voici la liste des commentaires !{% endblock title %}
+
+{% block h1 %} Commentaires de {{ post.title }}! {% endblock h1 %}
+
+{% block h3 %}
+
+    {# Inclusion template pour afficher le post #}
+    {% include 'communitymanager/un_post.html' with post=post bg_color="bg-light" btn_lire_commentaire=False %}
+
+    {# Affichage des commentaires du post #}
     {% for commentaire in commentaires %}
         <div class="media p-3">
             <div class="media-body">
@@ -59,6 +21,7 @@
         <hr class="my-4"/>
     {% endfor %}
 
+    {# Section pour ajouter un commentaire #}
     <div> Commentez!</div>
     {% if envoi %}Votre commentaire a bien été envoyé !{% endif %}
     <form action="{% url "post" post.id %}" method="post">
@@ -67,7 +30,4 @@
         <input type="submit" value="Ajoutez un commentaire..."/>
     </form>
 
-
-    </div>
 {% endblock h3 %}
-</body>
