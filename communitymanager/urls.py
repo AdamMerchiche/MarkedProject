@@ -5,6 +5,7 @@ from . import views
 urlpatterns = [
     path('list_communautes', views.liste_communautes, name="list_communautes"),
     path('abonnements/<int:communaute_id>', views.abonner, name="abonnements"),
+    path('fermer/<int:communaute_id>', views.fermer_communaute, name="fermer"),
     path('communaute/<int:communaute_id>/', views.communaute, name="communaute"),
     path('communaute/post/<int:post_id>', views.commentaire, name="post"),
     path('communaute/nouveau_post/', views.nouveau_post, name="nouveau_post"),

@@ -18,7 +18,6 @@ def accueil(request):
 @login_required(login_url='/accounts/login/')
 def liste_communautes(request):
     date_now = timezone.now()
-
     communautes = Communaute.objects.all()
     return render(request, 'communitymanager/list_communautes.html', {'communautes': communautes})
 
@@ -49,7 +48,7 @@ def communaute(request, communaute_id):
 def commentaire(request, post_id):
     date_now = timezone.now()
     post = Post.objects.get(id=post_id)
-    commentaires = Commentaire.objects.filter(post_id=post_id)
+    commentaires = Commentaire.objects.filter(post_id=post_id, ferme=False)
     form = CommentaireForm(request.POST or None)
 
     if form.is_valid():
@@ -71,7 +70,7 @@ def nouveau_post(request):
 
     form = PostForm(
         request.POST or None)
-    communautes = Communaute.objects.filter(abonnes=request.user)
+    communautes = Communaute.objects.filter(abonnes=request.user, ferme=False)
     form.fields['auteur'].choices = [
         (request.user.id, request.user.username)]  # On limite le choix de l'auteur à l'utilisateur uniquement.
     # On ne peut de fait, pas créer de post si l'authentification n'est pas faite.
@@ -115,7 +114,8 @@ def voir_posts(request):
         'communitymanager/see_posts.html',
         {"posts": Post.objects.filter(auteur=request.user),"date_now":timezone.now()}
     )
-
+#Vue permettant de créer une communauté, avec l'utilisateur comme auteur
+@login_required(login_url='/accounts/login/')
 def creation_communaute(request):
     communautes = Communaute.objects.all()
     form = CommunauteForm(
@@ -127,13 +127,15 @@ def creation_communaute(request):
         envoi = True
     return render(request, 'communitymanager/nouvelle_communaute.html', locals())
 
+#Vue permettant de modifier une communauté que l'utilisateur a créée
+@login_required(login_url='/accounts/login/')
 def modification_communaute(request, communaute_id):
     date_now = timezone.now()
     communaute = Communaute.objects.get(id=communaute_id)
     alert_flag = True
     if communaute.createur == request.user:
         alert_flag = False
-        form = ModificationCommunauteFormForm(request.POST or None, instance=communaute)
+        form = ModificationCommunauteForm(request.POST or None, instance=communaute)
         if form.is_valid():
             communaute = form.save()
             communaute.save()
@@ -141,3 +143,14 @@ def modification_communaute(request, communaute_id):
     else:
         alert_flag = True
     return render(request, 'communitymanager/update_communaute.html', locals())
+
+@login_required(login_url='/accounts/login/')
+def fermer_communaute(request, communaute_id):
+    communaute = Communaute.objects.get(id=communaute_id)
+    if communaute.ferme:
+        communaute.ferme = False
+    else:
+        communaute.ferme = True
+    print(communaute.ferme)
+    return redirect('list_communautes', communaute.ferme)
+

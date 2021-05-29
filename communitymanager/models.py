@@ -9,6 +9,7 @@ class Communaute(models.Model):
     abonnes = models.ManyToManyField(User, related_name="abonnés", blank=True)
     createur = models.ForeignKey(User, on_delete="models.CASCADE")
     description = models.CharField(max_length=2500, blank=False)
+    ferme= models.BooleanField(default=False)
     def __str__(self):
         return self.name
 
