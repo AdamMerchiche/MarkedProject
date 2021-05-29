@@ -1,0 +1,58 @@
+{% comment %}
+    Template à inclure pour afficher un post
+    Args: post, données du post à afficher
+          bg_color, couleur du background du post
+          btn_lire_commentaire, booleen pour spécifier si le lien "Lire les commentaires" doit être présent
+{% endcomment %}
+
+<div class="{{ bg_color }} mb-4">
+
+    <div class="row py-2 px-1 {{ bg_color }}">
+
+        <div class="col-sm-3"> {# colonne 1: priorité et info evenementiel #}
+            <h4 class="m-b-15 d-block"><b>
+                <p class="text-left">
+                    Priorite {{ post.priorite }}
+                    <span class="comment-widgets">
+                        {% if post.evenementiel %}
+                            <h4 class="font-medium text-left">
+                                <i class="fas fa-glass-cheers mr-2 my-1"></i> EVENT <br>
+                                <i class="fas fa-calendar-week mr-2 my-1"></i> {{ post.date_evenement }}
+                            </h4>
+                        {% endif %}
+                    </span>
+                </p>
+            </b></h4>
+        </div>
+
+        <div class="col-sm-6"> {# colonne 2: titre et description #}
+            <h4 class="m-b-15 d-block"><b>
+                <p class="text-center">
+                    {{ post.title|capfirst }}
+                    {% if user == post.auteur %}
+                        <a href="{% url 'update_post' post.id %}">
+                        <i class="far fa-edit"></i>
+                        </a>
+                    {% endif %}
+                </p>
+            </b></h4>
+            <span class="m-b-15 d-block"> <p class="text-justify">{{ post.description |linebreaks }}</p></span>
+        </div>
+
+        <div class="col-sm-3"> {# colonne 3: temps depuis la creation du post, communaute, auteur et lien vers les commentaires #}
+            <div class="comment-footer">
+                <span class="text-muted float-right">
+                    <i class="far fa-clock"></i> {{ post.date_creation|timesince:date_now|linebreaks }}
+                    <i class="fas fa-users"></i> {{ post.communaute|linebreaks }}
+                    <i class="fas fa-user-edit"></i> {{ post.auteur }}
+                    {% if btn_lire_commentaire %}
+                        <p><a href="{% url "post" post_id=post.id %}">Lire les commentaires</a></p>
+                    {% endif %}
+                </span>
+            </div>
+        </div>
+
+    </div>
+
+    <hr> {# delimitation pour marquer la fin du post #}
+</div>
