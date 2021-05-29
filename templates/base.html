@@ -5,6 +5,7 @@ tout en ajoutant dnas les templates de l'application, des fonctionnalités inté
 
 <html lang="fr-FR">
 <head>
+    <meta charset="UTF-8">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
@@ -13,7 +14,6 @@ tout en ajoutant dnas les templates de l'application, des fonctionnalités inté
     <link rel="stylesheet" type="text/css" href="/static/admin/css/base.css">
     <link rel="stylesheet" type="text/css" href="{% static 'css/priority.css' %}"/>
     <title>{% block title %}Déconnecté | Site d'administration de Django{% endblock title %}</title>
-
 
     <meta name="robots" content="NONE,NOARCHIVE">
 </head>
@@ -24,20 +24,17 @@ tout en ajoutant dnas les templates de l'application, des fonctionnalités inté
 <!-- Container -->
 <div id="container">
 
-
     <!-- Header -->
     <div class=' h-50 bg-dark bg-center' id="header">
         <div id="branding " class=" text-center ">
-
             <h1 id="site-name" class="text-white ">{% block h1 %} Administration de Django  {% endblock h1 %}</h1>
-
         </div>
-
-
     </div>
     <!-- END Header -->
-    <div class="  breadcrumbs bg-secondary"><a href="/accounts/login"> {% block h2 %}{% endblock h2 %}</a>
-        {% block navbar %}
+
+    {% block navbar %}
+    <div class="  breadcrumbs bg-secondary">
+{#        <a href="/accounts/login"> {% block h2 %}{% endblock h2 %}</a> #} {# Necessaire? #}
             <nav class="navbar navbar-expand-sm bg-transparent navbar-white pull-right ">
             <a class="navbar-brand" href="/accounts/logout"><i class="fas fa-sign-out-alt "></i></a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
@@ -45,16 +42,16 @@ tout en ajoutant dnas les templates de l'application, des fonctionnalités inté
             </button>
             <div class="collapse navbar-collapse" id="collapsibleNavbar">
                 <ul class="navbar-nav ml-auto ">
-                    <a class="nav-link" href="{% url 'nouveau_post' %}"><i
-                            class="far fa-edit"></i></a>
+                    <a class="nav-link" href="{% url 'nouveau_post' %}"><i class="far fa-edit"></i></a>
                     <a class="nav-link" href="{% url 'feed_abonnements' %}">Votre feed</a>
                     <a class="nav-link" href="{% url 'list_communautes' %}">Communautes</a>
                     <a class="nav-link" href="{% url 'see_posts' %}">Vos Créations</a>
                 </ul>
             </div>
         </nav>
-        {% endblock %}
     </div>
+    {% endblock %}
+
     <!-- Content -->
     <div id="content" class="colM text-center">
         <p>{% block h3 %}Merci pour le temps que vous avez accordé à ce site aujourd'hui.{% endblock h3 %}</p>
