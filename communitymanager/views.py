@@ -115,3 +115,29 @@ def voir_posts(request):
         'communitymanager/see_posts.html',
         {"posts": Post.objects.filter(auteur=request.user),"date_now":timezone.now()}
     )
+
+def creation_communaute(request):
+    communautes = Communaute.objects.all()
+    form = CommunauteForm(
+        request.POST or None)
+    form.fields['createur'].choices = [
+        (request.user.id, request.user.username)]
+    if form.is_valid():
+        form.save()
+        envoi = True
+    return render(request, 'communitymanager/nouvelle_communaute.html', locals())
+
+def modification_communaute(request, communaute_id):
+    date_now = timezone.now()
+    communaute = Communaute.objects.get(id=communaute_id)
+    alert_flag = True
+    if communaute.createur == request.user:
+        alert_flag = False
+        form = ModificationCommunauteFormForm(request.POST or None, instance=communaute)
+        if form.is_valid():
+            communaute = form.save()
+            communaute.save()
+            envoi = True
+    else:
+        alert_flag = True
+    return render(request, 'communitymanager/update_communaute.html', locals())

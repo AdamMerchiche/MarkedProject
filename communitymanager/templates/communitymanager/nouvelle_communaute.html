@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %} Créez votre communauté !{% endblock title %}</title>
+</head>
+{% block h1 %}Inspirez-nous{% endblock h1 %}
+<body class="">
+{% block h3 %}{% if envoi %}Votre communauté a bien été créée !{% endif %}
+    Créez un havre de paix où des utilisateurs pourront suivre votre actualité !
+    <form action="{% url "nouvelle_communaute" %}" method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <input class="" type="submit" value="Ajoutez une Communauté..."/>
+    </form>
+{% endblock h3 %}
+</body>

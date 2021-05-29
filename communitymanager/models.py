@@ -7,6 +7,8 @@ from django.utils import timezone
 class Communaute(models.Model):
     name = models.CharField(max_length=30)
     abonnes = models.ManyToManyField(User, related_name="abonnés", blank=True)
+    createur = models.ForeignKey(User, on_delete="models.CASCADE")
+    description = models.CharField(max_length=2500, blank=False)
     def __str__(self):
         return self.name
 

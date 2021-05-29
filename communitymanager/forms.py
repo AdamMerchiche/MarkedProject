@@ -41,3 +41,13 @@ class ModificationPostForm(forms.ModelForm):
         # La date de création apparait ici plutôt
         # comme un choix du designer d'application. On choisira de laisser la date de création
         # puisque par définition nous ne recréons pas le POST.
+
+class CommunauteForm(forms.ModelForm):
+    class Meta:
+        model = Communaute
+        fields = "__all__"
+
+class ModificationCommunauteForm(forms.ModelForm):
+    class Meta:
+        model = Communaute
+        exclude = ["createur"] #Possible de modifier la description, le titre, et de bannir des abonnés de la commu
