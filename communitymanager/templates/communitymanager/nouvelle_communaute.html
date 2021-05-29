@@ -6,7 +6,7 @@
 </head>
 {% block h1 %}Inspirez-nous{% endblock h1 %}
 <body class="">
-{% block h3 %}{% if envoi %}Votre communauté a bien été créée !{% endif %}
+{% block h3 %}{% if envoi %}Votre communauté a bien été créée! Retournez à la liste des communautés pour l'apprécier{% endif %}
     Créez un havre de paix où des utilisateurs pourront suivre votre actualité !
     <form action="{% url "nouvelle_communaute" %}" method="post">
         {% csrf_token %}

@@ -7,29 +7,34 @@
     <title>{% block title %}ACCUEIL : Voici la liste de vos communautés préférées !{% endblock title %}</title>
 </head>
 <hr>
-<div>{% block h1 %} Bienvenue {{ request.user.get_username }},  sur la page des communautés  ! {% endblock h1 %}</div>
+<div>{% block h1 %} Bienvenue {{ request.user.get_username }}, sur la page des communautés ! {% endblock h1 %}</div>
+
 {% block h3 %}
+{% for communaute in communautes %}
+<div class="communaute table-hover slideIn">
+    <h1><b>{{ communaute.name|capfirst }}</b></h1>
+    <p><i class="fas fa-users"></i>
+        {% for u in communaute.abonnes.all %}
+        {{ u.get_username }}-
+        {% endfor %}</p>
+    {% if request.user in communaute.abonnes.all %}
+    <a span href="{% url 'abonnements' communaute.id %}"><i class="fas fa-heart pull-right"></i></a>
+    <p><a href="{% url " communaute" communaute.id %}">Lire les Posts</a>
 
-    {% for communaute in communautes %}
-        <div class="communaute table-hover slideIn">
-            <h1><b>{{ communaute.name|capfirst }}</b></h1>
-            <p><i class="fas fa-users"></i>
-                {% for u in communaute.abonnes.all %}
-                    {{ u.get_username }}-
-                {% endfor %}</p>
-            {% if request.user in communaute.abonnes.all %}
-                <a span href="{% url 'abonnements' communaute.id %}"><i class="fas fa-heart pull-right"></i></a>
-                <p><a href="{% url "communaute" communaute.id %}">Lire les Posts</a>
+        {% else %}
+        <a span href="{% url 'abonnements' communaute.id %}"><i class="far fa-heart pull-right"></i> </a>
 
-            {% else %}
-                <a span href="{% url 'abonnements' communaute.id %}"><i class="far fa-heart pull-right"></i> </a>
+        {% endif %}
+</div>
+<hr class="my-4"/>
 
-            {% endif %}
-        </div>
-        <hr class="my-4"/>
+{% endfor %}
 
-    {% endfor %}
-
+{% if not communautes%}
+Créer le premier post de la communauté ?
+<a href="{% url 'nouvelle_communaute'  %}"><i class="far fa-edit"></i></a>
+{% endif%}
 {% endblock h3 %}
+
 </body>
 </html>
