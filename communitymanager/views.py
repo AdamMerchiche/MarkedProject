@@ -39,7 +39,7 @@ def abonner(request, communaute_id):
 @login_required(login_url='/accounts/login/')
 def communaute(request, communaute_id):
     return render(request, 'communitymanager/communaute.html',
-                  {'posts': Post.objects.filter(communaute_id=communaute_id),"date_now":timezone.now()})
+                  {'posts': Post.objects.filter(communaute_id=communaute_id), "date_now": timezone.now()})
 
 
 # Permet à l'utilisateur connecté de créer un commentaire. Il sera prérempli au niveau de la section Auteur,
@@ -112,9 +112,11 @@ def voir_posts(request):
     return render(
         request,
         'communitymanager/see_posts.html',
-        {"posts": Post.objects.filter(auteur=request.user),"date_now":timezone.now()}
+        {"posts": Post.objects.filter(auteur=request.user), "date_now": timezone.now()}
     )
-#Vue permettant de créer une communauté, avec l'utilisateur comme auteur
+
+
+# Vue permettant de créer une communauté, avec l'utilisateur comme auteur
 @login_required(login_url='/accounts/login/')
 def creation_communaute(request):
     communautes = Communaute.objects.all()
@@ -127,7 +129,8 @@ def creation_communaute(request):
         envoi = True
     return render(request, 'communitymanager/nouvelle_communaute.html', locals())
 
-#Vue permettant de modifier une communauté que l'utilisateur a créée
+
+# Vue permettant de modifier une communauté que l'utilisateur a créée
 @login_required(login_url='/accounts/login/')
 def modification_communaute(request, communaute_id):
     date_now = timezone.now()
@@ -144,6 +147,7 @@ def modification_communaute(request, communaute_id):
         alert_flag = True
     return render(request, 'communitymanager/update_communaute.html', locals())
 
+
 @login_required(login_url='/accounts/login/')
 def fermer_communaute(request, communaute_id):
     communaute = Communaute.objects.get(id=communaute_id)
@@ -155,3 +159,7 @@ def fermer_communaute(request, communaute_id):
     print(communaute.ferme)
     return redirect('list_communautes')
 
+def detruire_communaute(request, communaute_id):
+    communaute = Communaute.objects.get(id=communaute_id)
+    communaute.delete()
+    return redirect('list_communautes')

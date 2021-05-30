@@ -36,7 +36,7 @@ class Post(models.Model):
     priorite = models.ForeignKey(Priorite, on_delete="models.CASCADE")
     auteur = models.ForeignKey(User, on_delete="models.CASCADE")
     collant=models.BooleanField(default=False)
-    visible = models.BooleanField(default=False)
+    visible = models.BooleanField(default=True)
 
     # On choisira d'ordonner l'ensemble des POSTs en fonction de leur date de publication.
     # Plus un POST est ancien, plus il faudra descendre sur la page pour le voir.

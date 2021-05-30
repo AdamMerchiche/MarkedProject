@@ -35,6 +35,12 @@
         {{communaute.ferme}}
     {%endif%}
 
+    {% if communaute.createur == request.user %}
+        {{communaute.createur}}
+        {{request.user}}
+        <a span href="{% url 'detruire' communaute.id %}"><i class="fas fa-trash-alt"></i></a>
+    {% endif %}
+
 </div>
 <hr class="my-4"/>
 
