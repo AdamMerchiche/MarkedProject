@@ -51,7 +51,7 @@ class Commentaire(models.Model):
     contenu = models.TextField()
     auteur = models.ForeignKey(User, on_delete="models.CASCADE")
     post = models.ForeignKey(Post, on_delete="models.CASCADE")
-    visible = models.BooleanField(default=False)
+    invisible = models.BooleanField(default=False)
 
     # A l'image d'un Forum, on choisira plutôt d'ordonner les commentaires de façon différente. Les commentaires les plus anciens apparaisseront en haut de page.
     class Meta:

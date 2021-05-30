@@ -13,7 +13,13 @@
 
 {% for communaute in communautes %}
 <div class="communaute table-hover slideIn">
-    <h1><b>{{ communaute.name|capfirst }}</b></h1>
+    <h1><b>{{ communaute.name|capfirst }}
+        {% if request.user == communaute.createur %}
+        <a href="{% url 'update_communaute' communaute.id %}">
+            <i class="far fa-edit"></i>
+        </a>
+        {% endif %}</b></h1>
+
     <p><i class="fas fa-users"></i>
         {% for u in communaute.abonnes.all %}
         {{ u.get_username }}-
@@ -26,19 +32,13 @@
     <a span href="{% url 'abonnements' communaute.id %}"><i class="far fa-heart pull-right"></i> </a>
 
     {% endif %}
-
-    {% if communaute.ferme %}
-        <a span href="{% url 'fermer' communaute.id %}"><i class="fas fa-lock"></i></a>
-        {{communaute.ferme}}
-    {%else%}
-        <a span href="{% url 'fermer' communaute.id %}"><i class="fas fa-lock-open"></i></a>
-        {{communaute.ferme}}
-    {%endif%}
-
     {% if communaute.createur == request.user %}
-        {{communaute.createur}}
-        {{request.user}}
-        <a span href="{% url 'detruire' communaute.id %}"><i class="fas fa-trash-alt"></i></a>
+        {% if communaute.ferme %}
+            <a span href="{% url 'fermer' communaute.id %}"><i class="fas fa-lock"></i></a>
+        {%else%}
+            <a span href="{% url 'fermer' communaute.id %}"><i class="fas fa-lock-open"></i></a>
+        {%endif%}
+            <a span href="{% url 'detruire' communaute.id %}"><i class="fas fa-trash-alt pull-right"></i></a>
     {% endif %}
 
 </div>

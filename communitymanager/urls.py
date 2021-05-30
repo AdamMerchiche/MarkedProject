@@ -12,6 +12,8 @@ urlpatterns = [
     path('communaute/nouveau_post/', views.nouveau_post, name="nouveau_post"),
     path('nouvelle_communaute/', views.creation_communaute, name="nouvelle_communaute"),
     path('communaute/update_post/<int:post_id>', views.modification_post, name="update_post"),
+    path('communaute/visibilité_commentaire/<int:commentaire_id>', views.visibilite_commentaire, name="visibilite_commentaire"),
+    path('communaute/update_communaute/<int:communaute_id>', views.modification_communaute, name="update_communaute"),
     path('see_posts', views.voir_posts, name="see_posts"),
     path('feed_abonnements', views.accueil, name="feed_abonnements"),
 

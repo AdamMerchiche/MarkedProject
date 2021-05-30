@@ -48,7 +48,7 @@ def communaute(request, communaute_id):
 def commentaire(request, post_id):
     date_now = timezone.now()
     post = Post.objects.get(id=post_id)
-    commentaires = Commentaire.objects.filter(post_id=post_id, ferme=False)
+    commentaires = Commentaire.objects.filter(post_id=post_id)
     form = CommentaireForm(request.POST or None)
 
     if form.is_valid():
@@ -60,6 +60,16 @@ def commentaire(request, post_id):
         envoi = True
     return render(request, 'communitymanager/post.html', locals())
 
+def visibilite_commentaire(request, commentaire_id):
+   commentaire = Commentaire.objects.get(id=commentaire_id)
+   if commentaire.invisible:
+       commentaire.invisible=False
+       commentaire.save()
+   else:
+       commentaire.invisible = True
+       commentaire.save()
+   print(commentaire.invisible)
+   return redirect('post', post_id=commentaire.post_id)
 
 # Permet à l'utilisateur connecté de créer un POST. Il sera prérempli au niveau de la section Auteur,
 # et les choix de la communauté (lieu de publication) seront limités. L'utilisateur ne pourra poster que dans les
@@ -154,12 +164,13 @@ def fermer_communaute(request, communaute_id):
     print(communaute.ferme)
     if communaute.ferme:
         communaute.ferme = False
+        communaute.save()
     else:
         communaute.ferme = True
+        communaute.save()
     print(communaute.ferme)
     return redirect('list_communautes')
 
 def detruire_communaute(request, communaute_id):
-    communaute = Communaute.objects.get(id=communaute_id)
-    communaute.delete()
+    Communaute.objects.filter(id=communaute_id).delete()
     return redirect('list_communautes')

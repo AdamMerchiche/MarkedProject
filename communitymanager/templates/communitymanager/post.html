@@ -11,17 +11,40 @@
 
     {# Affichage des commentaires du post #}
     {% for commentaire in commentaires %}
+        {% if not commentaire.invisible%}
         <div class="media p-3">
             <div class="media-body">
-                <h4><i class="fas fa-user-edit"></i> {{ commentaire.auteur }}
-                    <small><i>{{ commentaire.date_creation }}</i></small></h4>
                 <p>{{ commentaire.contenu }}</p>
+                <h4><i class="fas fa-user-edit"></i> {{ commentaire.auteur }}
+                    <small><i>{{ commentaire.date_creation }}</i></small>
+                {% if request.user == post.communaute.createur %}
+                    <a span href="{% url 'visibilite_commentaire' commentaire.id %}"><i class="far fa-eye"></i></a>
+
+                    {% endif%}
+                </h4>
             </div>
         </div>
         <hr class="my-4"/>
-    {% endfor %}
 
+        {%else%}
+    {% if request.user == post.communaute.createur %}
+ <div class="media p-3">
+            <div class="media-body">
+                <p>{{ commentaire.contenu }}</p>
+                <h4><i class="fas fa-user-edit"></i> {{ commentaire.auteur }}
+                    <small><i>{{ commentaire.date_creation }}</i></small>
+                <a span href="{% url 'visibilite_commentaire' commentaire.id %}"><i class="far fa-eye-slash"></i></a>
+
+                </h4>
+            </div>
+        </div>
+        <hr class="my-4"/>
+
+        {% endif %}
+{% endif %}
+    {% endfor %}
     {# Section pour ajouter un commentaire #}
+    {% if not post.communaute.ferme%}
     <div> Commentez!</div>
     {% if envoi %}Votre commentaire a bien été envoyé !{% endif %}
     <form action="{% url "post" post.id %}" method="post">
@@ -29,5 +52,8 @@
         <p>{{ form.contenu}}</p>
         <input type="submit" value="Ajoutez un commentaire..."/>
     </form>
+    {%else%}
+    Ce POST est fermé, vous ne pouvez plus le commenter.
+    {% endif %}
 
 {% endblock h3 %}
