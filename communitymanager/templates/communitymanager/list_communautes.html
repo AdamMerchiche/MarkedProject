@@ -28,12 +28,11 @@
     {% endif %}
 
     {% if communaute.ferme %}
-    <a span href="{% url 'fermer' communaute.id %}"><i class="fas fa-lock"></i></a>
-    {{communaute.ferme}}
+        <a span href="{% url 'fermer' communaute.id %}"><i class="fas fa-lock"></i></a>
+        {{communaute.ferme}}
     {%else%}
-    <a span href="{% url 'fermer' communaute.id %}"><i class="fas fa-lock-open"></i></a>
-    {{communaute.ferme}}
-
+        <a span href="{% url 'fermer' communaute.id %}"><i class="fas fa-lock-open"></i></a>
+        {{communaute.ferme}}
     {%endif%}
 
 </div>

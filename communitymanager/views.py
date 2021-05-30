@@ -147,10 +147,11 @@ def modification_communaute(request, communaute_id):
 @login_required(login_url='/accounts/login/')
 def fermer_communaute(request, communaute_id):
     communaute = Communaute.objects.get(id=communaute_id)
+    print(communaute.ferme)
     if communaute.ferme:
         communaute.ferme = False
     else:
         communaute.ferme = True
     print(communaute.ferme)
-    return redirect('list_communautes', communaute.ferme)
+    return redirect('list_communautes')
 

@@ -35,6 +35,8 @@ class Post(models.Model):
     communaute = models.ForeignKey(Communaute, on_delete="models.CASCADE")
     priorite = models.ForeignKey(Priorite, on_delete="models.CASCADE")
     auteur = models.ForeignKey(User, on_delete="models.CASCADE")
+    collant=models.BooleanField(default=False)
+    visible = models.BooleanField(default=False)
 
     # On choisira d'ordonner l'ensemble des POSTs en fonction de leur date de publication.
     # Plus un POST est ancien, plus il faudra descendre sur la page pour le voir.
@@ -49,6 +51,7 @@ class Commentaire(models.Model):
     contenu = models.TextField()
     auteur = models.ForeignKey(User, on_delete="models.CASCADE")
     post = models.ForeignKey(Post, on_delete="models.CASCADE")
+    visible = models.BooleanField(default=False)
 
     # A l'image d'un Forum, on choisira plutôt d'ordonner les commentaires de façon différente. Les commentaires les plus anciens apparaisseront en haut de page.
     class Meta:
