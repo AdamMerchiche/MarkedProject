@@ -15,6 +15,10 @@ class PostForm(forms.ModelForm):
     class Meta:
         model = Post
         exclude = ["date_creation"]
+        posts = Post.objects.all()
+        for post in posts:
+            if post.collant:
+                exclude = ["collant"]
 
     # On initialisera notre formulaire dans la vue associée. Néanmoins, on fera attention à deux variables du modèle Post.
     def clean(self):
@@ -41,6 +45,7 @@ class ModificationPostForm(forms.ModelForm):
         # La date de création apparait ici plutôt
         # comme un choix du designer d'application. On choisira de laisser la date de création
         # puisque par définition nous ne recréons pas le POST.
+
 
 class CommunauteForm(forms.ModelForm):
     class Meta:

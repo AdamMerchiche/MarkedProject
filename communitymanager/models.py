@@ -7,7 +7,7 @@ from django.utils import timezone
 class Communaute(models.Model):
     name = models.CharField(max_length=30)
     abonnes = models.ManyToManyField(User, related_name="abonnés", blank=True)
-    createur = models.ForeignKey(User, on_delete="models.CASCADE")
+    createur = models.ForeignKey(User, on_delete="models.DO_NOTHING")
     description = models.CharField(max_length=2500, blank=False)
     ferme= models.BooleanField(default=False)
     def __str__(self):
@@ -33,15 +33,15 @@ class Post(models.Model):
     date_evenement = models.DateTimeField(verbose_name="Date de l'évenement", blank=True, null=True)
 
     communaute = models.ForeignKey(Communaute, on_delete="models.CASCADE")
-    priorite = models.ForeignKey(Priorite, on_delete="models.CASCADE")
-    auteur = models.ForeignKey(User, on_delete="models.CASCADE")
+    priorite = models.ForeignKey(Priorite, on_delete="models.DO_NOTHING")
+    auteur = models.ForeignKey(User, on_delete="models.DO_NOTHING")
     collant=models.BooleanField(default=False)
     visible = models.BooleanField(default=True)
 
     # On choisira d'ordonner l'ensemble des POSTs en fonction de leur date de publication.
     # Plus un POST est ancien, plus il faudra descendre sur la page pour le voir.
     class Meta:
-        ordering = ['-date_creation']
+        ordering = ['-collant', '-date_creation']
 
 
 # Modèle du Commentaire, renseignant l'ensemble des variables demandées.
@@ -49,7 +49,7 @@ class Commentaire(models.Model):
     date_creation = models.DateTimeField(default=timezone.now,
                                          verbose_name="Date du commentaire")
     contenu = models.TextField()
-    auteur = models.ForeignKey(User, on_delete="models.CASCADE")
+    auteur = models.ForeignKey(User, on_delete="models.DO_NOTHING")
     post = models.ForeignKey(Post, on_delete="models.CASCADE")
     invisible = models.BooleanField(default=False)
 

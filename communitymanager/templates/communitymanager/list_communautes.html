@@ -10,7 +10,7 @@
 <div>{% block h1 %} Bienvenue {{ request.user.get_username }}, sur la page des communautés ! {% endblock h1 %}</div>
 
 {% block h3 %}
-
+{%if communautes%}
 {% for communaute in communautes %}
 <div class="communaute table-hover slideIn">
     <h1><b>{{ communaute.name|capfirst }}
@@ -32,13 +32,14 @@
     <a span href="{% url 'abonnements' communaute.id %}"><i class="far fa-heart pull-right"></i> </a>
 
     {% endif %}
-    {% if communaute.createur == request.user %}
-        {% if communaute.ferme %}
-            <a span href="{% url 'fermer' communaute.id %}"><i class="fas fa-lock"></i></a>
-        {%else%}
-            <a span href="{% url 'fermer' communaute.id %}"><i class="fas fa-lock-open"></i></a>
-        {%endif%}
-            <a span href="{% url 'detruire' communaute.id %}"><i class="fas fa-trash-alt pull-right"></i></a>
+    {# Section pour fermer/détruire une communauté si le créateur est l'utilisateur#}
+    {% if communaute.createur == request.user or request.user.is_superuser %}
+    {% if communaute.ferme %}
+    <a span href="{% url 'fermer' communaute.id %}"><i class="fas fa-lock"></i></a>
+    {%else%}
+    <a span href="{% url 'fermer' communaute.id %}"><i class="fas fa-lock-open"></i></a>
+    {%endif%}
+    <a span href="{% url 'detruire' communaute.id %}"><i class="fas fa-trash-alt pull-right"></i></a>
     {% endif %}
 
 </div>
@@ -46,8 +47,8 @@
 
 {% endfor %}
 
-{% if not communautes%}
-Créer le premier post de la communauté ?
+{% else%}
+Créer la première communauté ?
 <a href="{% url 'nouvelle_communaute'  %}"><i class="far fa-edit"></i></a>
 {% endif%}
 {% endblock h3 %}

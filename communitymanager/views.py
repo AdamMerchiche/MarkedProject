@@ -34,6 +34,12 @@ def abonner(request, communaute_id):
         communaute.abonnes.add(request.user)
     return redirect('list_communautes')
 
+#Permet au CM de bannir un utilisateur si ce dernier fait toujours parti de la communauté.
+#On pourra le bannir à partir d'un POST ou d'un commentaire
+def bannir(request, communaute_id, user_id):
+    communaute = Communaute.objects.get(id=communaute_id)
+    communaute.abonnes.remove(user_id)
+    return redirect('list_communautes')
 
 # Renvoie l'ensemble des posts d'une communauté précise
 @login_required(login_url='/accounts/login/')
@@ -60,6 +66,7 @@ def commentaire(request, post_id):
         envoi = True
     return render(request, 'communitymanager/post.html', locals())
 
+#Permet de rendre un commentaire visible ou non à l'ensemble des autres utilisateurs
 def visibilite_commentaire(request, commentaire_id):
    commentaire = Commentaire.objects.get(id=commentaire_id)
    if commentaire.invisible:
@@ -115,6 +122,16 @@ def modification_post(request, post_id):
         alert_flag = True
     return render(request, 'communitymanager/update_post.html', locals())
 
+#Permet de rendre un POST visible ou non à l'ensemble des autres utilisateurs
+def visibilite_post(request, post_id):
+   post = Post.objects.get(id=post_id)
+   if post.visible:
+       post.visible=False
+       post.save()
+   else:
+       post.visible = True
+       post.save()
+   return redirect('communaute', communaute_id=post.communaute_id)
 
 # Permet de renvoyer tous les POSTs dont l'utilisateur est l'auteur.
 @login_required(login_url='/accounts/login/')
@@ -135,6 +152,7 @@ def creation_communaute(request):
     form.fields['createur'].choices = [
         (request.user.id, request.user.username)]
     if form.is_valid():
+        post = form.save(commit=False)
         form.save()
         envoi = True
     return render(request, 'communitymanager/nouvelle_communaute.html', locals())
@@ -157,7 +175,7 @@ def modification_communaute(request, communaute_id):
         alert_flag = True
     return render(request, 'communitymanager/update_communaute.html', locals())
 
-
+# Vue permettant de fermer une communauté que l'utilisateur a créée. Il n'y sera plus possible d'y publier des commentaires ou des posts
 @login_required(login_url='/accounts/login/')
 def fermer_communaute(request, communaute_id):
     communaute = Communaute.objects.get(id=communaute_id)
@@ -171,6 +189,7 @@ def fermer_communaute(request, communaute_id):
     print(communaute.ferme)
     return redirect('list_communautes')
 
+# Vue permettant de détruire une communauté que l'utilisateur a créée
 def detruire_communaute(request, communaute_id):
     Communaute.objects.filter(id=communaute_id).delete()
     return redirect('list_communautes')
