@@ -41,7 +41,7 @@ def bannir(request, communaute_id, user_id):
     communaute.abonnes.remove(user_id)
     communaute.list_bannis.add(user_id)
     posts = Post.objects.filter(auteur_id=user_id)
-    commentaires = Commentair.objects.filter(auteur_id=user_id)
+    commentaires = Commentaire.objects.filter(auteur_id=user_id)
     for post in posts:
         post.delete()
     for commentaire in commentaires:
