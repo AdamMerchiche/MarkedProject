@@ -39,7 +39,7 @@ class Post(models.Model):
     auteur = models.ForeignKey(User, on_delete=models.DO_NOTHING)
     collant = models.BooleanField(default=False)
     visible = models.BooleanField(default=True)
-
+    avertissement = models.BooleanField(default=False)
     # On choisira d'ordonner l'ensemble des POSTs en fonction de leur date de publication.
     # Plus un POST est ancien, plus il faudra descendre sur la page pour le voir.
     class Meta:
