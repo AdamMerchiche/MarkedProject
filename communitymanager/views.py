@@ -30,8 +30,11 @@ def abonner(request, communaute_id):
     communaute = Communaute.objects.get(id=communaute_id)
     if request.user in communaute.abonnes.all():
         communaute.abonnes.remove(request.user)
-    if (not request.user in communaute.abonnes.all()) and (not request.user in communaute.list_bannis.all()):
-        communaute.abonnes.add(request.user)
+        print(communaute.abonnes.all())
+    else: 
+        if not request.user in communaute.list_bannis.all():
+            communaute.abonnes.add(request.user)      
+    print(communaute.abonnes.all())
     return redirect('list_communautes')
 
 #Permet au CM de bannir un utilisateur si ce dernier fait toujours parti de la communauté.
@@ -52,9 +55,10 @@ def bannir(request, communaute_id, user_id):
 #l'admin : on ne pourrait plus avoir accès aux posts.
 @login_required(login_url='/accounts/login/')
 def communaute(request, communaute_id):
+    communaute = Communaute.objects.get(id=communaute_id)
     if not Communaute.objects.get(id=communaute_id).ferme_invisible:
         return render(request, 'communitymanager/communaute.html',
-                          {'posts': Post.objects.filter(communaute_id=communaute_id), "date_now": timezone.now()})
+                          {'posts': Post.objects.filter(communaute_id=communaute_id), "date_now": timezone.now(), 'communaute':communaute})
     else:
         return redirect("list_communautes")
 

@@ -27,7 +27,6 @@
     {% if request.user in communaute.abonnes.all %}
     <a span href="{% url 'abonnements' communaute.id %}"><i class="fas fa-heart pull-right"></i></a>
     <p><a href="{% url 'communaute' communaute.id %}">Lire les Posts</a></p>
-
     {% else %}
         {%if not request.user in communaute.list_bannis.all%}
     <a span href="{% url 'abonnements' communaute.id %}"><i class="far fa-heart pull-right"></i> </a>

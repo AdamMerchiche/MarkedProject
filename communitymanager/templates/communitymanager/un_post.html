@@ -5,22 +5,29 @@
           btn_lire_commentaire, booleen pour spécifier si le lien "Lire les commentaires" doit être présent
 {% endcomment %}
 
-<div class="{{ bg_color }} mb-4">
-
+{%if not post.avertissement%}
+<div class="bg-light mb-4">
+{%else%}
+<div class="bg-warning mb-4">
+{%endif%}
     <div class="row py-2 px-1 {{ bg_color }}">
     {% if post.visible%}
         <div class="col-sm-3"> {# colonne 1: priorité et info evenementiel #}
             <h4 class="m-b-15 d-block"><b>
                 <p class="text-left">
-                    Priorite {{ post.priorite }}
+                    Priorite {{ post.priorite }}<br>
                     <span class="comment-widgets">
                         {% if post.evenementiel %}
                             <h4 class="font-medium text-left">
                                 <i class="fas fa-glass-cheers mr-2 my-1"></i> EVENT <br>
                                 <i class="fas fa-calendar-week mr-2 my-1"></i> {{ post.date_evenement }}
-                            </h4>
+                            </h4><br>
                         {% endif %}
                     </span>
+                {%if  post.avertissement%}
+                <i class="fas fa-exclamation-circle"></i>
+                    {%endif%}
+
                 </p>
             </b></h4>
         </div>

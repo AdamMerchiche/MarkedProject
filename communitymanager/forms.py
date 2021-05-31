@@ -25,6 +25,7 @@ class PostForm(forms.ModelForm):
         date_evenement = cleaned_data["date_evenement"]
         collant = cleaned_data["collant"]
         communaute = cleaned_data["communaute"]
+        avertissement = cleaned_data["avertissement"]
         duplicat = Post.objects.filter(communaute_id=communaute.id).filter(collant=True)
         if collant and duplicat.exists():
             raise forms.ValidationError("Un post de la communauté est déjà collé! Veuillez réctifier la situation. ")
@@ -34,6 +35,8 @@ class PostForm(forms.ModelForm):
             raise forms.ValidationError("Vous devez inscrire une date d'évenement ou cochez l'option évenement")
         if (communaute.createur != auteur) and collant:
             raise forms.ValidationError("Vous ne pouvez pas rendre ce post collant puisque vous n'êtes pas le CM. ")
+        if (not auteur.is_superuser) and avertissement:
+            raise forms.ValidationError("Vous ne pouvez changer la nature de votre POST étant donné que vous n'êtes pas administrateur ")
         return cleaned_data
 
 
@@ -50,13 +53,21 @@ class ModificationPostForm(forms.ModelForm):
         # puisque par définition nous ne recréons pas le POST.
     def clean(self):
         cleaned_data = super(ModificationPostForm, self).clean()
+        evenementiel = cleaned_data['evenementiel']
+        auteur = cleaned_data['auteur']
+        date_evenement = cleaned_data["date_evenement"]
         collant = cleaned_data["collant"]
         communaute = cleaned_data["communaute"]
+        avertissement = cleaned_data["avertissement"]
         duplicat = Post.objects.filter(communaute_id=communaute.id).filter(collant=True)
         if collant and duplicat.exists():
             raise forms.ValidationError("Un post de la communauté est déjà collé! Veuillez réctifier la situation. ")
         if (evenementiel and date_evenement == None) or (not evenementiel and date_evenement != None):
             raise forms.ValidationError("Vous devez inscrire une date d'évenement ou cochez l'option évenement")
+        if (communaute.createur != auteur) and collant:
+            raise forms.ValidationError("Vous ne pouvez pas rendre ce post collant puisque vous n'êtes pas le CM. ")
+        if (not auteur.is_superuser) and avertissement:
+            raise forms.ValidationError("Vous ne pouvez changer la nature de votre POST étant donné que vous n'êtes pas administrateur ")
         return cleaned_data
 
 class CommunauteForm(forms.ModelForm):
@@ -67,4 +78,4 @@ class CommunauteForm(forms.ModelForm):
 class ModificationCommunauteForm(forms.ModelForm):
     class Meta:
         model = Communaute
-        exclude = ["createur"] #Possible de modifier la description, le titre, et de bannir des abonnés de la commu
+        exclude = ["createur", "list_bannis", "abonnes", "ferme_invisible"] #Possible de modifier la description, le titre, et de bannir des abonnés de la commu
