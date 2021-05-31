@@ -6,9 +6,12 @@
 
 {% block h3 %}
 
+    {# Bar de filtrage d'affichage des posts de la communaute #}
+    {# Filtrage: min priorite: select(priorite, default=no filter) (radio(et/ou) or select(et/ou)) check(only evenementiel) submit("filtrer") #}
+
     {# Affichage des posts #}
     {% for post in posts %}
-        {% include 'communitymanager/un_post.html' with post=post bg_color="transparent" btn_lire_commentaire=True %}
+        {% include 'communitymanager/un_post.html' with bg_color="transparent" btn_lire_commentaire=True %}
     {% endfor %}
 
     {# Section pour créer un nouveau post s'il n'y en a pas #}
