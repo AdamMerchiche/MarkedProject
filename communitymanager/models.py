@@ -7,9 +7,11 @@ from django.utils import timezone
 class Communaute(models.Model):
     name = models.CharField(max_length=30)
     abonnes = models.ManyToManyField(User, related_name="abonnes", blank=True)
+    list_bannis = models.ManyToManyField(User, related_name="bannis", blank=True)
     createur = models.ForeignKey(User, on_delete="models.DO_NOTHING")
     description = models.CharField(max_length=2500, blank=False)
     ferme= models.BooleanField(default=False)
+    ferme_invisible = models.BooleanField(default=False)
     def __str__(self):
         return self.name
 
@@ -35,7 +37,7 @@ class Post(models.Model):
     communaute = models.ForeignKey(Communaute, on_delete=models.CASCADE)
     priorite = models.ForeignKey(Priorite, on_delete=models.DO_NOTHING)
     auteur = models.ForeignKey(User, on_delete=models.DO_NOTHING)
-    collant=models.BooleanField(default=False)
+    collant = models.BooleanField(default=False)
     visible = models.BooleanField(default=True)
 
     # On choisira d'ordonner l'ensemble des POSTs en fonction de leur date de publication.

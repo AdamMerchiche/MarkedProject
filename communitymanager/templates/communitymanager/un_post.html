@@ -42,6 +42,9 @@
                         {%else%}
                             <a span href="{% url 'visibilite_post' post.id %}"><i class="far fa-eye-slash"></i></a>
                         {%endif%}
+                      {% if post.auteur != post.communaute.createur%}e
+                        <a span href="{% url 'bannir' communaute_id=post.communaute.id user_id=post.auteur.id %}"><i class="fas fa-ban"></i></a>
+                        {%endif%}
                     {%endif%}
                 </p>
             </b></h4>
@@ -100,7 +103,7 @@
                             <a span href="{% url 'visibilite_post' post.id %}"><i class="far fa-eye-slash"></i></a>
                         {%endif%}
                     {# possibilité de Bannir un utilisateur si l'utilisateur est toujours dans la communauté #}
-                        {% if post.auteur.id in post.communaute.id.abonnes%}
+                        {% if post.auteur.id in post.communaute.abonnes%}
                         <a span href="{% url 'bannir' communaute_id=post.communaute.id user_id=post.auteur.id %}"><i class="fas fa-ban"></i></a>
                         {%endif%}
                     {%endif%}

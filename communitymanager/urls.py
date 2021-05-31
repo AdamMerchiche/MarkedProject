@@ -6,6 +6,7 @@ urlpatterns = [
     path('list_communautes', views.liste_communautes, name="list_communautes"),
     path('abonnements/<int:communaute_id>', views.abonner, name="abonnements"),
     path('fermer/<int:communaute_id>', views.fermer_communaute, name="fermer"),
+    path('fermer_invisible/<int:communaute_id>', views.fermer_invisible_communaute, name="fermer_invisible"),
     path('fermer/<int:communaute_id>/<int:user_id>', views.bannir, name="bannir"),
     path('detruire/<int:communaute_id>', views.detruire_communaute, name="detruire"),
     path('communaute/<int:communaute_id>/', views.communaute, name="communaute"),

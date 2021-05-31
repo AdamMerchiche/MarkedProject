@@ -8,11 +8,18 @@
 <body class="">
 {% block h3 %}{% if envoi %}Votre post a bien été envoyé !{% endif %}
     Formulez votre Post !
+{% if alert_flag %}
+        <script>alert("Vous n'êtes pas le créateur de ce Communauté! Retournez à votre feed.")
+        window.location.href = " http://127.0.0.1:8000/communitymanager/feed_abonnements"
+        </script>
+    {% endif %}
+{% if not alert_flag %}
     <form action="{% url 'nouveau_post' %}" method="post">
         {% csrf_token %}
         {{ form.as_p }}
         <input class="" type="submit" value="Ajoutez un POST..."/>
     </form>
+{% endif %}
 {% endblock h3 %}
 </body>
 

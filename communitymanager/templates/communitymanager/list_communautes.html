@@ -29,17 +29,27 @@
     <p><a href="{% url 'communaute' communaute.id %}">Lire les Posts</a></p>
 
     {% else %}
+        {%if not request.user in communaute.list_bannis.all%}
     <a span href="{% url 'abonnements' communaute.id %}"><i class="far fa-heart pull-right"></i> </a>
-
+        {%else%}
+    Vous avez été banni.e de cette Communauté.
+        {% endif %}
     {% endif %}
     {# Section pour fermer/détruire une communauté si le créateur est l'utilisateur#}
     {% if communaute.createur == request.user or request.user.is_superuser %}
-    {% if communaute.ferme %}
-    <a span href="{% url 'fermer' communaute.id %}"><i class="fas fa-lock"></i></a>
-    {%else%}
-    <a span href="{% url 'fermer' communaute.id %}"><i class="fas fa-lock-open"></i></a>
-    {%endif%}
-    <a span href="{% url 'detruire' communaute.id %}"><i class="fas fa-trash-alt pull-right"></i></a>
+        {% if communaute.ferme %}
+        <a span href="{% url 'fermer' communaute.id %}"><i class="fas fa-lock"></i></a>
+        {%else%}
+        <a span href="{% url 'fermer' communaute.id %}"><i class="fas fa-lock-open"></i></a>
+        {%endif%}
+        {% if request.user.is_superuser%}
+        {% if communaute.ferme_invisible %}
+        <a span href="{% url 'fermer_invisible' communaute.id %}"><i class="fas fa-lock" style="color:indianred"></i></a>
+        {%else%}
+        <a span href="{% url 'fermer_invisible' communaute.id %}"><i class="fas fa-lock-open" style="color:indianred"></i></a>
+        {%endif%}
+        {%endif%}
+        <a span href="{% url 'detruire' communaute.id %}"><i class="fas fa-trash-alt pull-right"></i></a>
     {% endif %}
 
 </div>
