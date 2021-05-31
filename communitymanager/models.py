@@ -6,7 +6,7 @@ from django.utils import timezone
 # Modèle définissant la Communauté. On la caractérise par ses abonnés, et son nom.
 class Communaute(models.Model):
     name = models.CharField(max_length=30)
-    abonnes = models.ManyToManyField(User, related_name="abonnés", blank=True)
+    abonnes = models.ManyToManyField(User, related_name="abonnements", blank=True)
     def __str__(self):
         return self.name
 
@@ -31,7 +31,7 @@ class Post(models.Model):
 
     communaute = models.ForeignKey(Communaute, on_delete="models.CASCADE")
     priorite = models.ForeignKey(Priorite, on_delete="models.CASCADE")
-    auteur = models.ForeignKey(User, on_delete="models.CASCADE")
+    auteur = models.ForeignKey(User, on_delete="models.CASCADE", related_name="posts")
 
     # On choisira d'ordonner l'ensemble des POSTs en fonction de leur date de publication.
     # Plus un POST est ancien, plus il faudra descendre sur la page pour le voir.

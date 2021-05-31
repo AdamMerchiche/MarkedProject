@@ -69,17 +69,14 @@ def commentaire(request, post_id):
 def nouveau_post(request):
     date_now = timezone.now()
 
-    form = PostForm(
-        request.POST or None)
+    list_priorite = Priorite.objects.all()
+    form = PostForm(request.POST or None)
     communautes = Communaute.objects.filter(abonnes=request.user)
-    form.fields['auteur'].choices = [
-        (request.user.id, request.user.username)]  # On limite le choix de l'auteur à l'utilisateur uniquement.
-    # On ne peut de fait, pas créer de post si l'authentification n'est pas faite.
-    form.fields['communaute'].choices = [(communaute.id, communaute.name) for communaute in
-                                         communautes]  # On limite la communauté où le POST sera partagé,
-    # aux communautés auxquelles l'abonnée fait parti.
+
+    print(form)
     if form.is_valid():
-        post_cree = form.save()
+        print('ok')
+        post_cree = form.save(user=request.user)
         envoi = True
         return redirect(commentaire, post_id=post_cree.id)
     return render(request, 'communitymanager/nouveau_post.html', locals())

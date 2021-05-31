@@ -12,9 +12,12 @@ class CommentaireForm(forms.ModelForm):
 
 # Formulaire permettant la création d'un Post.
 class PostForm(forms.ModelForm):
+    date_evenement = forms.DateTimeField(input_formats=['%Y-%m-%dT%H:%M', '%Y-%m-%d %H:%M'], required=False)
+    commu = forms.CharField(max_length=30, required=True)
+
     class Meta:
         model = Post
-        exclude = ["date_creation"]
+        exclude = ["date_creation", 'communaute', 'auteur']
 
     # On initialisera notre formulaire dans la vue associée. Néanmoins, on fera attention à deux variables du modèle Post.
     def clean(self):
@@ -24,9 +27,20 @@ class PostForm(forms.ModelForm):
         # Les deux variables sont indissociables l'une de l'autre. Sans cocher la case évenement, il sera impossible de mettre une date d'évenement
         # et inversement
         if (evenementiel and date_evenement == None) or (not evenementiel and date_evenement != None):
-            raise forms.ValidationError("Vous devez inscrire une date d'évenement ou cochez l'option évenement")
-        return cleaned_data
+            self.add_error("date_evenement", "Vous devez inscrire une date d'évenement ou cochez l'option évenement")
 
+        # Verification de l'existence de la communaute
+        try:
+            c = Communaute.objects.get(name=cleaned_data.get('commu'))
+        except Communaute.DoesNotExist:
+            raise forms.ValidationError("Cette communaute n'existe pas..")
+
+    def save(self, user):
+        nouveau_post = super().save(commit=False)
+        nouveau_post.auteur = user
+        nouveau_post.communaute = Communaute.objects.get(name=self.cleaned_data.get('commu'))
+        nouveau_post.save()
+        return nouveau_post
 
 # On a fait le choix ici de créer une formulaire pour la modification du POST. Des alternatives auraient pu être trouvées (en utilisant le même formulaire que pour la création d'un POST)
 # Néanmoins, il parait intéressant de créer une formulaire à part, notamment pour exclure certaines variables.
