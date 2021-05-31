@@ -6,7 +6,7 @@ from django.utils import timezone
 # Modèle définissant la Communauté. On la caractérise par ses abonnés, et son nom.
 class Communaute(models.Model):
     name = models.CharField(max_length=30)
-    abonnes = models.ManyToManyField(User, related_name="abonnés", blank=True)
+    abonnes = models.ManyToManyField(User, related_name="abonnes", blank=True)
     createur = models.ForeignKey(User, on_delete="models.DO_NOTHING")
     description = models.CharField(max_length=2500, blank=False)
     ferme= models.BooleanField(default=False)
@@ -32,9 +32,9 @@ class Post(models.Model):
                                        blank=True)  # Les deux variables sont ici non requises pour un POST.
     date_evenement = models.DateTimeField(verbose_name="Date de l'évenement", blank=True, null=True)
 
-    communaute = models.ForeignKey(Communaute, on_delete="models.CASCADE")
-    priorite = models.ForeignKey(Priorite, on_delete="models.DO_NOTHING")
-    auteur = models.ForeignKey(User, on_delete="models.DO_NOTHING")
+    communaute = models.ForeignKey(Communaute, on_delete=models.CASCADE)
+    priorite = models.ForeignKey(Priorite, on_delete=models.DO_NOTHING)
+    auteur = models.ForeignKey(User, on_delete=models.DO_NOTHING)
     collant=models.BooleanField(default=False)
     visible = models.BooleanField(default=True)
 
@@ -49,8 +49,8 @@ class Commentaire(models.Model):
     date_creation = models.DateTimeField(default=timezone.now,
                                          verbose_name="Date du commentaire")
     contenu = models.TextField()
-    auteur = models.ForeignKey(User, on_delete="models.DO_NOTHING")
-    post = models.ForeignKey(Post, on_delete="models.CASCADE")
+    auteur = models.ForeignKey(User, on_delete=models.DO_NOTHING)
+    post = models.ForeignKey(Post, on_delete=models.CASCADE)
     invisible = models.BooleanField(default=False)
 
     # A l'image d'un Forum, on choisira plutôt d'ordonner les commentaires de façon différente. Les commentaires les plus anciens apparaisseront en haut de page.

@@ -35,6 +35,7 @@
                         </a>
                     {% endif %}
                     {% if request.user == post.communaute.createur%}
+                    <a span href="{% url 'supprimer_post' post.id %}"><i class="far fa-trash-alt"></i></a>
                         {% if post.visible%}
                             <a span href="{% url 'visibilite_post' post.id %}"><i class="far fa-eye"></i></a>
 
@@ -120,7 +121,6 @@
                 </span>
             </div>
         </div>
-
     </div>
 
     <hr> {# delimitation pour marquer la fin du post #}

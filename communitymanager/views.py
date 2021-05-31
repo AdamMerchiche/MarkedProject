@@ -97,7 +97,7 @@ def nouveau_post(request):
     if form.is_valid():
         post_cree = form.save()
         envoi = True
-        return redirect(commentaire, post_id=post_cree.id)
+        return redirect(communaute, communaute_id=post_cree.communaute.id)
     return render(request, 'communitymanager/nouveau_post.html', locals())
 
 
@@ -117,7 +117,7 @@ def modification_post(request, post_id):
             post = form.save()
             post.save()
             envoi = True
-            return redirect(commentaire, post_id=post.id)
+            return redirect(communaute, communaute_id=post.communaute.id)
     else:
         alert_flag = True
     return render(request, 'communitymanager/update_post.html', locals())
@@ -155,6 +155,7 @@ def creation_communaute(request):
         post = form.save(commit=False)
         form.save()
         envoi = True
+        return redirect('list_communautes')
     return render(request, 'communitymanager/nouvelle_communaute.html', locals())
 
 
@@ -191,5 +192,11 @@ def fermer_communaute(request, communaute_id):
 
 # Vue permettant de détruire une communauté que l'utilisateur a créée
 def detruire_communaute(request, communaute_id):
-    Communaute.objects.filter(id=communaute_id).delete()
+    Communaute.objects.get(id=communaute_id).delete()
     return redirect('list_communautes')
+
+#Vue permettant de supprimer un post d'une communauté
+def supprimer_post(request, post_id):
+    post = Post.objects.get(id=post_id)
+    post.delete()
+    return redirect(communaute, communaute_id=post.communaute.id)

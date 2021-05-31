@@ -15,16 +15,18 @@ class PostForm(forms.ModelForm):
     class Meta:
         model = Post
         exclude = ["date_creation"]
-        posts = Post.objects.all()
-        for post in posts:
-            if post.collant:
-                exclude = ["collant"]
+
 
     # On initialisera notre formulaire dans la vue associée. Néanmoins, on fera attention à deux variables du modèle Post.
     def clean(self):
         cleaned_data = super(PostForm, self).clean()
         evenementiel = cleaned_data['evenementiel']
         date_evenement = cleaned_data["date_evenement"]
+        collant = cleaned_data["collant"]
+        communaute =cleaned_data["communaute"]
+        duplicat = Post.objects.filter(communaute_id=communaute.id).filter(collant=True)
+        if duplicat.exists():
+            raise forms.ValidationError("Un post de la communauté est déjà collé! Veuillez réctifier la situation. ")
         # Les deux variables sont indissociables l'une de l'autre. Sans cocher la case évenement, il sera impossible de mettre une date d'évenement
         # et inversement
         if (evenementiel and date_evenement == None) or (not evenementiel and date_evenement != None):
@@ -38,14 +40,21 @@ class PostForm(forms.ModelForm):
 class ModificationPostForm(forms.ModelForm):
     class Meta:
         model = Post
-        exclude = ["auteur", "communaute",
-                   "date_creation"]  # On choisit d'exclure logiquement la variable "auteur" et "communaute".
+        exclude = ["auteur","date_creation"]  # On choisit d'exclure logiquement la variable "auteur".
         # En effet, l'utilisateur ne pourra modifier l'auteur d'un POST qu'il a lui même écrit.
-        # De la même façon, un POST est partagé sur une communauté précise, et ne doit pas être changé.
         # La date de création apparait ici plutôt
         # comme un choix du designer d'application. On choisira de laisser la date de création
         # puisque par définition nous ne recréons pas le POST.
-
+    def clean(self):
+        cleaned_data = super(ModificationPostForm, self).clean()
+        collant = cleaned_data["collant"]
+        communaute = cleaned_data["communaute"]
+        duplicat = Post.objects.filter(communaute_id=communaute.id).filter(collant=True)
+        if duplicat.exists():
+            raise forms.ValidationError("Un post de la communauté est déjà collé! Veuillez réctifier la situation. ")
+        if (evenementiel and date_evenement == None) or (not evenementiel and date_evenement != None):
+            raise forms.ValidationError("Vous devez inscrire une date d'évenement ou cochez l'option évenement")
+        return cleaned_data
 
 class CommunauteForm(forms.ModelForm):
     class Meta:

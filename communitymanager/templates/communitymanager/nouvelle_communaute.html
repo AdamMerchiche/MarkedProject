@@ -8,7 +8,7 @@
 <body class="">
 {% block h3 %}{% if envoi %}Votre communauté a bien été créée! Retournez à la liste des communautés pour l'apprécier{% endif %}
     Créez un havre de paix où des utilisateurs pourront suivre votre actualité !
-    <form action="{% url "nouvelle_communaute" %}" method="post">
+    <form action="{% url 'nouvelle_communaute' %}" method="post">
         {% csrf_token %}
         {{ form.as_p }}
         <input class="" type="submit" value="Ajoutez une Communauté..."/>
