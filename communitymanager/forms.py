@@ -41,3 +41,9 @@ class ModificationPostForm(forms.ModelForm):
         # La date de création apparait ici plutôt
         # comme un choix du designer d'application. On choisira de laisser la date de création
         # puisque par définition nous ne recréons pas le POST.
+
+
+class FiltragePostCommunauteForm(forms.Form):
+    type_filtrage = forms.ChoiceField(choices=[('ET', 'et'), ('OU', 'ou')])
+    min_priorite = forms.ModelChoiceField(queryset=Priorite.objects.all(), empty_label="(Vide)", required=False)
+    evenementiels = forms.BooleanField(required=False)

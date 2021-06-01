@@ -1,5 +1,5 @@
 from .forms import *
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from .models import *
 from django.contrib.auth.decorators import login_required
 
@@ -39,8 +39,22 @@ def abonner(request, communaute_id):
 # Renvoie l'ensemble des posts d'une communauté précise
 @login_required(login_url='/accounts/login/')
 def communaute(request, communaute_id):
-    return render(request, 'communitymanager/communaute.html',
-                  {'posts': Post.objects.filter(communaute_id=communaute_id),"date_now":timezone.now()})
+    posts = Post.objects.filter(communaute_id=communaute_id)
+    date_now = timezone.now()
+
+    form_filtrage = FiltragePostCommunauteForm(request.POST or None)
+    if form_filtrage.is_valid():
+        et = form_filtrage.cleaned_data['type_filtrage']
+        min_priorite = form_filtrage.cleaned_data['min_priorite']
+        if not min_priorite:
+            min_priorite = Priorite.objects.latest('rang')
+        evenementiels = form_filtrage.cleaned_data['evenementiels']
+        if et == "ET":
+            posts = posts.filter(priorite__rang__lte=min_priorite.rang, evenementiel=evenementiels)
+        else:
+            posts = posts.filter(priorite__rang__lte=min_priorite.rang) | posts.filter(evenementiel=evenementiels)
+
+    return render(request, 'communitymanager/communaute.html', locals())
 
 
 # Permet à l'utilisateur connecté de créer un commentaire. Il sera prérempli au niveau de la section Auteur,

@@ -14,6 +14,7 @@ class Communaute(models.Model):
 # Modèle caractérisant la priorité des POSTs. On essaiera, dans un deuxième temps, d'associer la priorité à une couleur.
 class Priorite(models.Model):
     labels = models.CharField(max_length=30)
+    rang = models.IntegerField()
 
     def __str__(self):
         return self.labels

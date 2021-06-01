@@ -8,6 +8,11 @@
 
     {# Bar de filtrage d'affichage des posts de la communaute #}
     {# Filtrage: min priorite: select(priorite, default=no filter) (radio(et/ou) or select(et/ou)) check(only evenementiel) submit("filtrer") #}
+    <form action="{% url 'communaute' communaute_id=communaute_id %}" method="POST">
+        {% csrf_token %}
+        {{ form_filtrage.as_p }}
+        <input type="submit" value="Filter">
+    </form>
 
     {# Affichage des posts #}
     {% for post in posts %}
