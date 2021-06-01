@@ -2,14 +2,15 @@
     Template à inclure pour afficher un post
     Args: post, données du post à afficher
           bg_color, couleur du background du post
-          btn_lire_commentaire, booleen pour spécifier si le lien "Lire les commentaires" doit être présent
+          btn_lire_commentaire, booleen pour spécifier si le lien "Lire les commentaires" doit être présent (par défaut à False)
+          btn_like, booleen pour spécifier si le bouton pour liker le post doit être présent (par défaut à False)
 {% endcomment %}
 
 <div class="{{ bg_color }} mb-4">
 
     <div class="row py-2 px-1 {{ bg_color }}">
 
-        <div class="col-sm-3"> {# colonne 1: priorité et info evenementiel #}
+        <div class="col-sm-3"> {# colonne 1: priorité, info evenementiel et bouton like #}
             <h4 class="m-b-15 d-block"><b>
                 <p class="text-left">
                     Priorite {{ post.priorite }}
@@ -17,7 +18,21 @@
                         {% if post.evenementiel %}
                             <h4 class="font-medium text-left">
                                 <i class="fas fa-glass-cheers mr-2 my-1"></i> EVENT <br>
-                                <i class="fas fa-calendar-week mr-2 my-1"></i> {{ post.date_evenement }}
+                                <i class="fas fa-calendar-week mr-2 my-1"></i> {{ post.date_evenement }} <br>
+
+                            </h4>
+                        {% endif %}
+                        {% if btn_like %}
+                            <h4 class="font-medium text-left">
+                                {% if request.user in post.likes.all %}
+                                    <a span href="{% url 'liker' post.id %}" data-toggle="tooltip" title="Unlike">
+                                        <i class="fas fa-thumbs-up mt-3" style='font-size:20px'></i>
+                                    </a>
+                                {% else %}
+                                    <a span href="{% url 'liker' post.id %}" data-toggle="tooltip" title="Like">
+                                        <i class="far fa-thumbs-up mt-3" style='font-size:20px'></i>
+                                    </a>
+                                {% endif %}
                             </h4>
                         {% endif %}
                     </span>
@@ -30,7 +45,7 @@
                 <span class="text-center">
                     {{ post.title|capfirst }}
                     {% if user == post.auteur %}
-                        <a href="{% url 'update_post' post.id %}">
+                        <a href="{% url 'update_post' post.id %}" data-toggle="tooltip" title="Modifier ce post">
                         <i class="far fa-edit"></i>
                         </a>
                     {% endif %}

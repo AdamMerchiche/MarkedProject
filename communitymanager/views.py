@@ -1,5 +1,6 @@
 from .forms import *
 from django.shortcuts import render, redirect, get_object_or_404
+from django.urls import reverse
 from .models import *
 from django.contrib.auth.decorators import login_required
 
@@ -144,3 +145,17 @@ def voir_posts(request):
         'communitymanager/see_posts.html',
         {"posts": posts,"date_now":timezone.now()}
     )
+
+
+# Permet à l'utilisateur de liker/unliker un post
+@login_required(login_url='/accounts/login/')
+def liker(request, post_id):
+    post = Post.objects.get(id=post_id)
+
+    # Mise à jour de la liste des utilisateurs qui like le post
+    if request.user in post.likes.all():
+        post.likes.remove(request.user)
+    else:
+        post.likes.add(request.user)
+
+    return redirect(reverse('post', args=[post_id])) # permettre de liker depuis la page de détail du post uniquement?

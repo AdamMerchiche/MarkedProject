@@ -11,5 +11,5 @@ urlpatterns = [
     path('communaute/update_post/<int:post_id>', views.modification_post, name="update_post"),
     path('see_posts', views.voir_posts, name="see_posts"),
     path('feed_abonnements', views.accueil, name="feed_abonnements"),
-
+    path('like/post/<int:post_id>', views.liker, name="liker"),
 ]
