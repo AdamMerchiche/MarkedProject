@@ -22,7 +22,6 @@ class PostForm(forms.ModelForm):
     # On initialisera notre formulaire dans la vue associée. Néanmoins, on fera attention à deux variables du modèle Post.
     def clean(self):
         cleaned_data = super(PostForm, self).clean()
-        print(cleaned_data)
         evenementiel = cleaned_data['evenementiel']
         date_evenement = cleaned_data["date_evenement"]
 
