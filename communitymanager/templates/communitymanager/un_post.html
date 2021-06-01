@@ -24,20 +24,26 @@
                     <h4 class="font-medium text-left">
                         {% if request.user in post.likes.all %}
                             <a href="{% url 'liker' post.id %}" data-toggle="tooltip" title="Unlike">
-                                <i class="fas fa-thumbs-up mt-3" style='font-size:20px'></i>
+                                <i class="fas fa-thumbs-up mt-3 " style='font-size:20px'></i>
                             </a>
                         {% else %}
                             <a href="{% url 'liker' post.id %}" data-toggle="tooltip" title="Like">
                                 <i class="far fa-thumbs-up mt-3" style='font-size:20px'></i>
                             </a>
                         {% endif %}
+                        {{ post.likes.count }}
                     </h4>
                 {% endif %}
             </span>
         </div>
 
         <div class="col-sm-6"> {# colonne 2: titre et description #}
-            <h3 class="m-b-15 d-block {% if request.user in post.lecteurs.all and btn_lire_commentaire %} font-weight-normal text-body {% else %} font-weight-bold text-dark {% endif %}">
+            <h3 class="m-b-15 d-block
+            {% if request.user in post.lecteurs.all and btn_lire_commentaire %} {# Change font si le post a été lu et que ce n'est pas la page du post #}
+                font-weight-normal text-body
+            {% else %}
+                font-weight-bold text-dark
+            {% endif %}">
                 <span class="text-center">
                     {{ post.title|capfirst }}
                     {% if user == post.auteur %}
