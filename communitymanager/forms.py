@@ -44,6 +44,6 @@ class ModificationPostForm(forms.ModelForm):
 
 
 class FiltragePostCommunauteForm(forms.Form):
-    type_filtrage = forms.ChoiceField(choices=[('ET', 'et'), ('OU', 'ou')])
+    type_filtrage = forms.ChoiceField(choices=[('OU', 'ou'), ('ET', 'et')])
     min_priorite = forms.ModelChoiceField(queryset=Priorite.objects.all(), empty_label="(Vide)", required=False)
-    evenementiels = forms.BooleanField(required=False)
+    que_evt = forms.BooleanField(required=False)

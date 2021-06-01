@@ -7,11 +7,29 @@
 {% block h3 %}
 
     {# Bar de filtrage d'affichage des posts de la communaute #}
-    {# Filtrage: min priorite: select(priorite, default=no filter) (radio(et/ou) or select(et/ou)) check(only evenementiel) submit("filtrer") #}
-    <form action="{% url 'communaute' communaute_id=communaute_id %}" method="POST">
+    {# Filtrage:   min priorite: select(priorite, defaut=lowest)   select(et/ou, defaut=et)   evt: check(evenementiel)   submit("filtrer") #}
+    <form class="form-inline bg-light p-2" action="{% url 'communaute' communaute_id=communaute_id %}" method="POST">
+        <span class="mr-5">Filtrer les posts de la communauté: </span>
         {% csrf_token %}
-        {{ form_filtrage.as_p }}
-        <input type="submit" value="Filter">
+        <label for="id_min_priorite" class="mr-sm-2">Priorité minimale: </label>
+        <select class="form-control" id="id_min_priorite" name="min_priorite">
+            {% for priorite in list_priorite %}
+                {% if priorite == dft_priorite %}
+                    <option value="{{ priorite.id }}" selected>{{ priorite }}</option>
+                {% else %}
+                    <option value="{{ priorite.id }}">{{ priorite }}</option>
+                {% endif %}
+            {% endfor %}
+        </select>
+        <select class="form-control mx-4" id="id_type_filtrage" name="type_filtrage">
+            <option value="OU">ou</option>
+            <option value="ET" selected>et</option>
+        </select>
+        <div class="form-check">
+            <label for="id_que_evt" class="form-check-label mr-sm-2">Afficher les événements: </label>
+            <input class="form-check-input" type="checkbox" id="id_que_evt" name="que_evt">
+        </div>
+        <button type="submit" class="btn btn-primary mx-5">Filtrer</button>
     </form>
 
     {# Affichage des posts #}
