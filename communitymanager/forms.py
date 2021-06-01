@@ -12,7 +12,7 @@ class CommentaireForm(forms.ModelForm):
 
 # Formulaire permettant la création d'un Post.
 class PostForm(forms.ModelForm):
-    date_evenement = forms.DateTimeField(input_formats=['%Y-%m-%dT%H:%M', '%Y-%m-%d %H:%M'], required=False)
+    date_evenement = forms.DateTimeField(input_formats=['%Y-%m-%dT%H:%M', '%Y-%m-%d %H:%M', '%Y-%m-%dT%H:%M:%S', '%Y-%m-%d %H:%M:%S'], required=False)
     commu = forms.CharField(max_length=30, required=True)
 
     class Meta:
@@ -22,8 +22,10 @@ class PostForm(forms.ModelForm):
     # On initialisera notre formulaire dans la vue associée. Néanmoins, on fera attention à deux variables du modèle Post.
     def clean(self):
         cleaned_data = super(PostForm, self).clean()
+        print(cleaned_data)
         evenementiel = cleaned_data['evenementiel']
         date_evenement = cleaned_data["date_evenement"]
+
         # Les deux variables sont indissociables l'une de l'autre. Sans cocher la case évenement, il sera impossible de mettre une date d'évenement
         # et inversement
         if (evenementiel and date_evenement == None) or (not evenementiel and date_evenement != None):
@@ -33,7 +35,11 @@ class PostForm(forms.ModelForm):
         try:
             c = Communaute.objects.get(name=cleaned_data.get('commu'))
         except Communaute.DoesNotExist:
-            raise forms.ValidationError("Cette communaute n'existe pas..")
+            self.add_error("commu", "Cette communaute n'existe pas..")
+
+        return super().clean()
+
+
 
     def save(self, user):
         nouveau_post = super().save(commit=False)
@@ -42,16 +48,15 @@ class PostForm(forms.ModelForm):
         nouveau_post.save()
         return nouveau_post
 
-# On a fait le choix ici de créer une formulaire pour la modification du POST. Des alternatives auraient pu être trouvées (en utilisant le même formulaire que pour la création d'un POST)
-# Néanmoins, il parait intéressant de créer une formulaire à part, notamment pour exclure certaines variables.
+    def modifPost(self, id):
+        cleaned_data = self.clean()
+        modif_post = Post.objects.filter(id=id)
+        modif_post.update(title=cleaned_data.get('title'),
+                                priorite=cleaned_data.get('priorite'),
+                                evenementiel=cleaned_data.get('evenementiel'),
+                                date_evenement=cleaned_data.get('date_evenement'),
+                                communaute=Communaute.objects.filter(name=cleaned_data.get('commu'))[0],
+                                description=cleaned_data.get('description'),)
+        return modif_post[0]
 
-class ModificationPostForm(forms.ModelForm):
-    class Meta:
-        model = Post
-        exclude = ["auteur", "communaute",
-                   "date_creation"]  # On choisit d'exclure logiquement la variable "auteur" et "communaute".
-        # En effet, l'utilisateur ne pourra modifier l'auteur d'un POST qu'il a lui même écrit.
-        # De la même façon, un POST est partagé sur une communauté précise, et ne doit pas être changé.
-        # La date de création apparait ici plutôt
-        # comme un choix du designer d'application. On choisira de laisser la date de création
-        # puisque par définition nous ne recréons pas le POST.
+

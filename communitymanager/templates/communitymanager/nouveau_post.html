@@ -8,9 +8,9 @@
 <body class="">
 {% block h3 %}{% if envoi %}Votre post a bien été envoyé !{% endif %}
     Formulez votre Post !
-
-    {% include 'communitymanager/form_post.html' %}
-
+    <form action="{% url  "nouveau_post"  %}" method="post">
+        {% include 'communitymanager/form_post.html' %}
+    </form>
 {% endblock h3 %}
 </body>
 

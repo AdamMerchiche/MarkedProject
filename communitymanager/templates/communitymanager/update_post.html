@@ -16,11 +16,10 @@
         </script>
     {% endif %}
     {% if not alert_flag %}
-        <form action="{% url "update_post" post_id=post.id %}" method="post">
-            {% csrf_token %}
-            {{ form.as_p }}
-            <input type="submit" value="Modifiez votre POST..."/>
+        <form action="{% url "update_post" post.id%}" method="post">
+        {% include 'communitymanager/form_post.html' %}
         </form>
+
     {% endif %}
 {% endblock h3 %}
 </body>

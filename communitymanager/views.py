@@ -2,6 +2,7 @@ from .forms import *
 from django.shortcuts import render, redirect
 from .models import *
 from django.contrib.auth.decorators import login_required
+from django.http import Http404
 
 
 # Renvoie le feed d'un utilisateur, avec tous les posts des communautés auxquelles il est abonné
@@ -67,15 +68,14 @@ def commentaire(request, post_id):
 # communautés auxquelles il est abonné.
 @login_required(login_url='/accounts/login/')
 def nouveau_post(request):
-    date_now = timezone.now()
+    date_now = timezone.now().strftime("%Y-%m-%dT%H:%M")
+    date_evnt = None
 
     list_priorite = Priorite.objects.all()
     form = PostForm(request.POST or None)
     communautes = Communaute.objects.filter(abonnes=request.user)
 
-    print(form)
     if form.is_valid():
-        print('ok')
         post_cree = form.save(user=request.user)
         envoi = True
         return redirect(commentaire, post_id=post_cree.id)
@@ -87,16 +87,24 @@ def nouveau_post(request):
 # si la modification du POST est lancée par un autre utilisateur que l'auteur.
 @login_required(login_url='/accounts/login/')
 def modification_post(request, post_id):
-    date_now = timezone.now()
+    date_now = timezone.now().strftime("%Y-%m-%dT%H:%M")
 
-    post = Post.objects.get(id=post_id)
+    try:
+        post = Post.objects.get(id=post_id)
+    except Http404:
+        redirect(nouveau_post)
+
+    list_priorite = Priorite.objects.all()
+    communautes = Communaute.objects.filter(abonnes=request.user)
     alert_flag = True
     if post.auteur == request.user:
         alert_flag = False
-        form = ModificationPostForm(request.POST or None, instance=post)
+        form = PostForm(request.POST or None, instance=post)
+        form.fields['commu'].initial = post.communaute.name
+        form.fields['date_evenement'].initial = post.date_evenement
+
         if form.is_valid():
-            post = form.save()
-            post.save()
+            post = form.modifPost(id=post.id)
             envoi = True
             return redirect(commentaire, post_id=post.id)
     else:

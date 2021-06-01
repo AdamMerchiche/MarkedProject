@@ -1,6 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
-from django.utils import timezone
+from django.utils import timezone, dateformat
 
 
 # Modèle définissant la Communauté. On la caractérise par ses abonnés, et son nom.
