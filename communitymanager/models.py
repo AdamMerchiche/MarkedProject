@@ -33,6 +33,7 @@ class Post(models.Model):
     communaute = models.ForeignKey(Communaute, on_delete="models.CASCADE")
     priorite = models.ForeignKey(Priorite, on_delete="models.CASCADE")
     auteur = models.ForeignKey(User, on_delete="models.CASCADE")
+    lecteurs = models.ManyToManyField(User, related_name="lecteurs", blank=True)
 
     # On choisira d'ordonner l'ensemble des POSTs en fonction de leur date de publication.
     # Plus un POST est ancien, plus il faudra descendre sur la page pour le voir.
