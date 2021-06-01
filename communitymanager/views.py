@@ -57,6 +57,7 @@ def communaute(request, communaute_id):
                 posts = posts.filter(priorite__rang__lte=min_priorite.rang) | posts.filter(evenementiel=que_evt)
         else:
             posts = posts.filter(priorite__rang__lte=min_priorite.rang)
+        filtre = True
 
     return render(request, 'communitymanager/communaute.html', locals())
 
