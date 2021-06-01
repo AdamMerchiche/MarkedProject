@@ -14,7 +14,7 @@ class CommentaireForm(forms.ModelForm):
 class PostForm(forms.ModelForm):
     class Meta:
         model = Post
-        exclude = ["date_creation", "lecteurs"]
+        exclude = ["date_creation", "lecteurs", "likes"] #TO BE CHANGED: AUTHOR OF POST SHOULD BE ADDED AUTOMATICALLY TO lecteurs
 
     # On initialisera notre formulaire dans la vue associée. Néanmoins, on fera attention à deux variables du modèle Post.
     def clean(self):
@@ -34,7 +34,7 @@ class PostForm(forms.ModelForm):
 class ModificationPostForm(forms.ModelForm):
     class Meta:
         model = Post
-        exclude = ["auteur", "communaute", "lecteurs"
+        exclude = ["auteur", "communaute", "lecteurs", "likes"
                    "date_creation"]  # On choisit d'exclure logiquement la variable "auteur" et "communaute".
         # En effet, l'utilisateur ne pourra modifier l'auteur d'un POST qu'il a lui même écrit.
         # De la même façon, un POST est partagé sur une communauté précise, et ne doit pas être changé.
