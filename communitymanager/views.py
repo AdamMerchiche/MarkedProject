@@ -11,6 +11,7 @@ def accueil(request):
 
     communautes = Communaute.objects.filter(abonnes=request.user)
     posts = Post.objects.filter(communaute__abonnes=request.user)
+    posts = [(post, post.lecteurs.filter(id=request.user.id).exists()) for post in posts]
     return render(request, 'communitymanager/feed_abonnements.html', locals())
 
 
@@ -41,6 +42,8 @@ def abonner(request, communaute_id):
 def communaute(request, communaute_id):
     posts = Post.objects.filter(communaute_id=communaute_id)
     date_now = timezone.now()
+    posts = [(post, post.lecteurs.filter(id=request.user.id).exists()) for post in posts]
+
     list_priorite = Priorite.objects.all()
     dft_priorite = list_priorite.get(rang=list_priorite.count())
 
@@ -78,6 +81,11 @@ def commentaire(request, post_id):
         commentaire.save()
         form = CommentaireForm()
         envoi = True
+
+    # Le post est considéré comme lu quand l'utilisateur accède à cette vue
+    post.lecteurs.add(request.user)
+    post.save()
+
     return render(request, 'communitymanager/post.html', locals())
 
 
@@ -129,8 +137,10 @@ def modification_post(request, post_id):
 # Permet de renvoyer tous les POSTs dont l'utilisateur est l'auteur.
 @login_required(login_url='/accounts/login/')
 def voir_posts(request):
+    posts = Post.objects.filter(auteur=request.user)
+    posts = [(post, post.lecteurs.filter(id=request.user.id).exists()) for post in posts]
     return render(
         request,
         'communitymanager/see_posts.html',
-        {"posts": Post.objects.filter(auteur=request.user),"date_now":timezone.now()}
+        {"posts": posts,"date_now":timezone.now()}
     )

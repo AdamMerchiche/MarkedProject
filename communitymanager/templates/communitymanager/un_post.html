@@ -26,16 +26,16 @@
         </div>
 
         <div class="col-sm-6"> {# colonne 2: titre et description #}
-            <h4 class="m-b-15 d-block"><b>
-                <p class="text-center">
+            <h3 class="m-b-15 d-block {% if lu %} font-weight-normal text-body {% else %} font-weight-bold {% endif %}">
+                <span class="text-center">
                     {{ post.title|capfirst }}
                     {% if user == post.auteur %}
                         <a href="{% url 'update_post' post.id %}">
                         <i class="far fa-edit"></i>
                         </a>
                     {% endif %}
-                </p>
-            </b></h4>
+                </span>
+            </h3>
             <span class="m-b-15 d-block"> <p class="text-justify">{{ post.description |linebreaks }}</p></span>
         </div>
 
