@@ -12,7 +12,7 @@
         <span class="mr-5">Filtrer les posts de la communauté: </span>
         {% csrf_token %}
         <label for="id_min_priorite" class="mr-sm-2">Priorité minimale: </label>
-        <select class="form-control" id="id_min_priorite" name="min_priorite">
+        <select class="custom-select" id="id_min_priorite" name="min_priorite">
             {% for priorite in list_priorite %}
                 {% if priorite == dft_priorite %}
                     <option value="{{ priorite.id }}" selected>{{ priorite }}</option>
@@ -21,7 +21,7 @@
                 {% endif %}
             {% endfor %}
         </select>
-        <select class="form-control mx-4" id="id_type_filtrage" name="type_filtrage">
+        <select class="custom-select mx-4" id="id_type_filtrage" name="type_filtrage">
             <option value="OU">ou</option>
             <option value="ET" selected>et</option>
         </select>

@@ -41,21 +41,16 @@ def abonner(request, communaute_id):
 def communaute(request, communaute_id):
     posts = Post.objects.filter(communaute_id=communaute_id)
     date_now = timezone.now()
-
     list_priorite = Priorite.objects.all()
     dft_priorite = list_priorite.get(rang=list_priorite.count())
 
+    # Form pour filtrer les posts affiches
     form_filtrage = FiltragePostCommunauteForm(request.POST or None)
-    print("hello")
     if form_filtrage.is_valid():
-        print("in")
         et = form_filtrage.cleaned_data['type_filtrage']
         min_priorite = form_filtrage.cleaned_data['min_priorite']
         que_evt = form_filtrage.cleaned_data['que_evt']
-        print(min_priorite)
-        print(et)
         if que_evt:
-            print(que_evt)
             if et == "ET":
                 posts = posts.filter(priorite__rang__lte=min_priorite.rang, evenementiel=que_evt)
             else:
