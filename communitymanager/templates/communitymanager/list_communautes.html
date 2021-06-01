@@ -1,13 +1,10 @@
-<!DOCTYPE html>
 {% extends "base.html" %}
 {% load staticfiles %}
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>{% block title %}ACCUEIL : Voici la liste de vos communautés préférées !{% endblock title %}</title>
-</head>
-<hr>
-<div>{% block h1 %} Bienvenue {{ request.user.get_username }},  sur la page des communautés  ! {% endblock h1 %}</div>
+
+{% block title %}ACCUEIL : Voici la liste de vos communautés préférées !{% endblock title %}
+
+{% block h1 %} Bienvenue {{ request.user.get_username }},  sur la page des communautés  ! {% endblock h1 %}
+
 {% block h3 %}
 
     {% for communaute in communautes %}
@@ -20,15 +17,11 @@
             {% if request.user in communaute.abonnes.all %}
                 <a span href="{% url 'abonnements' communaute.id %}"><i class="fas fa-heart pull-right"></i></a>
                 <p><a href="{% url "communaute" communaute.id %}">Lire les Posts</a>
-
             {% else %}
                 <a span href="{% url 'abonnements' communaute.id %}"><i class="far fa-heart pull-right"></i> </a>
-
             {% endif %}
         </div>
         <hr class="my-4"/>
-
     {% endfor %}
+
 {% endblock h3 %}
-</body>
-</html>
