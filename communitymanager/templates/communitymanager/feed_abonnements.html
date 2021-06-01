@@ -7,7 +7,7 @@
 <hr class="my-4"/> {# Je ne suis pas sure que ce morceau de code soit pris en compte (il est en dehors des blocks) #}
 
 {% block h3 %}
-    {% for post, lu in posts %}
+    {% for post in posts %}
         {% include 'communitymanager/un_post.html' with bg_color="transparent" btn_lire_commentaire=True %}
     {% endfor %}
 {% endblock h3 %}

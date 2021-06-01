@@ -10,38 +10,34 @@
 
     <div class="row py-2 px-1 {{ bg_color }}">
 
-        <div class="col-sm-3"> {# colonne 1: priorité, info evenementiel et bouton like #}
-            <h4 class="m-b-15 d-block"><b>
-                <p class="text-left">
-                    Priorite {{ post.priorite }}
-                    <span class="comment-widgets">
-                        {% if post.evenementiel %}
-                            <h4 class="font-medium text-left">
-                                <i class="fas fa-glass-cheers mr-2 my-1"></i> EVENT <br>
-                                <i class="fas fa-calendar-week mr-2 my-1"></i> {{ post.date_evenement }} <br>
+        <div class="col-sm-3 m-b-15 d-block"> {# colonne 1: priorité, info evenementiel et bouton like #}
+            <h3 class="text-left text-dark">Priorite {{ post.priorite }}</h3>
+            <span class="comment-widgets">
+                {% if post.evenementiel %}
+                    <h4 class="font-medium text-left">
+                        <i class="fas fa-glass-cheers mr-2 my-1"></i> EVENT <br>
+                        <i class="fas fa-calendar-week mr-2 my-1"></i> {{ post.date_evenement }} <br>
 
-                            </h4>
+                    </h4>
+                {% endif %}
+                {% if btn_like %}
+                    <h4 class="font-medium text-left">
+                        {% if request.user in post.likes.all %}
+                            <a href="{% url 'liker' post.id %}" data-toggle="tooltip" title="Unlike">
+                                <i class="fas fa-thumbs-up mt-3" style='font-size:20px'></i>
+                            </a>
+                        {% else %}
+                            <a href="{% url 'liker' post.id %}" data-toggle="tooltip" title="Like">
+                                <i class="far fa-thumbs-up mt-3" style='font-size:20px'></i>
+                            </a>
                         {% endif %}
-                        {% if btn_like %}
-                            <h4 class="font-medium text-left">
-                                {% if request.user in post.likes.all %}
-                                    <a span href="{% url 'liker' post.id %}" data-toggle="tooltip" title="Unlike">
-                                        <i class="fas fa-thumbs-up mt-3" style='font-size:20px'></i>
-                                    </a>
-                                {% else %}
-                                    <a span href="{% url 'liker' post.id %}" data-toggle="tooltip" title="Like">
-                                        <i class="far fa-thumbs-up mt-3" style='font-size:20px'></i>
-                                    </a>
-                                {% endif %}
-                            </h4>
-                        {% endif %}
-                    </span>
-                </p>
-            </b></h4>
+                    </h4>
+                {% endif %}
+            </span>
         </div>
 
         <div class="col-sm-6"> {# colonne 2: titre et description #}
-            <h3 class="m-b-15 d-block {% if lu %} font-weight-normal text-body {% else %} font-weight-bold {% endif %}">
+            <h3 class="m-b-15 d-block {% if request.user in post.lecteurs.all and btn_lire_commentaire %} font-weight-normal text-body {% else %} font-weight-bold text-dark {% endif %}">
                 <span class="text-center">
                     {{ post.title|capfirst }}
                     {% if user == post.auteur %}

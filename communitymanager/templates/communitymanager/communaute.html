@@ -33,7 +33,7 @@
     </form>
 
     {# Affichage des posts #}
-    {% for post, lu in posts %}
+    {% for post in posts %}
         {% include 'communitymanager/un_post.html' with bg_color="transparent" btn_lire_commentaire=True %}
     {% endfor %}
 
