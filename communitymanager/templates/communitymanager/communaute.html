@@ -10,11 +10,11 @@
     {% for post in posts %}
         {% include 'communitymanager/un_post.html' with post=post bg_color="transparent" btn_lire_commentaire=True %}
     {% endfor %}
-
+{% if not communaute.ferme%}
     {# Section pour créer un nouveau post s'il n'y en a pas #}
-    {% if not posts %}
-        Créer le premier post de la communauté ?
-        <a href="{% url 'nouveau_post'  %}"><i class="far fa-edit"></i></a>
-    {% endif %}
-
+    <h3 class="text-center">Vous souhaitez créer votre post ?
+     <a href="{% url 'nouveau_post' %}"><i class="far fa-edit"></i></a> </h3>
+{%else%}
+Cette communauté est FERMÉE. Vous ne pouvez plus publier de POSTs ni COMMENTER.
+{%endif%}
 {% endblock h3 %}

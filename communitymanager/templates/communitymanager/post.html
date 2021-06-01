@@ -6,28 +6,73 @@
 
 {% block h3 %}
 
-    {# Inclusion template pour afficher le post #}
-    {% include 'communitymanager/un_post.html' with post=post bg_color="bg-light" btn_lire_commentaire=False %}
+{# Inclusion template pour afficher le post #}
+{% include 'communitymanager/un_post.html' with post=post btn_lire_commentaire=False %}
 
-    {# Affichage des commentaires du post #}
-    {% for commentaire in commentaires %}
-        <div class="media p-3">
-            <div class="media-body">
-                <h4><i class="fas fa-user-edit"></i> {{ commentaire.auteur }}
-                    <small><i>{{ commentaire.date_creation }}</i></small></h4>
-                <p>{{ commentaire.contenu }}</p>
-            </div>
-        </div>
-        <hr class="my-4"/>
-    {% endfor %}
+{# Affichage des commentaires du post #}
+{% for commentaire in commentaires %}
+{# Des commentaires uniquement visibles pour les utilisateurs #}
 
-    {# Section pour ajouter un commentaire #}
-    <div> Commentez!</div>
-    {% if envoi %}Votre commentaire a bien été envoyé !{% endif %}
-    <form action="{% url "post" post.id %}" method="post">
-        {% csrf_token %}
-        <p>{{ form.contenu}}</p>
-        <input type="submit" value="Ajoutez un commentaire..."/>
-    </form>
+{% if not commentaire.invisible%}
+<div class="media p-3">
+    <div class="media-body">
+        <p>{{ commentaire.contenu }}</p>
+        <h4><i class="fas fa-user-edit"></i> {{ commentaire.auteur }}
+            {% if request.user == post.communaute.createur %}
+{# possibilité de Bannir un utilisateur si l'utilisateur est toujours dans la communauté #}
+                       {%if not commentaire.auteur.is_superuser and not commentaire.auteur.id in post.communaute.abonnes.user_id %}
+                        <a span href="{% url 'bannir' communaute_id=post.communaute.id user_id=commentaire.auteur.id %}"><i
+                                class="fas fa-ban"></i></a>
+                    {%endif%}
+            {% endif%}
+            <small><i>{{ commentaire.date_creation }}</i></small>
+            {% if request.user == post.communaute.createur %}
+            <a span href="{% url 'visibilite_commentaire' commentaire.id %}"><i class="far fa-eye"></i></a>
+            {% endif%}
+        </h4>
+    </div>
+</div>
+<hr class="my-4"/>
+{# Section pour rendre visible un commentaire non-visible pour le créateur de la communauté #}
+
+{%else%}
+
+{% if request.user == post.communaute.createur %}
+<div class="media p-3">
+    <div class="media-body">
+        <p>{{ commentaire.contenu }}</p>
+        <h4><i class="fas fa-user-edit"></i> {{ commentaire.auteur }}
+            {% if request.user == post.communaute.createur %}
+{# possibilité de Bannir un utilisateur si l'utilisateur est toujours dans la communauté #}
+                       {%if not commentaire.auteur.is_superuser and not commentaire.auteur.id in post.communaute.abonnes.user_id %}
+                        <a span href="{% url 'bannir' communaute_id=post.communaute.id user_id=commentaire.auteur.id %}"><i
+                                class="fas fa-ban"></i></a>
+                    {%endif%}
+            {% endif%}
+            <small><i>{{ commentaire.date_creation }}</i></small>
+            {% if request.user == post.communaute.createur %}
+            <a span href="{% url 'visibilite_commentaire' commentaire.id %}"><i class="far fa-eye-slash"></i></a>
+            {% endif%}
+        </h4>
+    </div>
+</div>
+<hr class="my-4"/>
+{% endif %}
+{% endif %}
+
+{% endfor %}
+
+{# Section pour ajouter un commentaire uniquement si la communauté n'est pas fermée #}
+{% if not post.communaute.ferme%}
+<div> Commentez!</div>
+{% if envoi %}Votre commentaire a bien été envoyé !{% endif %}
+<form action="{% url 'post' post.id %}" method="post">
+{% csrf_token %}
+<p>{{ form.contenu}}</p>
+<input type="submit" value="Ajoutez un commentaire..."/>
+</form>
+{%else%}
+Ce POST est fermé, vous ne pouvez plus le commenter.
+{% endif %}
 
 {% endblock h3 %}

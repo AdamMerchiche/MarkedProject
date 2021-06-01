@@ -11,7 +11,7 @@
 <p><label for="id_priorite">Importance:</label><br>
     <select class="formObj formObjH" name="priorite" id="id_priorite" required="required">
         {% for prt in list_priorite %}
-            <option value="{{prt.pk}}"{% if prt.labels == 'blanche' %}selected="selected"{% endif %}>{{prt.labels}}</option>
+            <option value="{{prt.pk}}" {% if prt.labels == 'blanche' %} selected="selected"{% endif %}>{{prt.labels}}</option>
         {% endfor %}
     </select></p>
 <div class="errorPr"><p>{{ form.priorite.errors }}</p></div>
@@ -38,8 +38,21 @@
 
 <p>{{ form.date_evenement.value| date:"c" }}
     <label for="id_date_evenement">Date evenement:</label><br>
-    <input type="datetime-local" min="{{ date_now }}" name="date_evenement" id="id_date_evenement" value="{{ form.date_evenement.value| date:"c" }}">
+    <input type="datetime-local" min="{{ date_now }}" name="date_evenement" id="id_date_evenement" value="{{ form.date_evenement.value| date:'c' }}">
 </p>
 <div class="errorPr"><p>{{ form.date_evenement.errors }}</p></div>
+
+<p><label>À cocher s'il est collant':</label><br>
+    {{ form.collant }}
+</p>
+<div class="errorPr"><p>{{ form.collant.errors }}</p></div>
+
+
+{% if superuser%}
+<p><label>À cocher si c'est un avertissement:</label><br>
+    {{ form.avertissement }}
+</p>
+<div class="errorPr"><p>{{ form.avertissement.errors }}</p></div>
+{% endif%}
 
 <input class="" type="submit" value="Publier"/></div>

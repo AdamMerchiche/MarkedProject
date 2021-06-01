@@ -19,7 +19,6 @@ def accueil(request):
 @login_required(login_url='/accounts/login/')
 def liste_communautes(request):
     date_now = timezone.now()
-
     communautes = Communaute.objects.all()
     return render(request, 'communitymanager/list_communautes.html', {'communautes': communautes})
 
@@ -32,16 +31,38 @@ def abonner(request, communaute_id):
     communaute = Communaute.objects.get(id=communaute_id)
     if request.user in communaute.abonnes.all():
         communaute.abonnes.remove(request.user)
+        print(communaute.abonnes.all())
     else:
-        communaute.abonnes.add(request.user)
+        if not request.user in communaute.list_bannis.all():
+            communaute.abonnes.add(request.user)
+    print(communaute.abonnes.all())
     return redirect('list_communautes')
 
+#Permet au CM de bannir un utilisateur si ce dernier fait toujours parti de la communauté.
+#On pourra le bannir à partir d'un POST ou d'un commentaire. Tous ses posts et commentaires seront supprimés.
+def bannir(request, communaute_id, user_id):
+    communaute = Communaute.objects.get(id=communaute_id)
+    communaute.abonnes.remove(user_id)
+    communaute.list_bannis.add(user_id)
+    posts = Post.objects.filter(auteur_id=user_id)
+    commentaires = Commentaire.objects.filter(auteur_id=user_id)
+    for post in posts:
+        post.delete()
+    for commentaire in commentaires:
+        commentaire.delete()
+    return redirect('communaute', communaute_id=communaute_id)
 
-# Renvoie l'ensemble des posts d'une communauté précise
+# Renvoie l'ensemble des posts d'une communauté. Précisons le cas où la communauté est rendue invisible par
+#l'admin : on ne pourrait plus avoir accès aux posts.
 @login_required(login_url='/accounts/login/')
 def communaute(request, communaute_id):
-    return render(request, 'communitymanager/communaute.html',
-                  {'posts': Post.objects.filter(communaute_id=communaute_id),"date_now":timezone.now()})
+    communaute = Communaute.objects.get(id=communaute_id)
+    if not Communaute.objects.get(id=communaute_id).ferme_invisible:
+        return render(request, 'communitymanager/communaute.html',
+                          {'posts': Post.objects.filter(communaute_id=communaute_id), "date_now": timezone.now(), 'communaute':communaute})
+    else:
+        return redirect("list_communautes")
+
 
 
 # Permet à l'utilisateur connecté de créer un commentaire. Il sera prérempli au niveau de la section Auteur,
@@ -62,6 +83,16 @@ def commentaire(request, post_id):
         envoi = True
     return render(request, 'communitymanager/post.html', locals())
 
+#Permet de rendre un commentaire visible ou non à l'ensemble des autres utilisateurs
+def visibilite_commentaire(request, commentaire_id):
+   commentaire = Commentaire.objects.get(id=commentaire_id)
+   if commentaire.invisible:
+       commentaire.invisible=False
+       commentaire.save()
+   else:
+       commentaire.invisible = True
+       commentaire.save()
+   return redirect('post', post_id=commentaire.post_id)
 
 # Permet à l'utilisateur connecté de créer un POST. Il sera prérempli au niveau de la section Auteur,
 # et les choix de la communauté (lieu de publication) seront limités. L'utilisateur ne pourra poster que dans les
@@ -72,13 +103,20 @@ def nouveau_post(request):
     date_evnt = None
 
     list_priorite = Priorite.objects.all()
-    form = PostForm(request.POST or None)
-    communautes = Communaute.objects.filter(abonnes=request.user)
-
+    form = PostForm(
+        request.POST or None)
+    communautes = Communaute.objects.filter(abonnes=request.user, ferme=False, ferme_invisible=False)
+    form.fields['commu'].choices = [(communaute.id, communaute.name) for communaute in
+                                         communautes]  # On limite la communauté où le POST sera partagé,
+    # aux communautés auxquelles l'abonnée fait parti.
+    if request.user.is_superuser:
+        superuser=True
+    else:
+        superuser = False
     if form.is_valid():
         post_cree = form.save(user=request.user)
         envoi = True
-        return redirect(commentaire, post_id=post_cree.id)
+        return redirect(communaute, communaute_id=post_cree.communaute.id)
     return render(request, 'communitymanager/nouveau_post.html', locals())
 
 
@@ -95,8 +133,7 @@ def modification_post(request, post_id):
         redirect(nouveau_post)
 
     list_priorite = Priorite.objects.all()
-    communautes = Communaute.objects.filter(abonnes=request.user)
-    alert_flag = True
+    communautes = Communaute.objects.filter(abonnes=request.user, ferme=False, ferme_invisible=False)
     if post.auteur == request.user:
         alert_flag = False
         form = PostForm(request.POST or None, instance=post)
@@ -106,11 +143,21 @@ def modification_post(request, post_id):
         if form.is_valid():
             post = form.modifPost(id=post.id)
             envoi = True
-            return redirect(commentaire, post_id=post.id)
+            return redirect(communaute, communaute_id=post.communaute.id)
     else:
         alert_flag = True
     return render(request, 'communitymanager/update_post.html', locals())
 
+#Permet de rendre un POST visible ou non à l'ensemble des autres utilisateurs
+def visibilite_post(request, post_id):
+   post = Post.objects.get(id=post_id)
+   if post.visible:
+       post.visible=False
+       post.save()
+   else:
+       post.visible = True
+       post.save()
+   return redirect('communaute', communaute_id=post.communaute_id)
 
 # Permet de renvoyer tous les POSTs dont l'utilisateur est l'auteur.
 @login_required(login_url='/accounts/login/')
@@ -118,5 +165,75 @@ def voir_posts(request):
     return render(
         request,
         'communitymanager/see_posts.html',
-        {"posts": Post.objects.filter(auteur=request.user),"date_now":timezone.now()}
+        {"posts": Post.objects.filter(auteur=request.user), "date_now": timezone.now()}
     )
+
+
+# Vue permettant de créer une communauté, avec l'utilisateur comme auteur
+@login_required(login_url='/accounts/login/')
+def creation_communaute(request):
+    communautes = Communaute.objects.all()
+    form = CommunauteForm(
+        request.POST or None)
+    form.fields['createur'].choices = [
+        (request.user.id, request.user.username)]
+    if form.is_valid():
+        post = form.save(commit=False)
+        form.save()
+        envoi = True
+        return redirect('list_communautes')
+    return render(request, 'communitymanager/nouvelle_communaute.html', locals())
+
+
+# Vue permettant de modifier une communauté que l'utilisateur a créée
+@login_required(login_url='/accounts/login/')
+def modification_communaute(request, communaute_id):
+    date_now = timezone.now()
+    communaute = Communaute.objects.get(id=communaute_id)
+    alert_flag = True
+    if communaute.createur == request.user:
+        alert_flag = False
+        form = ModificationCommunauteForm(request.POST or None, instance=communaute)
+        if form.is_valid():
+            communaute = form.save()
+            communaute.save()
+            envoi = True
+    else:
+        alert_flag = True
+    return render(request, 'communitymanager/update_communaute.html', locals())
+
+# Vue permettant de fermer une communauté que l'utilisateur a créée. Il n'y sera plus possible d'y publier des commentaires ou des posts
+@login_required(login_url='/accounts/login/')
+def fermer_communaute(request, communaute_id):
+    communaute = Communaute.objects.get(id=communaute_id)
+    if communaute.ferme:
+        communaute.ferme = False
+        communaute.save()
+    else:
+        communaute.ferme = True
+        communaute.save()
+    return redirect('list_communautes')
+
+@login_required(login_url='/accounts/login/')
+def fermer_invisible_communaute(request, communaute_id):
+    communaute = Communaute.objects.get(id=communaute_id)
+    if communaute.ferme_invisible:
+        communaute.ferme_invisible = False
+        communaute.save()
+    else:
+        communaute.ferme_invisible = True
+        communaute.save()
+    return redirect('list_communautes')
+
+#Vue permettant de détruire une communauté que l'utilisateur a créée
+@login_required(login_url='/accounts/login/')
+def detruire_communaute(request, communaute_id):
+    Communaute.objects.get(id=communaute_id).delete()
+    return redirect('list_communautes')
+
+#Vue permettant de supprimer un post d'une communauté
+@login_required(login_url='/accounts/login/')
+def supprimer_post(request, post_id):
+    post = Post.objects.get(id=post_id)
+    post.delete()
+    return redirect(communaute, communaute_id=post.communaute.id)

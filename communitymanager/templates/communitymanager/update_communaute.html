@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %} Mofifiez votre Communauté!{% endblock title %}</title>
+</head>
+<body>
+<div>{% block h1 %} Updatez votre COMMUNAUTÉ! {% endblock h1 %}</div>
+<a href="{% url "list_communautes" post_id=post.id %}">Retour aux Communautés </a>
+{% block h3 %}{% if envoi %}Votre communauté a bien été modifié !{% else %}
+    EDITEZ votre Post !{% endif %}
+    {% if alert_flag %}
+        <script>alert("Vous n'êtes pas le créateur de ce Communauté! Retournez à votre feed.")
+        window.location.href = " http://127.0.0.1:8000/communitymanager/feed_abonnements"
+        </script>
+    {% endif %}
+    {% if not alert_flag %}
+        <form action="{% url "update_communaute" communaute_id=communaute.id %}" method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <input type="submit" value="Modifiez votre POST..."/>
+        </form>
+    {% endif %}
+{% endblock h3 %}
+</body>

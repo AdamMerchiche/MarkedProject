@@ -1,58 +1,161 @@
 {% comment %}
-    Template à inclure pour afficher un post
-    Args: post, données du post à afficher
-          bg_color, couleur du background du post
-          btn_lire_commentaire, booleen pour spécifier si le lien "Lire les commentaires" doit être présent
+Template à inclure pour afficher un post
+Args: post, données du post à afficher
+bg_color, couleur du background du post
+btn_lire_commentaire, booleen pour spécifier si le lien "Lire les commentaires" doit être présent
 {% endcomment %}
 
-<div class="{{ bg_color }} mb-4">
-
-    <div class="row py-2 px-1 {{ bg_color }}">
-
-        <div class="col-sm-3"> {# colonne 1: priorité et info evenementiel #}
-            <h4 class="m-b-15 d-block"><b>
-                <p class="text-left">
-                    Priorite {{ post.priorite }}
-                    <span class="comment-widgets">
+{%if not post.avertissement%}
+<div class="bg-light mb-4">
+    {%else%}
+    <div class="alert alert-warning">
+        {%endif%}
+        <div class="row py-2 px-1 {{ bg_color }}">
+            {% if post.visible%}
+            <div class="col-sm-3"> {# colonne 1: priorité et info evenementiel #}
+                <h4 class="m-b-15 d-block"><b>
+                    <p class="text-left">
+                        Priorite {{ post.priorite }}<br>
+                        <span class="comment-widgets">
                         {% if post.evenementiel %}
-                            <h4 class="font-medium text-left">
-                                <i class="fas fa-glass-cheers mr-2 my-1"></i> EVENT <br>
-                                <i class="fas fa-calendar-week mr-2 my-1"></i> {{ post.date_evenement }}
-                            </h4>
-                        {% endif %}
-                    </span>
-                </p>
-            </b></h4>
-        </div>
-
-        <div class="col-sm-6"> {# colonne 2: titre et description #}
-            <h4 class="m-b-15 d-block"><b>
-                <p class="text-center">
-                    {{ post.title|capfirst }}
-                    {% if user == post.auteur %}
-                        <a href="{% url 'update_post' post.id %}">
-                        <i class="far fa-edit"></i>
-                        </a>
+                    <h4 class="font-medium text-left">
+                        <i class="fas fa-glass-cheers mr-2 my-1"></i> EVENT <br>
+                        <i class="fas fa-calendar-week mr-2 my-1"></i> {{ post.date_evenement }}
+                    </h4><br>
                     {% endif %}
-                </p>
-            </b></h4>
-            <span class="m-b-15 d-block"> <p class="text-justify">{{ post.description |linebreaks }}</p></span>
-        </div>
+                    </span>
+                    {%if post.avertissement%}
+                    <i class="fas fa-exclamation-circle"
+                       style="color:indianred ; float:left; position: relative; font-size: 3em"></i>
+                    {%endif%}
 
-        <div class="col-sm-3"> {# colonne 3: temps depuis la creation du post, communaute, auteur et lien vers les commentaires #}
-            <div class="comment-footer">
+                    </p>
+                </b></h4>
+            </div>
+
+            <div class="col-sm-6"> {# colonne 2: titre et description #}
+                <h4 class="m-b-15 d-block"><b>
+                    <p class="text-center">
+                        {% if request.user == post.communaute.createur%}
+                        {% if post.visible%}
+                        <a span href="{% url 'visibilite_post' post.id %}"><i class="far fa-eye"></i></a>
+
+                        {%else%}
+                        <a span href="{% url 'visibilite_post' post.id %}"><i class="far fa-eye-slash"></i></a>
+                        {%endif%}
+                        {%endif%}
+                        {{ post.title|capfirst }}
+                        {% if user == post.auteur %}
+                        <a href="{% url 'update_post' post.id %}">
+                            <i class="far fa-edit"></i>
+                        </a>
+                        {% endif %}
+                    </p>
+                </b></h4>
+                <span class="m-b-15 d-block"> <p class="text-justify">{{ post.description |linebreaks }}</p></span>
+            </div>
+{# colonne 3: temps depuis la creation du post, communaute, auteur et lien vers les commentaires #}
+            <div class="col-sm-3">
+                <div class="comment-footer">
                 <span class="text-muted float-right">
                     <i class="far fa-clock"></i> {{ post.date_creation|timesince:date_now|linebreaks }}
                     <i class="fas fa-users"></i> {{ post.communaute|linebreaks }}
                     <i class="fas fa-user-edit"></i> {{ post.auteur }}
+                    {% if request.user == post.communaute.createur%} {# Possibilité de les rendre visible par la suite #}
+{# possibilité de Bannir un utilisateur si l'utilisateur est toujours dans la communauté #}
+                       {%if not post.auteur.is_superuser and not post.auteur.id in post.communaute.abonnes.user_id %}
+                        <a span href="{% url 'bannir' communaute_id=post.communaute.id user_id=post.auteur.id %}"><i
+                                class="fas fa-ban"></i></a>
+                     {%endif%}
+                    {%endif%}
                     {% if btn_lire_commentaire %}
-                        <p><a href="{% url "post" post_id=post.id %}">Lire les commentaires</a></p>
+                        <p><a href="{% url 'post' post_id=post.id %}">Lire les commentaires</a></p>
                     {% endif %}
+                    {% if request.user == post.communaute.createur%}
+                    <a span href="{% url 'supprimer_post' post.id %}"><i class="far fa-trash-alt"></i></a>
+                    {%endif%}
                 </span>
+                </div>
             </div>
+
         </div>
 
+        <hr>
+    </div>
+    {% else%} {# Les posts invisibles sont uniquement visibles pas le Community Manager#}
+    {% if post.communaute.createur == request.user%}
+     <div class="col-sm-3"> {# colonne 1: priorité et info evenementiel #}
+                <h4 class="m-b-15 d-block"><b>
+                    <p class="text-left">
+                        Priorite {{ post.priorite }}<br>
+                        <span class="comment-widgets">
+                        {% if post.evenementiel %}
+                    <h4 class="font-medium text-left">
+                        <i class="fas fa-glass-cheers mr-2 my-1"></i> EVENT <br>
+                        <i class="fas fa-calendar-week mr-2 my-1"></i> {{ post.date_evenement }}
+                    </h4><br>
+                    {% endif %}
+                    </span>
+                    {%if post.avertissement%}
+                    <i class="fas fa-exclamation-circle"
+                       style="color:indianred ; float:left; position: relative; font-size: 3em"></i>
+                    {%endif%}
+
+                    </p>
+                </b></h4>
+            </div>
+
+    <div class="col-sm-6"> {# colonne 2: titre et description #}
+        <h4 class="m-b-15 d-block"><b>
+            <p class="text-center">
+                {% if request.user == post.communaute.createur%}
+                {% if post.visible%}
+                <a span href="{% url 'visibilite_post' post.id %}"><i class="far fa-eye"></i></a>
+
+                {%else%}
+                <a span href="{% url 'visibilite_post' post.id %}"><i class="far fa-eye-slash"></i></a>
+                {%endif%}
+                {%endif%}
+
+                {{ post.title|capfirst }}
+                {% if user == post.auteur %}
+                <a href="{% url 'update_post' post.id %}">
+                    <i class="far fa-edit"></i>
+                </a>
+                {% endif %}
+
+            </p>
+        </b></h4>
+        <span class="m-b-15 d-block"> <p class="text-justify">{{ post.description |linebreaks }}</p></span>
     </div>
 
-    <hr> {# delimitation pour marquer la fin du post #}
+    <div class="col-sm-3"> {# colonne 3: temps depuis la creation du post, communaute, auteur et lien vers les commentaires #}
+        <div class="comment-footer">
+                <span class="text-muted float-right">
+                    <i class="far fa-clock"></i> {{ post.date_creation|timesince:date_now|linebreaks }}
+                    <i class="fas fa-users"></i> {{ post.communaute|linebreaks }}
+                    <i class="fas fa-user-edit"></i> {{ post.auteur }}
+                    {% if request.user == post.communaute.createur%}
+                    ddd{# Possibilité de les rendre visible par la suite #}
+{# possibilité de Bannir un utilisateur si l'utilisateur est toujours dans la communauté #}
+                        {% if post.auteur.id in post.communaute.abonnes and not post.auteur.is_superuser%}
+                        <a span href="{% url 'bannir' communaute_id=post.communaute.id user_id=post.auteur.id %}"><i
+                                class="fas fa-ban"></i></a>
+                        {%endif%}
+                    {%endif%}
+
+                    {% if btn_lire_commentaire %}
+                        <p><a href="{% url 'post' post_id=post.id %}">Lire les commentaires</a></p>
+                    {% endif %}
+                    {% if request.user == post.communaute.createur%} {# Possibilité de les rendre visible par la suite #}
+                    <a span href="{% url 'supprimer_post' post.id %}"><i class="far fa-trash-alt"></i></a>
+                    {%endif%}
+                </span>
+        </div>
+    </div>
 </div>
+
+<hr> {# delimitation pour marquer la fin du post #}
+</div>
+{% endif %}
+{% endif %}
