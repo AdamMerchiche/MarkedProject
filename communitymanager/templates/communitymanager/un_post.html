@@ -7,18 +7,16 @@
 {% endcomment %}
 
 {% if post.visible%}
-{%if not post.avertissement%}
-    <div class="{{ bg_color }} mb-4">
-{%else%}
-    <div class="alert alert-warning">
-{%endif%}
 
-    <div class="row py-2 px-1 {{ bg_color }}">
+    <div class="{%if post.avertissement%}alert alert-warning {%endif%} {{ bg_color }} mb-4">
+
+
+    <div class="row py-2 px-1">
 
         <div class="col-sm-3 m-b-15 d-block"> {# colonne 1: priorité, info evenementiel et bouton like #}
             {% if request.user not in post.lecteurs.all %}
                 <h3 class="text-left text-dark font-italic">
-                    <i class="fa fa-circle" style="font-size:20px;color:blue"></i>
+                    <i class="fa fa-circle " style="font-size:20px;color:blue"></i>
                     Nouveau post !
                 </h3>
             {% endif %}
@@ -114,8 +112,6 @@
         </div>
 
     </div>
-
-    <hr> {# delimitation pour marquer la fin du post #}
-
 </div>
+<hr> {# delimitation pour marquer la fin du post #}
 {% endif %}

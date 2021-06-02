@@ -8,7 +8,7 @@
 {% block h3 %}
 
 {% for communaute in communautes %}
-<div class="communaute table-hover slideIn">
+<div class="communaute table-hover">
     <h1><b>{{ communaute.name|capfirst }}
         {% if request.user == communaute.createur %}
         <a href="{% url 'update_communaute' communaute.id %}">
