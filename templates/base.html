@@ -13,22 +13,22 @@ tout en ajoutant dnas les templates de l'application, des fonctionnalités inté
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
     <link rel="stylesheet" type="text/css" href="{% static '/css/base.css' %}">
     <link rel="stylesheet" type="text/css" href="{% static '/css/animation.css' %}"/>
-
+    <link rel="stylesheet" type="text/css" href="{% static '/css/fixe_navbar.css' %}"/>
     <link rel="stylesheet" type="text/css" href ="{% static '/communitymanager/css/commun.css' %}">
-
     <title>{% block title %}Déconnecté | Site d'administration de Django{% endblock title %}</title>
     <link rel="shortcut icon" type="image/png" href='{% static "/img/owl.ico" %}'/>
 
+
     <meta name="robots" content="NONE,NOARCHIVE">
+
 </head>
-
-
 <body class="" data-admin-utc-offset="0">
 
 <!-- Container -->
 <div id="container">
 
     <!-- Header -->
+
     <div class=' h-50 bg-dark bg-center' id="header">
         <div id="branding " class=" text-center ">
             <h1 id="site-name" class="text-white ">{% block h1 %} Administration de Django  {% endblock h1 %}</h1>
@@ -36,7 +36,7 @@ tout en ajoutant dnas les templates de l'application, des fonctionnalités inté
     </div>
     <!-- END Header -->
 
-    {% block navbar %}
+    <div id="navbar">
     <div class="breadcrumbs bg-secondary">
 {#        <a href="/accounts/login"> {% block h2 %}{% endblock h2 %}</a> #} {# Necessaire? #}
             <nav class="navbar navbar-expand-sm bg-transparent navbar-white pull-right ">
@@ -55,10 +55,9 @@ tout en ajoutant dnas les templates de l'application, des fonctionnalités inté
             </div>
         </nav>
     </div>
-    {% endblock %}
-
+    </div>
     <!-- Content -->
-    <div id="content" class="colM text-center">
+    <div id="content" class="colM text-center content">
         <p>{% block h3 %}Merci pour le temps que vous avez accordé à ce site aujourd'hui.{% endblock h3 %}</p>
 
 
@@ -70,6 +69,21 @@ tout en ajoutant dnas les templates de l'application, des fonctionnalités inté
 
 </div>
 <!-- END Container -->
+<script>
+window.onscroll = function() {myFunction()};
+
+var navbar = document.getElementById("navbar");
+var sticky = navbar.offsetTop;
+
+function myFunction() {
+  if (window.pageYOffset >= sticky) {
+    navbar.classList.add("sticky")
+  } else {
+    navbar.classList.remove("sticky");
+  }
+}
+</script>
+
 
 
 </body>

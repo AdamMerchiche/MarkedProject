@@ -8,24 +8,34 @@
 {% block h3 %}
 
 {% for communaute in communautes %}
+    <div class="slideIn">
 <div class="communaute table-hover">
-    <h1><b>{{ communaute.name|capfirst }}
+<h1><b>
+    {% if request.user in communaute.abonnes.all %}
+{%if not communaute.ferme_invisible%}
+     <a href="{% url 'communaute' communaute.id %}">{{ communaute.name|capfirst }}</a>
+        {%else%}
+{{ communaute.name|capfirst }}
+{% endif %}
+    {% else %}
+{{ communaute.name|capfirst }}
+{% endif %}
+
         {% if request.user == communaute.createur %}
         <a href="{% url 'update_communaute' communaute.id %}">
             <i class="far fa-edit"></i>
         </a>
         {% endif %}</b></h1>
-
+<div class="slideInContenu">
     <p><i class="fas fa-users"></i>
         {% for u in communaute.abonnes.all %}
         {{ u.get_username }}-
         {% endfor %}</p>
+    {{ communaute.description }}<br>
     {% if request.user in communaute.abonnes.all %}
     <a span href="{% url 'abonnements' communaute.id %}"><i class="fas fa-heart pull-right"></i></a><br>
         {%if communaute.ferme_invisible%}
     La communauté a été fermée par l'administrateur. <br>
-        {%else%}
-    <p><a href="{% url 'communaute' communaute.id %}">Lire les Posts</a></p>
         {%endif%}
     {% else %}
         {%if not request.user in communaute.list_bannis.all%}
@@ -57,6 +67,8 @@
 {% empty %}
     Créer la première communauté ?
     <a href="{% url 'nouvelle_communaute'  %}"><i class="far fa-edit"></i></a>
+    </div>
+    </div>
 {% endfor %}
 
 {% endblock h3 %}
