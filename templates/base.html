@@ -11,13 +11,12 @@ tout en ajoutant dnas les templates de l'application, des fonctionnalités inté
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
-    <link rel="stylesheet" type="text/css" href="/static/admin/css/base.css">
-    <link rel="stylesheet" type="text/css" href="{% static 'css/priority.css' %}"/>
+    <link rel="stylesheet" type="text/css" href="/static/css/base.css">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/fixe_navbar.css' %}"/>
     <title>{% block title %}Déconnecté | Site d'administration de Django{% endblock title %}</title>
 
     <meta name="robots" content="NONE,NOARCHIVE">
 </head>
-
 
 <body class="" data-admin-utc-offset="0">
 
@@ -31,11 +30,9 @@ tout en ajoutant dnas les templates de l'application, des fonctionnalités inté
         </div>
     </div>
     <!-- END Header -->
-
-    {% block navbar %}
-    <div class="  breadcrumbs bg-secondary">
-{#        <a href="/accounts/login"> {% block h2 %}{% endblock h2 %}</a> #} {# Necessaire? #}
-            <nav class="navbar navbar-expand-sm bg-transparent navbar-white pull-right ">
+    <div id="navbar">
+    <div class="  breadcrumbs bg-secondary" >
+            <nav class="navbar navbar-expand-sm bg-transparent navbar-white pull-right " >
             <a class="navbar-brand" href="/accounts/logout"><i class="fas fa-sign-out-alt "></i></a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
                 <span class="navbar-toggler-icon"></span>
@@ -50,11 +47,11 @@ tout en ajoutant dnas les templates de l'application, des fonctionnalités inté
                 </ul>
             </div>
         </nav>
+        </div>
     </div>
-    {% endblock %}
 
     <!-- Content -->
-    <div id="content" class="colM text-center">
+    <div id="content" class="text-center content">
         <p>{% block h3 %}Merci pour le temps que vous avez accordé à ce site aujourd'hui.{% endblock h3 %}</p>
 
 
@@ -66,6 +63,21 @@ tout en ajoutant dnas les templates de l'application, des fonctionnalités inté
 
 </div>
 <!-- END Container -->
+<script>
+window.onscroll = function() {myFunction()};
+
+var navbar = document.getElementById("navbar");
+var sticky = navbar.offsetTop;
+
+function myFunction() {
+  if (window.pageYOffset >= sticky) {
+    navbar.classList.add("sticky")
+  } else {
+    navbar.classList.remove("sticky");
+  }
+}
+</script>
+
 
 
 </body>
