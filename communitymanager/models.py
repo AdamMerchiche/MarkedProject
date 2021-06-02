@@ -6,7 +6,7 @@ from django.utils import timezone
 # Modèle définissant la Communauté. On la caractérise par ses abonnés, et son nom.
 class Communaute(models.Model):
     name = models.CharField(max_length=30)
-    abonnes = models.ManyToManyField(User, related_name="abonnes", blank=True)
+    abonnes = models.ManyToManyField(User, related_name="abonnements", blank=True)
     list_bannis = models.ManyToManyField(User, related_name="bannis", blank=True)
     createur = models.ForeignKey(User, on_delete="models.DO_NOTHING")
     description = models.CharField(max_length=2500, blank=False)
