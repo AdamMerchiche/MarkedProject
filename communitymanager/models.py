@@ -19,6 +19,7 @@ class Communaute(models.Model):
 # Modèle caractérisant la priorité des POSTs. On essaiera, dans un deuxième temps, d'associer la priorité à une couleur.
 class Priorite(models.Model):
     labels = models.CharField(max_length=30)
+    rang = models.IntegerField()
 
     def __str__(self):
         return self.labels
@@ -40,6 +41,10 @@ class Post(models.Model):
     collant = models.BooleanField(default=False)
     visible = models.BooleanField(default=True)
     avertissement = models.BooleanField(default=False)
+    lecteurs = models.ManyToManyField(User, related_name="lecteurs",
+                                      blank=True)  # TO BE CHANGED: SHOULD AT LEAST HAVE ITS AUTHOR
+    likes = models.ManyToManyField(User, related_name="likes", blank=True)
+
     # On choisira d'ordonner l'ensemble des POSTs en fonction de leur date de publication.
     # Plus un POST est ancien, plus il faudra descendre sur la page pour le voir.
     class Meta:
