@@ -1,16 +1,12 @@
-<!DOCTYPE html>
 {% extends "base.html" %}
 {% load staticfiles %}
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>{% block title %}ACCUEIL : Voici la liste de vos communautés préférées !{% endblock title %}</title>
-</head>
-<hr>
-<div>{% block h1 %} Bienvenue {{ request.user.get_username }}, sur la page des communautés ! {% endblock h1 %}</div>
+
+{% block title %}ACCUEIL : Voici la liste de vos communautés préférées !{% endblock title %}
+
+{% block h1 %} Bienvenue {{ request.user.get_username }},  sur la page des communautés  ! {% endblock h1 %}
 
 {% block h3 %}
-{%if communautes%}
+
 {% for communaute in communautes %}
 <div class="communaute table-hover slideIn">
     <h1><b>{{ communaute.name|capfirst }}
@@ -58,13 +54,10 @@
 </div>
 <hr class="my-4"/>
 
+{% empty %}
+    Créer la première communauté ?
+    <a href="{% url 'nouvelle_communaute'  %}"><i class="far fa-edit"></i></a>
 {% endfor %}
 
-{% else%}
-Créer la première communauté ?
-<a href="{% url 'nouvelle_communaute'  %}"><i class="far fa-edit"></i></a>
-{% endif%}
 {% endblock h3 %}
 
-</body>
-</html>

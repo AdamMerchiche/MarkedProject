@@ -6,14 +6,44 @@
 
 {% block h3 %}
 
+    {# Bar de filtrage d'affichage des posts de la communaute #}
+    {# Filtrage:   min priorite: select(priorite, defaut=lowest)   select(et/ou, defaut=et)   evt: check(evenementiel)   submit("filtrer") #}
+    <form class="form-inline bg-light p-2 mb-4" action="{% url 'communaute' communaute_id=communaute_id %}" method="POST">
+        <span class="mr-5">Filtrer les posts de la communauté: </span>
+        {% csrf_token %}
+        <label for="id_min_priorite" class="mr-sm-2">Priorité minimale: </label>
+        <select class="custom-select" id="id_min_priorite" name="min_priorite">
+            {% for priorite in list_priorite %}
+                {% if priorite == dft_priorite %}
+                    <option value="{{ priorite.id }}" selected>{{ priorite }}</option>
+                {% else %}
+                    <option value="{{ priorite.id }}">{{ priorite }}</option>
+                {% endif %}
+            {% endfor %}
+        </select>
+        <select class="custom-select mx-4" id="id_type_filtrage" name="type_filtrage">
+            <option value="OU">ou</option>
+            <option value="ET" selected>et</option>
+        </select>
+        <div class="form-check">
+            <label for="id_que_evt" class="form-check-label mr-sm-2">Afficher uniquement les événements: </label>
+            <input class="form-check-input" type="checkbox" id="id_que_evt" name="que_evt">
+        </div>
+        <button type="submit" class="btn btn-primary mx-5">Filtrer</button>
+    </form>
+
     {# Affichage des posts #}
     {% for post in posts %}
-        {% include 'communitymanager/un_post.html' with post=post bg_color="transparent" btn_lire_commentaire=True %}
+        {% include 'communitymanager/un_post.html' with bg_color="transparent" btn_like=True %}
     {% endfor %}
 {% if not communaute.ferme%}
-    {# Section pour créer un nouveau post s'il n'y en a pas #}
-    <h3 class="text-center">Vous souhaitez créer votre post ?
-     <a href="{% url 'nouveau_post' %}"><i class="far fa-edit"></i></a> </h3>
+    {% if filtre %}
+        Aucun post ne correspond à ces critères.
+    {% else %}
+        {# Section pour créer un nouveau post s'il n'y en a pas #}
+        <h3 class="text-center">Vous souhaitez créer votre post ?
+         <a href="{% url 'nouveau_post' %}"><i class="far fa-edit"></i></a> </h3>
+    {% endif %}
 {%else%}
 Cette communauté est FERMÉE. Vous ne pouvez plus publier de POSTs ni COMMENTER.
 {%endif%}

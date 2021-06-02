@@ -1,5 +1,6 @@
 from .forms import *
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
+from django.urls import reverse
 from .models import *
 from django.contrib.auth.decorators import login_required
 from django.http import Http404
@@ -31,11 +32,9 @@ def abonner(request, communaute_id):
     communaute = Communaute.objects.get(id=communaute_id)
     if request.user in communaute.abonnes.all():
         communaute.abonnes.remove(request.user)
-        print(communaute.abonnes.all())
     else:
         if not request.user in communaute.list_bannis.all():
             communaute.abonnes.add(request.user)
-    print(communaute.abonnes.all())
     return redirect('list_communautes')
 
 #Permet au CM de bannir un utilisateur si ce dernier fait toujours parti de la communauté.
@@ -58,8 +57,27 @@ def bannir(request, communaute_id, user_id):
 def communaute(request, communaute_id):
     communaute = Communaute.objects.get(id=communaute_id)
     if not Communaute.objects.get(id=communaute_id).ferme_invisible:
-        return render(request, 'communitymanager/communaute.html',
-                          {'posts': Post.objects.filter(communaute_id=communaute_id), "date_now": timezone.now(), 'communaute':communaute})
+        posts = Post.objects.filter(communaute_id=communaute_id)
+        date_now = timezone.now()
+
+        list_priorite = Priorite.objects.all()
+        dft_priorite = list_priorite.get(rang=list_priorite.count())
+
+        # Form pour filtrer les posts affiches
+        form_filtrage = FiltragePostCommunauteForm(request.POST or None)
+        if form_filtrage.is_valid():
+            et = form_filtrage.cleaned_data['type_filtrage']
+            min_priorite = form_filtrage.cleaned_data['min_priorite']
+            que_evt = form_filtrage.cleaned_data['que_evt']
+            if que_evt:
+                if et == "ET":
+                    posts = posts.filter(priorite__rang__lte=min_priorite.rang, evenementiel=que_evt)
+                else:
+                    posts = posts.filter(priorite__rang__lte=min_priorite.rang) | posts.filter(evenementiel=que_evt)
+            else:
+                posts = posts.filter(priorite__rang__lte=min_priorite.rang)
+            filtre = True
+        return render(request, 'communitymanager/communaute.html', locals())
     else:
         return redirect("list_communautes")
 
@@ -81,6 +99,11 @@ def commentaire(request, post_id):
         commentaire.save()
         form = CommentaireForm()
         envoi = True
+
+    # Le post est considéré comme lu quand l'utilisateur accède à cette vue
+    post.lecteurs.add(request.user)
+    post.save()
+
     return render(request, 'communitymanager/post.html', locals())
 
 #Permet de rendre un commentaire visible ou non à l'ensemble des autres utilisateurs
@@ -163,10 +186,12 @@ def visibilite_post(request, post_id):
 # Permet de renvoyer tous les POSTs dont l'utilisateur est l'auteur.
 @login_required(login_url='/accounts/login/')
 def voir_posts(request):
+    posts = Post.objects.filter(auteur=request.user)
+    date_now = timezone.now()
     return render(
         request,
         'communitymanager/see_posts.html',
-        {"posts": Post.objects.filter(auteur=request.user), "date_now": timezone.now()}
+        locals()
     )
 
 
@@ -238,3 +263,17 @@ def supprimer_post(request, post_id):
     post = Post.objects.get(id=post_id)
     post.delete()
     return redirect(communaute, communaute_id=post.communaute.id)
+
+
+# Permet à l'utilisateur de liker/unliker un post
+@login_required(login_url='/accounts/login/')
+def liker(request, post_id):
+    post = Post.objects.get(id=post_id)
+
+    # Mise à jour de la liste des utilisateurs qui like le post
+    if request.user in post.likes.all():
+        post.likes.remove(request.user)
+    else:
+        post.likes.add(request.user)
+
+    return redirect(reverse('post', args=[post_id])) # permettre de liker depuis la page de détail du post uniquement?
