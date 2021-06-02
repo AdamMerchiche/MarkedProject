@@ -1,3 +1,6 @@
+from .models import*
+from django import forms
+
 
 # Formulaire permettant la création d'un commentaire.
 class CommentaireForm(forms.ModelForm):
