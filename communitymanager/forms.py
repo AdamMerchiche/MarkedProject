@@ -1,6 +1,7 @@
 from .models import *
 from django import forms
 
+
 # Formulaire permettant la création d'un commentaire.
 class CommentaireForm(forms.ModelForm):
     class Meta:
@@ -16,7 +17,7 @@ class PostForm(forms.ModelForm):
 
     class Meta:
         model = Post
-        exclude = ["date_creation", 'communaute', 'auteur', 'visible']
+        exclude = ["date_creation", 'communaute', 'auteur', 'visible', "lecteurs", "likes"]#TO BE CHANGED: AUTHOR OF POST SHOULD BE ADDED AUTOMATICALLY TO lecteurs
 
     def __init__(self, *args,**kwargs):
         self.user = kwargs.pop('user')
@@ -24,13 +25,11 @@ class PostForm(forms.ModelForm):
 
     # On initialisera notre formulaire dans la vue associée. Néanmoins, on fera attention à deux variables du modèle Post.
     def clean(self):
-        print(self.user)
         cleaned_data = super(PostForm, self).clean()
         evenementiel = cleaned_data['evenementiel']
         date_evenement = cleaned_data["date_evenement"]
         # Les deux variables sont indissociables l'une de l'autre. Sans cocher la case évenement, il sera impossible de mettre une date d'évenement
         # et inversement
-
         if (evenementiel and date_evenement == None) or (not evenementiel and date_evenement != None):
             self.add_error("date_evenement", "Vous devez inscrire une date d'évenement ou cochez l'option évenement")
         # Verification de l'existence de la communaute
@@ -90,6 +89,8 @@ class ModificationCommunauteForm(forms.ModelForm):
     class Meta:
         model = Communaute
         exclude = ["createur", "list_bannis", "abonnes", "ferme_invisible"] #Possible de modifier la description, le titre, et de bannir des abonnés de la commu
+
+
 
 class FiltragePostCommunauteForm(forms.Form):
     type_filtrage = forms.ChoiceField(choices=[('OU', 'ou'), ('ET', 'et')])
