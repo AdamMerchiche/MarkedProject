@@ -61,7 +61,13 @@
                     {% endif %}
                 </span>
             </h3>
-            <span class="m-b-15 d-block"> <p class="text-justify">{{ post.description |linebreaks }}</p></span>
+            <span class="m-b-15 d-block"> <p class="text-justify">
+                {% if btn_lire_commentaire %}
+                    {{ post.description |truncatewords:30 |linebreaks }}
+                {% else %}
+                    {{ post.description |linebreaks }}
+                {% endif %}
+            </p></span>
         </div>
 
         <div class="col-sm-3"> {# colonne 3: temps depuis la creation du post, communaute, auteur et lien vers les commentaires #}
