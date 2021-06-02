@@ -6,7 +6,7 @@
 
 {% block h3 %}
     {% for post in posts %}
-        {% include 'communitymanager/un_post.html' with bg_color="transparent" btn_lire_commentaire=True %}
+        {% include 'communitymanager/un_post.html' with bg_color="transparent" btn_lire_commentaire=True btn_like=True %}
     {% endfor %}
 {% endblock h3 %}
 
