@@ -1,3 +1,5 @@
+from .models import *
+from django import forms
 
 # Formulaire permettant la création d'un commentaire.
 class CommentaireForm(forms.ModelForm):
@@ -16,27 +18,40 @@ class PostForm(forms.ModelForm):
         model = Post
         exclude = ["date_creation", 'communaute', 'auteur', 'visible']
 
+    def __init__(self, *args,**kwargs):
+        self.user = kwargs.pop('user')
+        super(PostForm, self).__init__(*args, **kwargs)
+
     # On initialisera notre formulaire dans la vue associée. Néanmoins, on fera attention à deux variables du modèle Post.
     def clean(self):
+        print(self.user)
         cleaned_data = super(PostForm, self).clean()
         evenementiel = cleaned_data['evenementiel']
         date_evenement = cleaned_data["date_evenement"]
         # Les deux variables sont indissociables l'une de l'autre. Sans cocher la case évenement, il sera impossible de mettre une date d'évenement
         # et inversement
+
         if (evenementiel and date_evenement == None) or (not evenementiel and date_evenement != None):
             self.add_error("date_evenement", "Vous devez inscrire une date d'évenement ou cochez l'option évenement")
+        # Verification de l'existence de la communaute
+        try:
+            communaute = Communaute.objects.get(name=self.cleaned_data.get('commu'))
+        except Communaute.DoesNotExist:
+            self.add_error("commu", "Cette communaute n'existe pas!")
+        # Verification que l'utilisateur soit abonne pour poster dans une communaute s'il force l'acces
+        else:
+            if communaute not in self.user.abonnements.all():
+                self.add_error("commu",
+                               "Vous ne pouvez pas poster dans cette communaute car vous n'etes pas abonne!")
+
         collant = cleaned_data["collant"]
-        communaute = Communaute.objects.get(name=self.cleaned_data.get('commu'))
         avertissement = cleaned_data["avertissement"]
         duplicat = Post.objects.filter(communaute_id=communaute.id).filter(collant=True)
+
         if collant and duplicat.exists():
             self.add_error("collant", "Un post de la communauté est déjà collé! Veuillez réctifier la situation. ")
 
-        # Verification de l'existence de la communaute
-        try:
-            c = Communaute.objects.get(name=cleaned_data.get('commu'))
-        except Communaute.DoesNotExist:
-            self.add_error("commu", "Cette communaute n'existe pas..")
+
 
         return super().clean()
 

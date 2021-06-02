@@ -104,7 +104,7 @@ def nouveau_post(request):
 
     list_priorite = Priorite.objects.all()
     form = PostForm(
-        request.POST or None)
+        request.POST or None, user=request.user)
     communautes = Communaute.objects.filter(abonnes=request.user, ferme=False, ferme_invisible=False)
     form.fields['commu'].choices = [(communaute.id, communaute.name) for communaute in
                                          communautes]  # On limite la communauté où le POST sera partagé,
@@ -136,7 +136,7 @@ def modification_post(request, post_id):
     communautes = Communaute.objects.filter(abonnes=request.user, ferme=False, ferme_invisible=False)
     if post.auteur == request.user:
         alert_flag = False
-        form = PostForm(request.POST or None, instance=post)
+        form = PostForm(request.POST or None, instance=post, user=request.user)
         form.fields['commu'].initial = post.communaute.name
         form.fields['date_evenement'].initial = post.date_evenement
 
