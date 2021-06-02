@@ -97,15 +97,16 @@ def visibilite_commentaire(request, commentaire_id):
 # Permet à l'utilisateur connecté de créer un POST. Il sera prérempli au niveau de la section Auteur,
 # et les choix de la communauté (lieu de publication) seront limités. L'utilisateur ne pourra poster que dans les
 # communautés auxquelles il est abonné.
+
 @login_required(login_url='/accounts/login/')
 def nouveau_post(request):
     date_now = timezone.now().strftime("%Y-%m-%dT%H:%M")
     date_evnt = None
 
-    list_priorite = Priorite.objects.all()
+    list_priorite = Priorite.objects.all()      #recupère la liste des priorite disponible
     form = PostForm(
         request.POST or None, user=request.user)
-    communautes = Communaute.objects.filter(abonnes=request.user, ferme=False, ferme_invisible=False)
+    communautes = Communaute.objects.filter(abonnes=request.user, ferme=False, ferme_invisible=False)   #Liste des communautes accessibles par l'utilisateur
     form.fields['commu'].choices = [(communaute.id, communaute.name) for communaute in
                                          communautes]  # On limite la communauté où le POST sera partagé,
     # aux communautés auxquelles l'abonnée fait parti.
