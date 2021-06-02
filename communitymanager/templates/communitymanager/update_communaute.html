@@ -17,8 +17,40 @@
     {% if not alert_flag %}
         <form action="{% url "update_communaute" communaute_id=communaute.id %}" method="post">
             {% csrf_token %}
-            {{ form.as_p }}
-            <input type="submit" value="Modifiez votre POST..."/>
+            <br>
+            <div class="form_fieldsH form_block">
+                <p class="form_fieldsH">
+                    <label class="form_fieldsLabel" >Nom de la Communauté :</label><br>
+                    {{ form.name }}
+                </p>
+                <div class="errorPr"><p>{{ form.name.errors }}</p></div>
+            </div><br>
+
+            <div class="form_fieldsH form_block">
+                <p class="form_fieldsH">
+                    <label class="form_fieldsLabel" >Utilisateurs bannis :</label><br>
+                    {{ form.list_bannis }}
+                </p>
+                <div class="errorPr"><p>{{ form.list_bannis.errors }}</p></div>
+            </div><br>
+
+            <div class="form_fieldsH form_block">
+                <p class="form_fieldsH">
+                    <label class="form_fieldsLabel" >Description de la communauté :</label><br>
+                    {{ form.description }}
+                </p>
+                <div class="errorPr"><p>{{ form.description.errors }}</p></div>
+            </div><br>
+
+            <div class="form_fieldsH form_block">
+                <p class="form_fieldsH">
+                    <label class="form_fieldsLabel" >A cocher pour fermer la communauté :</label>
+                    {{ form.ferme }}
+                </p>
+                <div class="errorPr"><p>{{ form.ferme.errors }}</p></div>
+            </div><br>
+
+            <input type="submit" value="Appliquer"/>
         </form>
     {% endif %}
 {% endblock h3 %}

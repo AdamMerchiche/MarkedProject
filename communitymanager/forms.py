@@ -90,8 +90,6 @@ class ModificationCommunauteForm(forms.ModelForm):
         model = Communaute
         exclude = ["createur", "abonnes", "ferme_invisible"] #Possible de modifier la description, le titre, et de bannir des abonnés de la commu
 
-
-
 class FiltragePostCommunauteForm(forms.Form):
     type_filtrage = forms.ChoiceField(choices=[('OU', 'ou'), ('ET', 'et')])
     min_priorite = forms.ModelChoiceField(queryset=Priorite.objects.all(), empty_label="(Vide)", required=False)
