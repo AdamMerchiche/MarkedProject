@@ -40,14 +40,14 @@ tout en ajoutant dnas les templates de l'application, des fonctionnalités inté
     <div class="breadcrumbs bg-secondary">
 {#        <a href="/accounts/login"> {% block h2 %}{% endblock h2 %}</a> #} {# Necessaire? #}
             <nav class="navbar navbar-expand-sm bg-transparent navbar-white pull-right ">
-            <a class="navbar-brand" href="/accounts/logout"><i class="fas fa-sign-out-alt "></i></a>
+            <a class="navbar-brand" href="/accounts/logout" data-toggle="tooltip" title="Déconnexion"><i class="fas fa-sign-out-alt "></i></a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="collapsibleNavbar">
                 <ul class="navbar-nav ml-auto ">
-                    <a class="nav-link" href="{% url 'nouvelle_communaute' %}"><i class="fas fa-pencil-alt"></i></a>
-                    <a class="nav-link" href="{% url 'nouveau_post' %}"><i class="far fa-edit"></i></a>
+                    <a class="nav-link" href="{% url 'nouvelle_communaute' %}"data-toggle="tooltip" title="Créer une communauté"><i class="fas fa-pencil-alt"></i></a>
+                    <a class="nav-link" href="{% url 'nouveau_post' %}"data-toggle="tooltip" title="Publier un POST"><i class="far fa-edit"></i></a>
                     <a class="nav-link" href="{% url 'feed_abonnements' %}">Votre feed</a>
                     <a class="nav-link" href="{% url 'list_communautes' %}">Communautes</a>
                     <a class="nav-link" href="{% url 'see_posts' %}">Vos Créations</a>

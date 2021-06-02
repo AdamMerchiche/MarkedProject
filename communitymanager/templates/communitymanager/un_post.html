@@ -55,9 +55,9 @@
                 <span class="text-center">
                     {% if request.user == post.communaute.createur%}
                         {% if post.visible%}
-                            <a span href="{% url 'visibilite_post' post.id %}"><i class="far fa-eye"></i></a>
+                            <a span href="{% url 'visibilite_post' post.id %}" data-toggle="tooltip" title="Rendre le POST invisible"><i class="far fa-eye"></i></a>
                         {%else%}
-                            <a span href="{% url 'visibilite_post' post.id %}"><i class="far fa-eye-slash"></i></a>
+                            <a span href="{% url 'visibilite_post' post.id %}"data-toggle="tooltip" title="Rendre le POST visible"><i class="far fa-eye-slash"></i></a>
                         {%endif%}
                     {%endif%}
                     <a class="{% if request.user in post.lecteurs.all and not page_post %} {# Change font si le post a été lu et que ce n'est pas la page du post #}
@@ -69,7 +69,7 @@
                         {{ post.title|capfirst }}
                     </a>
                     {% if user == post.auteur %}
-                        <a href="{% url 'update_post' post.id %}">
+                        <a href="{% url 'update_post' post.id %}" data-toggle="tooltip" title="Modifier le POST">
                         <i class="far fa-edit"></i>
                         </a>
                     {% endif %}
@@ -96,7 +96,7 @@
                         {# Possibilité de les rendre visible par la suite #}
                         {# possibilité de Bannir un utilisateur si l'utilisateur est toujours dans la communauté #}
                         {%if not post.auteur.is_superuser and not post.auteur == post.communaute.createur %}
-                            <a span href="{% url 'bannir' communaute_id=post.communaute.id user_id=post.auteur.id %}">
+                            <a span href="{% url 'bannir' communaute_id=post.communaute.id user_id=post.auteur.id %}" data-toggle="tooltip" title="Bannir l'utilisateur">
                                 <i class="fas fa-ban"></i>
                             </a>
                         {%endif%}
@@ -105,7 +105,7 @@
                         <p><a href="{% url "post" post_id=post.id %}">Lire les commentaires</a></p>
                     {% endif %}
                     {% if request.user == post.communaute.createur%} {# Possibilité de les rendre visible par la suite #}
-                    <a span href="{% url 'supprimer_post' post.id %}"><i class="far fa-trash-alt"></i></a>
+                    <a span href="{% url 'supprimer_post' post.id %}" data-toggle="tooltip" title="Supprimer le POST"><i class="far fa-trash-alt"></i></a>
                     {%endif%}
                 </span>
             </div>
@@ -117,7 +117,8 @@
 
 {% else %}
     {% if post.communaute.createur == request.user %}
-           <div class="{%if post.avertissement%}alert alert-warning {%endif%} {{ bg_color }} mb-4">
+
+    <div class="{%if post.avertissement%}alert alert-warning {%endif%} {{ bg_color }} mb-4">
 
 
     <div class="row py-2 px-1">
@@ -164,9 +165,9 @@
                 <span class="text-center">
                     {% if request.user == post.communaute.createur%}
                         {% if post.visible%}
-                            <a span href="{% url 'visibilite_post' post.id %}"><i class="far fa-eye"></i></a>
+                            <a span href="{% url 'visibilite_post' post.id %}" data-toggle="tooltip" title="Rendre le POST invisible"><i class="far fa-eye"></i></a>
                         {%else%}
-                            <a span href="{% url 'visibilite_post' post.id %}"><i class="far fa-eye-slash"></i></a>
+                            <a span href="{% url 'visibilite_post' post.id %}"data-toggle="tooltip" title="Rendre le POST visible"><i class="far fa-eye-slash"></i></a>
                         {%endif%}
                     {%endif%}
                     <a class="{% if request.user in post.lecteurs.all and not page_post %} {# Change font si le post a été lu et que ce n'est pas la page du post #}
@@ -178,7 +179,7 @@
                         {{ post.title|capfirst }}
                     </a>
                     {% if user == post.auteur %}
-                        <a href="{% url 'update_post' post.id %}">
+                        <a href="{% url 'update_post' post.id %}" data-toggle="tooltip" title="Modifier le POST">
                         <i class="far fa-edit"></i>
                         </a>
                     {% endif %}
@@ -205,7 +206,7 @@
                         {# Possibilité de les rendre visible par la suite #}
                         {# possibilité de Bannir un utilisateur si l'utilisateur est toujours dans la communauté #}
                         {%if not post.auteur.is_superuser and not post.auteur == post.communaute.createur %}
-                            <a span href="{% url 'bannir' communaute_id=post.communaute.id user_id=post.auteur.id %}">
+                            <a span href="{% url 'bannir' communaute_id=post.communaute.id user_id=post.auteur.id %}" data-toggle="tooltip" title="Bannir l'utilisateur">
                                 <i class="fas fa-ban"></i>
                             </a>
                         {%endif%}
@@ -214,7 +215,7 @@
                         <p><a href="{% url "post" post_id=post.id %}">Lire les commentaires</a></p>
                     {% endif %}
                     {% if request.user == post.communaute.createur%} {# Possibilité de les rendre visible par la suite #}
-                    <a span href="{% url 'supprimer_post' post.id %}"><i class="far fa-trash-alt"></i></a>
+                    <a span href="{% url 'supprimer_post' post.id %}" data-toggle="tooltip" title="Supprimer le POST"><i class="far fa-trash-alt"></i></a>
                     {%endif%}
                 </span>
             </div>
@@ -223,6 +224,7 @@
     </div>
 </div>
 <hr> {# delimitation pour marquer la fin du post #}
+
 {% endif %}
                     {%endif%}
 </div>
