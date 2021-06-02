@@ -178,8 +178,9 @@ def creation_communaute(request):
     form.fields['createur'].choices = [
         (request.user.id, request.user.username)]
     if form.is_valid():
-        post = form.save(commit=False)
-        form.save()
+        form.save(commit=False)
+        communaute = form.save()
+        communaute.abonnes.add(request.user)
         envoi = True
         return redirect('list_communautes')
     return render(request, 'communitymanager/nouvelle_communaute.html', locals())

@@ -136,7 +136,7 @@ btn_lire_commentaire, booleen pour spécifier si le lien "Lire les commentaires"
                     <i class="fas fa-users"></i> {{ post.communaute|linebreaks }}
                     <i class="fas fa-user-edit"></i> {{ post.auteur }}
                     {% if request.user == post.communaute.createur%}
-                    ddd{# Possibilité de les rendre visible par la suite #}
+                    {# Possibilité de les rendre visible par la suite #}
 {# possibilité de Bannir un utilisateur si l'utilisateur est toujours dans la communauté #}
                         {% if post.auteur.id in post.communaute.abonnes and not post.auteur.is_superuser%}
                         <a span href="{% url 'bannir' communaute_id=post.communaute.id user_id=post.auteur.id %}"><i

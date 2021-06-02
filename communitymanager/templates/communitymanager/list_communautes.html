@@ -13,7 +13,15 @@
 {%if communautes%}
 {% for communaute in communautes %}
 <div class="communaute table-hover slideIn">
-    <h1><b>{{ communaute.name|capfirst }}
+    <h1><b>{% if request.user in communaute.abonnes.all %}
+       {%if not communaute.ferme_invisible%}
+        <a href="{% url 'communaute' communaute.id %}">{{ communaute.name|capfirst }}</a>
+        {% else%}
+        {{ communaute.name|capfirst }}
+        {% endif%}
+        {% else%}
+        {{ communaute.name|capfirst }}
+        {% endif%}
         {% if request.user == communaute.createur %}
         <a href="{% url 'update_communaute' communaute.id %}">
             <i class="far fa-edit"></i>
@@ -28,8 +36,6 @@
     <a span href="{% url 'abonnements' communaute.id %}"><i class="fas fa-heart pull-right"></i></a><br>
         {%if communaute.ferme_invisible%}
     La communauté a été fermée par l'administrateur. <br>
-        {%else%}
-    <p><a href="{% url 'communaute' communaute.id %}">Lire les Posts</a></p>
         {%endif%}
     {% else %}
         {%if not request.user in communaute.list_bannis.all%}
