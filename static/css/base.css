@@ -921,3 +921,11 @@ table#change-history tbody th {
 .popup #header {
     padding: 10px 20px;
 }
+
+.miniTxt{
+    font-size: 10px;
+    color: #a0a0a0;
+    padding:8px;
+    max-width:400px;
+    text-align: left;
+}

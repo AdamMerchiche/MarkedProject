@@ -40,7 +40,7 @@ tout en ajoutant dnas les templates de l'application, des fonctionnalités inté
     <div class="breadcrumbs bg-secondary stickyFront">
         {% if user.is_authenticated %}
         <nav class="navbar navbar-expand-sm navbar-white pull-right ">
-            <a class="navbar-brand" href="/accounts/logout" data-toggle="tooltip" title="Déconnexion"><i class="fas fa-sign-out-alt "></i></a>
+            <span class="miniTxt"><a class="navbar-brand" href="/accounts/logout" data-toggle="tooltip" title="Déconnexion"><i class="fas fa-sign-out-alt "></i></a></span>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
                 <span class="navbar-toggler-icon"></span>
             </button>
@@ -86,8 +86,14 @@ function myFunction() {
   }
 }
 </script>
-
-
-
 </body>
+
+<footer class="miniTxt">
+    <hr>
+    {% if user.is_authenticated %}
+        <span class="">Vous êtes connecté en tant que, <i>{{ user.username }} !</i></span>
+    {% endif %}
+    <p> ©Copyright 2021 ISAE-SUPAERO - AWNG - Adam Merchiche, Claire Ky & Guilhem Glaziou</p>
+</footer>
+
 </html>
