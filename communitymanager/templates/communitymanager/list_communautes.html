@@ -30,7 +30,7 @@
 <div class="text-muted">
     <p><i class="fas fa-users"></i>
         {% for u in communaute.abonnes.all %}
-        {{ u.get_username }}-
+           {{ u.get_username }}-
         {% endfor %}</p></div>
     {{ communaute.description }}<br>
     {% if request.user in communaute.abonnes.all %}
