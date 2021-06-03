@@ -54,9 +54,6 @@ class PostForm(forms.ModelForm):
 
         return super().clean()
 
-
-
-#problème ici à résoudre !!
     def save(self, user):
         nouveau_post = super().save(commit=False)
         nouveau_post.auteur = user
@@ -83,7 +80,22 @@ class PostForm(forms.ModelForm):
 class CommunauteForm(forms.ModelForm):
     class Meta:
         model = Communaute
-        exclude  = ["list_bannis", "abonnes", "ferme_invisible"]
+        exclude  = ["list_bannis", "abonnes", "ferme_invisible", 'createur']
+
+    def save(self, user):
+        nouvelle_communaute = super().save(commit=False)
+        nouvelle_communaute.createur = user
+        nouvelle_communaute.save()
+        return nouvelle_communaute
+
+    def modifCommunaute(self, id):
+        cleaned_data = self.clean()
+        modif_communaute = Communaute.objects.filter(id=id)
+        modif_communaute.update(name=cleaned_data.get('name'),
+                                description=cleaned_data.get('description'),
+                                ferme=cleaned_data.get('ferme'),
+                                )
+        return modif_communaute
 
 class ModificationCommunauteForm(forms.ModelForm):
     class Meta:
