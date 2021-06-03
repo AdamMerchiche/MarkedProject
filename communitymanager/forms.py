@@ -17,7 +17,7 @@ class PostForm(forms.ModelForm):
 
     class Meta:
         model = Post
-        exclude = ["date_creation", 'communaute', 'auteur', 'visible', "lecteurs", "likes"]#TO BE CHANGED: AUTHOR OF POST SHOULD BE ADDED AUTOMATICALLY TO lecteurs
+        exclude = ["date_creation", 'communaute', 'auteur', 'visible', "lecteurs", "likes"]
 
     def __init__(self, *args,**kwargs):
         self.user = kwargs.pop('user')

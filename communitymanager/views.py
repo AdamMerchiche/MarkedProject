@@ -21,6 +21,7 @@ def accueil(request):
 def liste_communautes(request):
     date_now = timezone.now()
     communautes = Communaute.objects.all()
+    communautes = [(commu, Post.objects.filter(communaute=commu).exclude(lecteurs__username=request.user.username).count()) for commu in communautes]
     return render(request, 'communitymanager/list_communautes.html', {'communautes': communautes})
 
 
@@ -139,6 +140,8 @@ def nouveau_post(request):
         superuser = False
     if form.is_valid():
         post_cree = form.save(user=request.user)
+        post_cree.lecteurs.add(request.user)
+        post_cree.save()
         envoi = True
         return redirect('communaute', communaute_id=post_cree.communaute.id)
     return render(request, 'communitymanager/nouveau_post.html', locals())
