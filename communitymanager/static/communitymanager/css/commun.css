@@ -1,1 +1,26 @@
 /* Fichier css pour les classes css presentes dans l'application "communitymaager" */
+
+.form_fieldsH{
+    max-width:500px;
+    text-align: center;
+}
+
+.form_fieldsTitle{
+}
+
+.form_block{
+    padding:0px 50px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.form_fieldsLabel{
+    font-weight: bold;
+    padding-left:10px;
+}
+
+.errorPr{
+    color: red;
+    font-size: small;
+    font-weight: bold;
+}
