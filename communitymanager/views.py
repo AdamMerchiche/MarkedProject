@@ -143,7 +143,7 @@ def nouveau_post(request):
         post_cree.lecteurs.add(request.user)
         post_cree.save()
         envoi = True
-        return redirect(communaute, communaute_id=post_cree.communaute.id)
+        return redirect('communaute', communaute_id=post_cree.communaute.id)
     return render(request, 'communitymanager/nouveau_post.html', locals())
 
 
@@ -204,11 +204,9 @@ def creation_communaute(request):
     communautes = Communaute.objects.all()
     form = CommunauteForm(
         request.POST or None)
-    form.fields['createur'].choices = [
-        (request.user.id, request.user.username)]
     if form.is_valid():
-        form.save(commit=False)
-        communaute = form.save()
+        form.save(user=request.user)
+        communaute = form.save(user=request.user)
         communaute.abonnes.add(request.user)
         envoi = True
         return redirect('list_communautes')
@@ -218,16 +216,19 @@ def creation_communaute(request):
 # Vue permettant de modifier une communauté que l'utilisateur a créée
 @login_required(login_url='/accounts/login/')
 def modification_communaute(request, communaute_id):
-    date_now = timezone.now()
-    communaute = Communaute.objects.get(id=communaute_id)
+    try:
+        communaute = Communaute.objects.get(id=communaute_id)
+    except Http404:
+        redirect(liste_communautes)
     alert_flag = True
     if communaute.createur == request.user:
         alert_flag = False
         form = ModificationCommunauteForm(request.POST or None, instance=communaute)
         if form.is_valid():
-            communaute = form.save()
-            communaute.save()
+            communaute = form.modifCommunaute(id=communaute.id)
+
             envoi = True
+            return redirect(liste_communautes)
     else:
         alert_flag = True
     return render(request, 'communitymanager/update_communaute.html', locals())

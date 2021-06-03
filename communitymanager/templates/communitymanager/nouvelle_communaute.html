@@ -10,7 +10,31 @@
     Créez un havre de paix où des utilisateurs pourront suivre votre actualité !
     <form action="{% url 'nouvelle_communaute' %}" method="post">
         {% csrf_token %}
-        {{ form.as_p }}
+        <br>
+        <div class="form_fieldsH form_block">
+            <p class="form_fieldsH">
+                <label class="form_fieldsLabel" >Nom de la Communauté :</label><br>
+                {{ form.name }}
+            </p>
+            <div class="errorPr"><p>{{ form.name.errors }}</p></div>
+        </div>
+
+        <div class="form_fieldsH form_block">
+            <p class="form_fieldsH">
+                <label class="form_fieldsLabel" >Description de la communauté :</label><br>
+                {{ form.description }}
+            </p>
+            <div class="errorPr"><p>{{ form.description.errors }}</p></div>
+        </div>
+
+        <div class="form_fieldsH form_block">
+            <p class="form_fieldsH">
+                <label class="form_fieldsLabel" >A cocher pour fermer la communauté :</label>
+                {{ form.ferme }}
+            </p>
+            <div class="errorPr"><p>{{ form.ferme.errors }}</p></div>
+        </div>
+
         <input class="" type="submit" value="Ajoutez une Communauté..."/>
     </form>
 {% endblock h3 %}

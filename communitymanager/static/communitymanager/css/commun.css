@@ -24,3 +24,7 @@
     font-size: small;
     font-weight: bold;
 }
+
+.stickyFront{
+    z-index: 50;
+}
