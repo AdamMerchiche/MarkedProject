@@ -21,7 +21,7 @@
         <input class="" id="id_communaute" name="commu" list="list_com" required="required" {% if form.commu.value != none %} value="{{ form.commu.value }}" {%endif%}>
         <datalist class="" id="list_com">
             {% for communaute in communautes %}
-                <option class="form_fieldsTitle" value="{{communaute.name|capfirst}}">
+                <option class="form_fieldsTitle" value="{{communaute.name}}">
             {% endfor %}
         </datalist>
     </p>
@@ -44,7 +44,7 @@
     <div class="errorPr"><p>{{ form.evenementiel.errors }}</p></div>
 
     <p class="form_fieldsH">{{ form.date_evenement.value| date:"c" }}
-        <label class="form_fieldsLabel" for="id_date_evenement">Date evenement :</label>
+        <label class="form_fieldsLabel" for="id_date_evenement">Date evenement (AAAA-MM-JJ HH:MM) :</label>
         <input type="datetime-local" min="{{ date_now }}" name="date_evenement" id="id_date_evenement" value="{{ form.date_evenement.value| date:'c' }}">
     </p>
     <div class="errorPr"><p>{{ form.date_evenement.errors }}</p></div>

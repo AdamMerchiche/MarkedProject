@@ -37,18 +37,19 @@ class PostForm(forms.ModelForm):
             communaute = Communaute.objects.get(name=self.cleaned_data.get('commu'))
         except Communaute.DoesNotExist:
             self.add_error("commu", "Cette communaute n'existe pas!")
+            communaute = None
         # Verification que l'utilisateur soit abonne pour poster dans une communaute s'il force l'acces
         else:
             if communaute not in self.user.abonnements.all():
                 self.add_error("commu",
                                "Vous ne pouvez pas poster dans cette communaute car vous n'etes pas abonne!")
 
-        collant = cleaned_data["collant"]
-        avertissement = cleaned_data["avertissement"]
-        duplicat = Post.objects.filter(communaute_id=communaute.id).filter(collant=True)
+            collant = cleaned_data["collant"]
+            avertissement = cleaned_data["avertissement"]
+            duplicat = Post.objects.filter(communaute_id=communaute.id).filter(collant=True)
 
-        if collant and duplicat.exists():
-            self.add_error("collant", "Un post de la communauté est déjà collé! Veuillez réctifier la situation. ")
+            if collant and duplicat.exists():
+                self.add_error("collant", "Un post de la communauté est déjà collé! Veuillez réctifier la situation. ")
 
 
 
