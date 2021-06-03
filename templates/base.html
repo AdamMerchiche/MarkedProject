@@ -31,15 +31,15 @@ tout en ajoutant dnas les templates de l'application, des fonctionnalités inté
 
     <div class=' h-50 bg-dark bg-center' id="header">
         <div id="branding " class=" text-center ">
-            <h1 id="site-name" class="text-white ">{% block h1 %} Administration de Django  {% endblock h1 %}</h1>
+            <h1 id="site-name" class="text-white ">{% block h1 %} Bienvenue !  {% endblock h1 %}</h1>
         </div>
     </div>
     <!-- END Header -->
 
     <div id="navbar">
     <div class="breadcrumbs bg-secondary stickyFront">
-{#        <a href="/accounts/login"> {% block h2 %}{% endblock h2 %}</a> #} {# Necessaire? #}
-            <nav class="navbar navbar-expand-sm navbar-white pull-right ">
+        {% if user.is_authenticated %}
+        <nav class="navbar navbar-expand-sm navbar-white pull-right ">
             <a class="navbar-brand" href="/accounts/logout" data-toggle="tooltip" title="Déconnexion"><i class="fas fa-sign-out-alt "></i></a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
                 <span class="navbar-toggler-icon"></span>
@@ -54,6 +54,9 @@ tout en ajoutant dnas les templates de l'application, des fonctionnalités inté
                 </ul>
             </div>
         </nav>
+        {% else %}
+        <a class="navbar-brand" href="/accounts/login" data-toggle="tooltip" title="Déconnexion"><i class="fas fa-sign-in-alt "></i></a>
+        {% endif %}
     </div>
     </div>
     <!-- Content -->
