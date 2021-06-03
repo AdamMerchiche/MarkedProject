@@ -41,8 +41,7 @@ class Post(models.Model):
     collant = models.BooleanField(default=False)
     visible = models.BooleanField(default=True)
     avertissement = models.BooleanField(default=False)
-    lecteurs = models.ManyToManyField(User, related_name="lecteurs",
-                                      blank=True)  # TO BE CHANGED: SHOULD AT LEAST HAVE ITS AUTHOR
+    lecteurs = models.ManyToManyField(User, related_name="lecteurs", blank=True)
     likes = models.ManyToManyField(User, related_name="likes", blank=True)
 
     # On choisira d'ordonner l'ensemble des POSTs en fonction de leur date de publication.
