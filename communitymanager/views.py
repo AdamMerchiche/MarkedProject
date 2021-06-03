@@ -220,7 +220,7 @@ def modification_communaute(request, communaute_id):
     alert_flag = True
     if communaute.createur == request.user:
         alert_flag = False
-        form = CommunauteForm(request.POST or None, instance=communaute)
+        form = ModificationCommunauteForm(request.POST or None, instance=communaute)
         if form.is_valid():
             communaute = form.modifCommunaute(id=communaute.id)
 
