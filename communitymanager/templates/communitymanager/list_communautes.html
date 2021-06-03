@@ -7,64 +7,66 @@
 
 {% block h3 %}
 
-{% for communaute in communautes %}
+{% for communaute, nb_posts_non_lus in communautes %}
     <div class="slideIn">
-<div class="communaute table-hover">
-<h1><b>
-    {% if request.user in communaute.abonnes.all %}
-{%if not communaute.ferme_invisible%}
-     <a href="{% url 'communaute' communaute.id %}" data-toggle="tooltip" title="Lire les posts">{{ communaute.name|capfirst }}</a>
-        {%else%}
-{{ communaute.name|capfirst }}
-{% endif %}
-    {% else %}
-{{ communaute.name|capfirst }}
-{% endif %}
+    <div class="communaute table-hover">
+        <h1><b>
+            {% if request.user in communaute.abonnes.all %}
+                {%if not communaute.ferme_invisible%}
+                     <a href="{% url 'communaute' communaute.id %}" data-toggle="tooltip" title="Lire les posts">{{ communaute.name|capfirst }}</a>
+                {%else%}
+                    {{ communaute.name|capfirst }}
+                {% endif %}
+            {% else %}
+                {{ communaute.name|capfirst }}
+            {% endif %}
 
-        {% if request.user == communaute.createur %}
-        <a href="{% url 'update_communaute' communaute.id %}" data-toggle="tooltip" title="Modifier cette communauté">
-            <i class="far fa-edit" style="opacity: 50%"></i>
-        </a>
-        {% endif %}</b></h1>
-<div class="slideInContenu">
-<div class="text-muted">
-    <p><i class="fas fa-users"></i>
-        {% for u in communaute.abonnes.all %}
-        {{ u.get_username }}-
-        {% endfor %}</p></div>
-    {{ communaute.description }}<br>
-    {% if request.user in communaute.abonnes.all %}
-    <a span href="{% url 'abonnements' communaute.id %}" data-toggle="tooltip" title="Désabonnez-vous !"><i class="fas fa-heart pull-right"></i></a><br>
-        {%if communaute.ferme_invisible%}
-    La communauté a été fermée par l'administrateur. <br>
-        {%endif%}
-    {% else %}
-        {%if not request.user in communaute.list_bannis.all%}
-    <a span href="{% url 'abonnements' communaute.id %}" data-toggle="tooltip" title="Abonnez-vous !"><i class="far fa-heart pull-right"></i> </a><br>
-        {%else%}
-    Vous avez été banni.e de cette Communauté.
-        {% endif %}
-    {% endif %}
-    {# Section pour fermer/détruire une communauté si le créateur est l'utilisateur#}
-    {% if communaute.createur == request.user or request.user.is_superuser %}
-        <a span href="{% url 'detruire' communaute.id %}" data-toggle="tooltip" title="Supprimer cette communauté!"><i class="fas fa-trash-alt" style="float:right; opacity: 50%; font-size: 25px"></i></a>
-        {% if communaute.ferme %}
-        <a span href="{% url 'fermer' communaute.id %}" data-toggle="tooltip" title="Ouvrir cette communauté"><i class="fas fa-lock" style="float:right;  font-size: 25px"></i></a>
-        {%else%}
-        <a span href="{% url 'fermer' communaute.id %}" data-toggle="tooltip" title="Fermer cette communauté"><i class="fas fa-lock-open" style="float:right;  font-size: 25px"></i></a>
-        {%endif%}
-        {% if request.user.is_superuser%}
-        {% if communaute.ferme_invisible %}
-        <a span href="{% url 'fermer_invisible' communaute.id %}" data-toggle="tooltip" title="Autoriser l'accès à la communauté!"><i class="fas fa-lock" style="color:indianred; float:left;  font-size: 25px"></i></a>
-        {%else%}
-        <a span href="{% url 'fermer_invisible' communaute.id %}" data-toggle="tooltip" title="Interdire l'accès à la communauté!"><i class="fas fa-lock-open" style="color:indianred; float:left;  font-size: 25px"></i></a>
-        {%endif%}
-        {%endif%}
-    {% endif %}
-
-</div>
-<hr class="my-4"/>
-
+            {% if request.user == communaute.createur %}
+                <a href="{% url 'update_communaute' communaute.id %}" data-toggle="tooltip" title="Modifier cette communauté">
+                    <i class="far fa-edit" style="opacity: 50%"></i>
+                </a>
+            {% endif %}
+        </b></h1>
+        <div class="slideInContenu">
+            <div class="text-muted">
+                <p><i class="fas fa-users"></i>
+                    {% for u in communaute.abonnes.all %}
+                        {{ u.get_username }}-
+                    {% endfor %}
+                </p>
+            </div>
+            {{ communaute.description }}<br>
+            {% if request.user in communaute.abonnes.all %}
+                <a span href="{% url 'abonnements' communaute.id %}" data-toggle="tooltip" title="Désabonnez-vous !"><i class="fas fa-heart pull-right"></i></a><br>
+                {%if communaute.ferme_invisible%}
+                    La communauté a été fermée par l'administrateur.<br>
+                {%endif%}
+            {% else %}
+                {%if not request.user in communaute.list_bannis.all%}
+                    <a span href="{% url 'abonnements' communaute.id %}" data-toggle="tooltip" title="Abonnez-vous !"><i class="far fa-heart pull-right"></i></a><br>
+                {%else%}
+                    Vous avez été banni.e de cette Communauté.<br>
+                {% endif %}
+            {% endif %}
+            Vous avez <b>{{ nb_posts_non_lus }} posts</b> non lus.<br>
+            {# Section pour fermer/détruire une communauté si le créateur est l'utilisateur#}
+            {% if communaute.createur == request.user or request.user.is_superuser %}
+                <a span href="{% url 'detruire' communaute.id %}" data-toggle="tooltip" title="Supprimer cette communauté!"><i class="fas fa-trash-alt" style="float:right; opacity: 50%; font-size: 25px"></i></a>
+                {% if communaute.ferme %}
+                <a span href="{% url 'fermer' communaute.id %}" data-toggle="tooltip" title="Ouvrir cette communauté"><i class="fas fa-lock" style="float:right;  font-size: 25px"></i></a>
+                {%else%}
+                <a span href="{% url 'fermer' communaute.id %}" data-toggle="tooltip" title="Fermer cette communauté"><i class="fas fa-lock-open" style="float:right;  font-size: 25px"></i></a>
+                {%endif%}
+                {% if request.user.is_superuser%}
+                    {% if communaute.ferme_invisible %}
+                    <a span href="{% url 'fermer_invisible' communaute.id %}" data-toggle="tooltip" title="Autoriser l'accès à la communauté!"><i class="fas fa-lock" style="color:indianred; float:left;  font-size: 25px"></i></a>
+                    {%else%}
+                    <a span href="{% url 'fermer_invisible' communaute.id %}" data-toggle="tooltip" title="Interdire l'accès à la communauté!"><i class="fas fa-lock-open" style="color:indianred; float:left;  font-size: 25px"></i></a>
+                    {%endif%}
+                {%endif%}
+            {% endif %}
+        </div>
+    <hr class="my-4"/>
 {% empty %}
     Créer la première communauté ?
     <a href="{% url 'nouvelle_communaute'  %}"><i class="far fa-edit"></i></a>

@@ -46,8 +46,16 @@ tout en ajoutant dnas les templates de l'application, des fonctionnalités inté
             </button>
             <div class="collapse navbar-collapse" id="collapsibleNavbar">
                 <ul class="navbar-nav ml-auto ">
-                    <a class="nav-link" href="{% url 'nouvelle_communaute' %}"data-toggle="tooltip" title="Créer une communauté"><i class="fas fa-pencil-alt"></i></a>
-                    <a class="nav-link" href="{% url 'nouveau_post' %}"data-toggle="tooltip" title="Publier un POST"><i class="far fa-edit"></i></a>
+      {# Menu déroulant pour la création de contenu #}
+<div class="dropdown">
+  <button class="btn btn-secondary dropdown-toggle" type="button" data-toggle="dropdown">
+   <i class="far fa-edit"></i>
+  </button>
+  <div class="dropdown-menu">
+     <a class="nav-link" href="{% url 'nouvelle_communaute' %}"data-toggle="tooltip" title="Créer une communauté" style="color:dimgrey">Communauté</a>
+     <a class="nav-link" href="{% url 'nouveau_post' %}"data-toggle="tooltip" title="Publier un POST" style="color:dimgrey">POST</a>
+  </div>
+</div>
                     <a class="nav-link" href="{% url 'feed_abonnements' %}">Votre feed</a>
                     <a class="nav-link" href="{% url 'list_communautes' %}">Communautes</a>
                     <a class="nav-link" href="{% url 'see_posts' %}">Vos Créations</a>
