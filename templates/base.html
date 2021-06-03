@@ -37,9 +37,9 @@ tout en ajoutant dnas les templates de l'application, des fonctionnalités inté
     <!-- END Header -->
 
     <div id="navbar">
-    <div class="breadcrumbs bg-secondary">
+    <div class="breadcrumbs bg-secondary stickyFront">
 {#        <a href="/accounts/login"> {% block h2 %}{% endblock h2 %}</a> #} {# Necessaire? #}
-            <nav class="navbar navbar-expand-sm bg-transparent navbar-white pull-right ">
+            <nav class="navbar navbar-expand-sm navbar-white pull-right ">
             <a class="navbar-brand" href="/accounts/logout" data-toggle="tooltip" title="Déconnexion"><i class="fas fa-sign-out-alt "></i></a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
                 <span class="navbar-toggler-icon"></span>
@@ -57,7 +57,7 @@ tout en ajoutant dnas les templates de l'application, des fonctionnalités inté
     </div>
     </div>
     <!-- Content -->
-    <div id="content" class="colM text-center content">
+    <div id="content" class="colM text-center content" style="padding: 20px;">
         <p>{% block h3 %}Merci pour le temps que vous avez accordé à ce site aujourd'hui.{% endblock h3 %}</p>
 
 
