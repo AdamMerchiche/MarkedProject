@@ -10,7 +10,9 @@
 <form class="form-inline" method="POST" action="{% url 'list_communautes' %}">
     {% csrf_token %}
     {{ form }}
-    <input class="btn btn-primary" type="submit" value="Submit"/>
+    <button type="submit" class="btn btn-info">
+        <i class="fas fa-search"></i> Search
+    </button>
 </form>
 {% for communaute, nb_posts_non_lus in communautes %}
     <div class="slideIn">
