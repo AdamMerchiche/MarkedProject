@@ -1,0 +1,7 @@
+<form class="form-inline" method="POST" action={{ action_url }}>
+    {% csrf_token %}
+    {{ search_form }}
+    <button type="submit" class="btn btn-info">
+        <i class="fas fa-search"></i> Search
+    </button>
+</form>

@@ -6,14 +6,8 @@
 {% block h1 %} Bienvenue {{ request.user.get_username }},  sur la page des communautés  ! {% endblock h1 %}
 
 {% block h3 %}
+{% include 'communitymanager/search_form.html' with search_form=search %}
 
-<form class="form-inline" method="POST" action="{% url 'list_communautes' %}">
-    {% csrf_token %}
-    {{ form }}
-    <button type="submit" class="btn btn-info">
-        <i class="fas fa-search"></i> Search
-    </button>
-</form>
 {% for communaute, nb_posts_non_lus in communautes %}
     <div class="slideIn">
     <div class="communaute table-hover">

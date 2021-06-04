@@ -22,9 +22,10 @@ def liste_communautes(request):
     date_now = timezone.now()
 
     #Gestion form pour chercher une communaute precise
-    form = SimpleSearchForm(request.POST or None)
-    if form.is_valid():
-        query = form.cleaned_data['simple_query']
+    search = SimpleSearchForm(request.POST or None)
+    action_url = reverse('list_communautes') #Variable pour le template "search_form.html"
+    if search.is_valid():
+        query = search.cleaned_data['simple_query']
         communautes = Communaute.objects.filter(
             Q(name__icontains=query) |
             Q(description__icontains=query))
@@ -66,9 +67,24 @@ def bannir(request, communaute_id, user_id):
 #l'admin : on ne pourrait plus avoir accès aux posts.
 @login_required(login_url='/accounts/login/')
 def communaute(request, communaute_id):
+
     communaute = Communaute.objects.get(id=communaute_id)
-    if not Communaute.objects.get(id=communaute_id).ferme_invisible:
-        posts = Post.objects.filter(communaute_id=communaute_id)
+    #vérification que l'utilisateur est bien abonné pour pouvoir voir les post pour éviter de forcer l'acces avec l'url
+    if request.user not in communaute.abonnes.all():
+        return redirect('list_communautes')
+
+    elif not Communaute.objects.get(id=communaute_id).ferme_invisible:
+
+        #Formulaire pour afficher une liste de post contenant une chaine de caractères
+        search = SimpleSearchForm(request.POST or None)
+        action_url = reverse('communaute', args=[communaute_id])
+        if search.is_valid():
+            query = search.cleaned_data['simple_query']
+            posts = Post.objects.filter(
+                Q(title__icontains=query) |
+                Q(description__icontains=query))
+        else:
+            posts = Post.objects.filter(communaute_id=communaute_id)
         date_now = timezone.now()
 
         list_priorite = Priorite.objects.all()
