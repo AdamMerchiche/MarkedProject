@@ -33,7 +33,7 @@
     </form>
 
     {# Formulaire de recherche d'un post précis #}
-    {% include 'communitymanager/search_form.html' with search_form=search %}
+    {% include 'communitymanager/search_form.html' with search_form=search action_url=action_url%}
 
     {# Affichage des posts #}
     {% for post in posts %}

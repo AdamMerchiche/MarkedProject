@@ -5,6 +5,7 @@
 {% block h1 %} Vos POSTs! {% endblock h1 %}
 
 {% block h3 %}
+    {% include 'communitymanager/search_form.html' with search_form=search action_url=action_url%}
     {% for post in posts %}
         {% include 'communitymanager/un_post.html' with bg_color="transparent" btn_like=True %}
     {% endfor %}

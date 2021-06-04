@@ -13,6 +13,16 @@ def accueil(request):
 
     communautes = Communaute.objects.filter(abonnes=request.user)
     posts = Post.objects.filter(communaute__abonnes=request.user)
+
+    # Formulaire pour afficher une liste de post contenant une chaine de caractères
+    search = SimpleSearchForm(request.POST or None)
+    action_url = reverse('feed_abonnements')
+    if search.is_valid():
+        query = search.cleaned_data['simple_query']
+        posts = posts.filter(
+            Q(title__icontains=query) |
+            Q(description__icontains=query))
+
     return render(request, 'communitymanager/feed_abonnements.html', locals())
 
 
@@ -217,12 +227,18 @@ def visibilite_post(request, post_id):
 @login_required(login_url='/accounts/login/')
 def voir_posts(request):
     posts = Post.objects.filter(auteur=request.user)
+
+    # Formulaire pour afficher une liste de post contenant une chaine de caractères
+    search = SimpleSearchForm(request.POST or None)
+    action_url = reverse('feed_abonnements')
+    if search.is_valid():
+        query = search.cleaned_data['simple_query']
+        posts = posts.filter(
+            Q(title__icontains=query) |
+            Q(description__icontains=query))
+
     date_now = timezone.now()
-    return render(
-        request,
-        'communitymanager/see_posts.html',
-        locals()
-    )
+    return render(request,'communitymanager/see_posts.html',locals())
 
 
 # Vue permettant de créer une communauté, avec l'utilisateur comme auteur
