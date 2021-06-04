@@ -4,7 +4,7 @@ from django.urls import reverse
 from .models import *
 from django.contrib.auth.decorators import login_required
 from django.http import Http404
-
+from django.db.models import Q
 
 # Renvoie le feed d'un utilisateur, avec tous les posts des communautés auxquelles il est abonné
 @login_required(login_url='/accounts/login/')
@@ -20,9 +20,19 @@ def accueil(request):
 @login_required(login_url='/accounts/login/')
 def liste_communautes(request):
     date_now = timezone.now()
-    communautes = Communaute.objects.all()
+
+    #Gestion form pour chercher une communaute precise
+    form = SimpleSearchForm(request.POST or None)
+    if form.is_valid():
+        query = form.cleaned_data['simple_query']
+        communautes = Communaute.objects.filter(
+            Q(name__icontains=query) |
+            Q(description__icontains=query))
+    else:
+        communautes = Communaute.objects.all()
+
     communautes = [(commu, Post.objects.filter(communaute=commu).exclude(lecteurs__username=request.user.username).count()) for commu in communautes]
-    return render(request, 'communitymanager/list_communautes.html', {'communautes': communautes})
+    return render(request, 'communitymanager/list_communautes.html', locals())
 
 
 # Permet à l'utilisateur de s'abonner ou se désabonner d'une communauté
@@ -91,8 +101,9 @@ def commentaire(request, post_id):
     date_now = timezone.now()
     post = Post.objects.get(id=post_id)
     commentaires = Commentaire.objects.filter(post_id=post_id)
-    form = CommentaireForm(request.POST or None)
 
+    #Gestion formulaire de commentaire
+    form = CommentaireForm(request.POST or None)
     if form.is_valid():
         commentaire = form.save(commit=False)
         commentaire.post = post
@@ -282,3 +293,9 @@ def liker(request, post_id):
         post.likes.add(request.user)
 
     return redirect(reverse('post', args=[post_id])) # permettre de liker depuis la page de détail du post uniquement?
+
+
+#Permet à l'utilisateur de faire une recherche
+@login_required(login_url='/accounts/login/')
+def rechercher(request):
+    search = SearchForm(request.POST or None)

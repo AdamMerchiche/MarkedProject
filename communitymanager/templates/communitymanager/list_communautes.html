@@ -7,6 +7,11 @@
 
 {% block h3 %}
 
+<form class="form-inline" method="POST" action="{% url 'list_communautes' %}">
+    {% csrf_token %}
+    {{ form }}
+    <input class="btn btn-primary" type="submit" value="Submit"/>
+</form>
 {% for communaute, nb_posts_non_lus in communautes %}
     <div class="slideIn">
     <div class="communaute table-hover">
@@ -41,14 +46,15 @@
                 {%if communaute.ferme_invisible%}
                     La communauté a été fermée par l'administrateur.<br>
                 {%endif%}
+                Vous avez <b>{{ nb_posts_non_lus }} posts</b> non lus.
             {% else %}
                 {%if not request.user in communaute.list_bannis.all%}
                     <a span href="{% url 'abonnements' communaute.id %}" data-toggle="tooltip" title="Abonnez-vous !"><i class="far fa-heart pull-right"></i></a><br>
                 {%else%}
                     Vous avez été banni.e de cette Communauté.<br>
                 {% endif %}
-            {% endif %}
-            Vous avez <b>{{ nb_posts_non_lus }} posts</b> non lus.<br>
+            {% endif %}<br>
+
             {# Section pour fermer/détruire une communauté si le créateur est l'utilisateur#}
             {% if communaute.createur == request.user or request.user.is_superuser %}
                 <a span href="{% url 'detruire' communaute.id %}" data-toggle="tooltip" title="Supprimer cette communauté!"><i class="fas fa-trash-alt" style="float:right; opacity: 50%; font-size: 25px"></i></a>
