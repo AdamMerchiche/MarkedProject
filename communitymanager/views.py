@@ -23,6 +23,14 @@ def accueil(request):
             Q(title__icontains=query) |
             Q(description__icontains=query))
 
+
+    #Block du formulaire de recherche global renvoyant vers la page de recherche preremplie
+    action_large_search = reverse('feed_abonnements')
+    large_search = SimpleSearchForm(request.POST or None, prefix='large_search')
+    if large_search.is_valid():
+        large_query = large_search.cleaned_data['simple_query']
+        request.session["large_query"] = large_query
+        return redirect('recherche')
     return render(request, 'communitymanager/feed_abonnements.html', locals())
 
 
@@ -48,6 +56,16 @@ def liste_communautes(request):
         else:
             nb_posts_non_lus.append(Post.objects.filter(communaute=communautes[i], visible=True).exclude(lecteurs__username=request.user.username).count())
     communautes = [(communautes[i], nb_posts_non_lus[i]) for i in range(len(communautes))]
+
+
+    #Block du formulaire de recherche global renvoyant vers la page de recherche preremplie
+    action_large_search = reverse('feed_abonnements')
+    large_search = SimpleSearchForm(request.POST or None, prefix='large_search')
+    if large_search.is_valid():
+        large_query = large_search.cleaned_data['simple_query']
+        request.session["large_query"] = large_query
+        return redirect('recherche')
+
     return render(request, 'communitymanager/list_communautes.html', locals())
 
 
@@ -89,6 +107,15 @@ def communaute(request, communaute_id):
         return redirect('list_communautes')
 
     elif not Communaute.objects.get(id=communaute_id).ferme_invisible:
+
+        # Block du formulaire de recherche global renvoyant vers la page de recherche preremplie
+        action_large_search = reverse('feed_abonnements')
+        large_search = SimpleSearchForm(request.POST or None, prefix='large_search')
+        if large_search.is_valid():
+            large_query = large_search.cleaned_data['simple_query']
+            request.session["large_query"] = large_query
+            return redirect('recherche')
+
 
         initial_list = Post.objects.filter(communaute_id=communaute_id)
         posts = initial_list
@@ -134,6 +161,8 @@ def communaute(request, communaute_id):
 def commentaire(request, post_id):
     date_now = timezone.now()
     post = Post.objects.get(id=post_id)
+    if request.user not in post.communaute.abonnes.all():
+        return redirect('list_communautes')
     commentaires = Commentaire.objects.filter(post_id=post_id)
 
     #Gestion formulaire de commentaire
@@ -149,6 +178,22 @@ def commentaire(request, post_id):
     # Le post est considéré comme lu quand l'utilisateur accède à cette vue
     post.lecteurs.add(request.user)
     post.save()
+
+    #Block du formulaire de recherche global renvoyant vers la page de recherche preremplie
+    action_large_search = reverse('feed_abonnements')
+    large_search = SimpleSearchForm(request.POST or None, prefix='large_search')
+    if large_search.is_valid():
+        large_query = large_search.cleaned_data['simple_query']
+        request.session["large_query"] = large_query
+        return redirect('recherche')
+
+    # Block du formulaire de recherche global renvoyant vers la page de recherche preremplie
+    action_large_search = reverse('feed_abonnements')
+    large_search = SimpleSearchForm(request.POST or None, prefix='large_search')
+    if large_search.is_valid():
+        large_query = large_search.cleaned_data['simple_query']
+        request.session["large_query"] = large_query
+        return redirect('recherche')
 
     return render(request, 'communitymanager/post.html', locals())
 
@@ -189,6 +234,15 @@ def nouveau_post(request):
         post_cree.save()
         envoi = True
         return redirect('communaute', communaute_id=post_cree.communaute.id)
+
+    # Block du formulaire de recherche global renvoyant vers la page de recherche preremplie
+    action_large_search = reverse('feed_abonnements')
+    large_search = SimpleSearchForm(request.POST or None, prefix='large_search')
+    if large_search.is_valid():
+        large_query = large_search.cleaned_data['simple_query']
+        request.session["large_query"] = large_query
+        return redirect('recherche')
+
     return render(request, 'communitymanager/nouveau_post.html', locals())
 
 
@@ -198,6 +252,14 @@ def nouveau_post(request):
 @login_required(login_url='/accounts/login/')
 def modification_post(request, post_id):
     date_now = timezone.now().strftime("%Y-%m-%dT%H:%M")
+
+    # Block du formulaire de recherche global renvoyant vers la page de recherche preremplie
+    action_large_search = reverse('feed_abonnements')
+    large_search = SimpleSearchForm(request.POST or None, prefix='large_search')
+    if large_search.is_valid():
+        large_query = large_search.cleaned_data['simple_query']
+        request.session["large_query"] = large_query
+        return redirect('recherche')
 
     try:
         post = Post.objects.get(id=post_id)
@@ -246,6 +308,14 @@ def voir_posts(request):
             Q(description__icontains=query))
 
     date_now = timezone.now()
+
+    # Block du formulaire de recherche global renvoyant vers la page de recherche preremplie
+    action_large_search = reverse('feed_abonnements')
+    large_search = SimpleSearchForm(request.POST or None, prefix='large_search')
+    if large_search.is_valid():
+        large_query = large_search.cleaned_data['simple_query']
+        request.session["large_query"] = large_query
+        return redirect('recherche')
     return render(request,'communitymanager/see_posts.html',locals())
 
 
@@ -261,12 +331,28 @@ def creation_communaute(request):
         communaute.abonnes.add(request.user)
         envoi = True
         return redirect('list_communautes')
+
+    # Block du formulaire de recherche global renvoyant vers la page de recherche preremplie
+    action_large_search = reverse('feed_abonnements')
+    large_search = SimpleSearchForm(request.POST or None, prefix='large_search')
+    if large_search.is_valid():
+        large_query = large_search.cleaned_data['simple_query']
+        request.session["large_query"] = large_query
+        return redirect('recherche')
     return render(request, 'communitymanager/nouvelle_communaute.html', locals())
 
 
 # Vue permettant de modifier une communauté que l'utilisateur a créée
 @login_required(login_url='/accounts/login/')
 def modification_communaute(request, communaute_id):
+    # Block du formulaire de recherche global renvoyant vers la page de recherche preremplie
+    action_large_search = reverse('feed_abonnements')
+    large_search = SimpleSearchForm(request.POST or None, prefix='large_search')
+    if large_search.is_valid():
+        large_query = large_search.cleaned_data['simple_query']
+        request.session["large_query"] = large_query
+        return redirect('recherche')
+
     try:
         communaute = Communaute.objects.get(id=communaute_id)
     except Http404:
@@ -318,7 +404,7 @@ def detruire_communaute(request, communaute_id):
 def supprimer_post(request, post_id):
     post = Post.objects.get(id=post_id)
     post.delete()
-    return redirect(communaute, communaute_id=post.communaute.id)
+    return redirect('communaute', communaute_id=post.communaute.id)
 
 
 # Permet à l'utilisateur de liker/unliker un post
@@ -337,9 +423,22 @@ def liker(request, post_id):
 
 #Permet à l'utilisateur de faire une recherche
 @login_required(login_url='/accounts/login/')
-def rechercher(request):
-    search = SearchForm(request.POST or None)
+def recherche(request):
+    # Block du formulaire de recherche global renvoyant vers la page de recherche preremplie
+    action_large_search = reverse('feed_abonnements')
+    large_search = SimpleSearchForm(request.POST or None, prefix='large_search')
+    if large_search.is_valid():
+        large_query = large_search.cleaned_data['simple_query']
+        request.session["large_query"] = large_query
+        return redirect('recherche')
 
+    try:
+        large_query = request.session.get('large_query')
+    except:
+        redirect('accueil')                             #permet de bloquerl'accès forcé par l'url
+
+
+    return render(request, 'communitymanager/recherche.html', locals())
 
 # Permet à l'utilisateur de marquer un post comme non lu
 @login_required(login_url='/accounts/login/')

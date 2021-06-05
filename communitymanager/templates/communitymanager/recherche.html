@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+
+{% block title %} Votre recherche !{% endblock title %}
+
+{% block h1 %} Resultats pour {{ large_query }}! {% endblock h1 %}
+
+{% block h3 %}
+
+{# Affichage des posts #}
+    {% for post in posts %}
+        {% include 'communitymanager/un_post.html' with bg_color="transparent" btn_like=True %}
+    {% empty %}
+
+    {% endfor %}
+{% endblock %}
