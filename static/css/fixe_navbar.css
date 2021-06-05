@@ -3,7 +3,9 @@
   position: fixed;
   top: 0;
   width: 100%;
+  background: rgba(255,255,255,0.9);
+
 }
 .sticky + .content {
-  padding-top: 90px !important;
+  padding-top: 120px !important;
 }

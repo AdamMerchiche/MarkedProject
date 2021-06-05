@@ -5,11 +5,10 @@
           page_post, booleen pour spécifier si on est sur la page de détails du post (par défaut à False)
           btn_like, booleen pour spécifier si le bouton pour liker le post doit être présent (par défaut à False)
 {% endcomment %}
+
 <div class="slideInContenu">
 {% if post.visible%}
-
     <div class="{{ bg_color }} mb-4">
-
 
     <div class="row py-2 px-1">
 
@@ -66,7 +65,12 @@
                         font-weight-bold text-dark
                     {% endif %}"
                         href="{% url "post" post_id=post.id %}" data-toggle="tooltip" title="Accéder au post">
+                    {% if post.avertissement %}
+                          <div class="cylon_eye">
                         {{ post.title|capfirst }}
+                          {% else %}
+                        {{ post.title|capfirst }}
+                        {% endif %}
                     </a>
                     {% if user == post.auteur %}
                         <a href="{% url 'update_post' post.id %}" data-toggle="tooltip" title="Modifier le POST">
@@ -111,8 +115,7 @@
             </div>
         </div>
 
-    </div>
-</div>
+    </div></div>
 <hr> {# delimitation pour marquer la fin du post #}
 
 {% else %}
@@ -228,3 +231,4 @@
 {% endif %}
                     {%endif%}
 </div>
+

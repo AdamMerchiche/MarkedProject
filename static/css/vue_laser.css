@@ -1,0 +1,25 @@
+.polling_message {
+  color: white;
+  float: left;
+  margin-right: 20%;
+}
+
+.view_port {
+  background-color: white;
+  height: 25px;
+  width: 100%;
+  overflow: hidden;
+}
+
+.cylon_eye {
+  background-color: grey;
+ background-image:         linear-gradient(to right, rgba(94, 94, 94, 0.9) 25%, rgba(94, 94, 94, 0.9) 50%, rgba(94, 94, 94, 0.9) 75%);  color: white;
+  height: 100%;
+  width: 20%;
+
+  -webkit-animation: 4s linear 0s infinite alternate move_eye;
+          animation: 4s linear 0s infinite alternate move_eye;
+}
+
+@-webkit-keyframes move_eye { from { margin-left:-20%; } to { margin-left:100%; }  }
+        @keyframes move_eye { from { margin-left:-20%; } to { margin-left:100%; }  }
