@@ -327,10 +327,22 @@ def liker(request, post_id):
     else:
         post.likes.add(request.user)
 
-    return redirect(reverse('post', args=[post_id])) # permettre de liker depuis la page de détail du post uniquement?
+    return redirect(reverse('post', args=[post_id]))
 
 
 #Permet à l'utilisateur de faire une recherche
 @login_required(login_url='/accounts/login/')
 def rechercher(request):
     search = SearchForm(request.POST or None)
+
+
+# Permet à l'utilisateur de marquer un post comme non lu
+@login_required(login_url='/accounts/login/')
+def marquer_non_lu(request, post_id):
+    post = Post.objects.get(id=post_id)
+
+    # Mise à jour de la liste des utilisateurs qui ont lu le post
+    if request.user in post.lecteurs.all():
+        post.lecteurs.remove(request.user)
+
+    return redirect(reverse('communaute', args=[post.communaute.id]))

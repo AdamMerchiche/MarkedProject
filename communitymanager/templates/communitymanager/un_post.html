@@ -7,8 +7,8 @@
 {% endcomment %}
 
 <div class="slideInContenu">
-{% if post.visible%}
-    <div class="{{ bg_color }} mb-4">
+{% if post.visible or post.communaute.createur == request.user %} {# Le post n'est visible selon son statut de visibilité ou par le créateur de la communauté #}
+    <div class="{%if post.avertissement%} alert alert-warning {%endif%} {{ bg_color }} mb-4">
 
     <div class="row py-2 px-1">
 
@@ -45,14 +45,19 @@
             </span>
             {%if post.avertissement%}
                 <i class="fas fa-exclamation-circle"
-                    style="color:indianred ; float:left; position: relative; font-size: 5em; opacity: 40%"></i>
+                      style="color:indianred ; float:left; position: relative; font-size: 5em; opacity: 40%"></i><br><br><br><br>
+            {%endif%}
+            {% if not page_post and request.user in post.lecteurs.all %} {# Possibilité de marquer le post comme non lu #}
+                <p class="text-left">
+                <a href="{% url 'marquer_non_lu' post.id %}" data-toggle="tooltip" title="Marquer comme non lu">Marquer comme non lu</a>
+                </p>
             {%endif%}
         </div>
 
         <div class="col-sm-6"> {# colonne 2: titre et description #}
             <h3 class="m-b-15 d-block">
                 <span class="text-center">
-                    {% if request.user == post.communaute.createur%}
+                    {% if request.user == post.communaute.createur%} {# Gestion du status de visibilité du post #}
                         {% if post.visible%}
                             <a span href="{% url 'visibilite_post' post.id %}" data-toggle="tooltip" title="Rendre le POST invisible"><i class="far fa-eye"></i></a>
                         {%else%}
@@ -65,11 +70,10 @@
                         font-weight-bold text-dark
                     {% endif %}"
                         href="{% url "post" post_id=post.id %}" data-toggle="tooltip" title="Accéder au post">
-                    {% if post.avertissement %}
-                          <div class="cylon_eye">
-                        {{ post.title|capfirst }}
-                          {% else %}
-                        {{ post.title|capfirst }}
+                        {% if post.avertissement %}
+                            <div class="cylon_eye">{{ post.title|capfirst }}</div>
+                        {% else %}
+                            {{ post.title|capfirst }}
                         {% endif %}
                     </a>
                     {% if user == post.auteur %}
@@ -88,28 +92,27 @@
             </p></span>
         </div>
 
-        <div class="col-sm-3"> {# colonne 3: temps depuis la creation du post, communaute, auteur et lien vers les commentaires #}
+        <div class="col-sm-3"> {# colonne 3: temps depuis la creation du post, communaute, auteur et lien vers les commentaires ... #}
             <div class="comment-footer">
                 <span class="text-muted float-right">
                     <i class="far fa-clock"></i> {{ post.date_creation|timesince:date_now|linebreaks }}
                     <i class="fas fa-users"></i> <a class="text-muted" href="{% url "communaute" post.communaute.id %}" data-toggle="tooltip" title="Accéder à cette communauté">
                         {{ post.communaute|linebreaks }}
                     </a>
-                    <i class="fas fa-user-edit"></i> {{ post.auteur }}
+                    <i class="fas fa-user-edit"></i> {{ post.auteur }} <br>
                     {% if request.user == post.communaute.createur%}
-                        {# Possibilité de les rendre visible par la suite #}
                         {# possibilité de Bannir un utilisateur si l'utilisateur est toujours dans la communauté #}
                         {%if not post.auteur.is_superuser and not post.auteur == post.communaute.createur %}
                             <a span href="{% url 'bannir' communaute_id=post.communaute.id user_id=post.auteur.id %}" data-toggle="tooltip" title="Bannir l'utilisateur">
                                 <i class="fas fa-ban"></i>
-                            </a>
+                            </a> <br>
                         {%endif%}
                     {%endif%}
                     {% if not page_post %}
-                        <p><a href="{% url "post" post_id=post.id %}">Lire les commentaires</a></p>
+                        <a href="{% url "post" post_id=post.id %}">Lire les commentaires</a><br>
                     {% endif %}
-                    {% if request.user == post.communaute.createur%} {# Possibilité de les rendre visible par la suite #}
-                    <a span href="{% url 'supprimer_post' post.id %}" data-toggle="tooltip" title="Supprimer le POST"><i class="far fa-trash-alt"></i></a>
+                    {% if request.user == post.communaute.createur %} {# Bouton pour supprimer le post #}
+                        <a class="mx-1" href="{% url 'supprimer_post' post.id %}" data-toggle="tooltip" title="Supprimer le POST"><i class="far fa-trash-alt"></i></a>
                     {%endif%}
                 </span>
             </div>
@@ -117,7 +120,7 @@
 
     </div></div>
 <hr> {# delimitation pour marquer la fin du post #}
-
+{% comment %}
 {% else %}
     {% if post.communaute.createur == request.user %}
 
@@ -204,7 +207,7 @@
                     <i class="fas fa-users"></i> <a class="text-muted" href="{% url "communaute" post.communaute.id %}" data-toggle="tooltip" title="Accéder à cette communauté">
                         {{ post.communaute|linebreaks }}
                     </a>
-                    <i class="fas fa-user-edit"></i> {{ post.auteur }}
+                    <i class="fas fa-user-edit"></i> {{ post.auteur }} <br>
                     {% if request.user == post.communaute.createur%}
                         {# Possibilité de les rendre visible par la suite #}
                         {# possibilité de Bannir un utilisateur si l'utilisateur est toujours dans la communauté #}
@@ -228,7 +231,8 @@
 </div>
 <hr> {# delimitation pour marquer la fin du post #}
 
-{% endif %}
-                    {%endif%}
+    {% endif %}
+{% endcomment %}
+{%endif%}
 </div>
 
