@@ -6,7 +6,7 @@
 {% block h1 %} Bienvenue {{ request.user.get_username }},  sur la page des communautés  ! {% endblock h1 %}
 
 {% block h3 %}
-{% include 'communitymanager/search_form.html' with search_form=search list_objet=communautes %}
+{% include 'communitymanager/search_form.html' with search_form=search list_objet=initial_list %}
 
 {% for communaute, nb_posts_non_lus in communautes %}
     <div class="slideIn">

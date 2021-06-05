@@ -12,14 +12,14 @@ def accueil(request):
     date_now = timezone.now()
 
     communautes = Communaute.objects.filter(abonnes=request.user)
-    posts = Post.objects.filter(communaute__abonnes=request.user)
-
+    initial_list = Post.objects.filter(communaute__abonnes=request.user)       #2 listes differentes posts et initial posts pour des raisons d'affichages
+    posts = initial_list
     # Formulaire pour afficher une liste de post contenant une chaine de caractères
     search = SimpleSearchForm(request.POST or None)
     action_url = reverse('feed_abonnements')
     if search.is_valid():
         query = search.cleaned_data['simple_query']
-        posts = posts.filter(
+        posts = initial_list.filter(
             Q(title__icontains=query) |
             Q(description__icontains=query))
 
@@ -30,17 +30,17 @@ def accueil(request):
 @login_required(login_url='/accounts/login/')
 def liste_communautes(request):
     date_now = timezone.now()
-
+    initial_list = Communaute.objects.all()             #2 listes differentes posts et initial posts pour des raisons d'affichages
+    communautes = initial_list
     #Gestion form pour chercher une communaute precise
     search = SimpleSearchForm(request.POST or None)
     action_url = reverse('list_communautes') #Variable pour le template "search_form.html"
     if search.is_valid():
         query = search.cleaned_data['simple_query']
-        communautes = Communaute.objects.filter(
+        communautes = initial_list.filter(
             Q(name__icontains=query) |
             Q(description__icontains=query))
-    else:
-        communautes = Communaute.objects.all()
+
 
     communautes = [(commu, Post.objects.filter(communaute=commu).exclude(lecteurs__username=request.user.username).count()) for commu in communautes]
     return render(request, 'communitymanager/list_communautes.html', locals())
@@ -85,19 +85,21 @@ def communaute(request, communaute_id):
 
     elif not Communaute.objects.get(id=communaute_id).ferme_invisible:
 
+        initial_list = Post.objects.filter(communaute_id=communaute_id)
+        posts = initial_list
         #Formulaire pour afficher une liste de post contenant une chaine de caractères
         search = SimpleSearchForm(request.POST or None)
         action_url = reverse('communaute', args=[communaute_id])
         if search.is_valid():
             query = search.cleaned_data['simple_query']
-            posts = Post.objects.filter(
+            posts = initial_list.filter(
                 Q(title__icontains=query) |
                 Q(description__icontains=query))
-        else:
-            posts = Post.objects.filter(communaute_id=communaute_id)
+
         date_now = timezone.now()
 
         list_priorite = Priorite.objects.all()
+
         dft_priorite = list_priorite.get(rang=list_priorite.count())
 
         # Form pour filtrer les posts affiches
@@ -227,14 +229,14 @@ def visibilite_post(request, post_id):
 # Permet de renvoyer tous les POSTs dont l'utilisateur est l'auteur.
 @login_required(login_url='/accounts/login/')
 def voir_posts(request):
-    posts = Post.objects.filter(auteur=request.user)
-
+    initial_list = Post.objects.filter(auteur=request.user)
+    posts = initial_list
     # Formulaire pour afficher une liste de post contenant une chaine de caractères
     search = SimpleSearchForm(request.POST or None)
     action_url = reverse('feed_abonnements')
     if search.is_valid():
         query = search.cleaned_data['simple_query']
-        posts = posts.filter(
+        posts = initial_list.filter(
             Q(title__icontains=query) |
             Q(description__icontains=query))
 
