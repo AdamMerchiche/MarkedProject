@@ -103,6 +103,7 @@ def communaute(request, communaute_id):
         # Form pour filtrer les posts affiches
         form_filtrage = FiltragePostCommunauteForm(request.POST or None)
         if form_filtrage.is_valid():
+            posts = Post.objects.filter(communaute_id=communaute_id)
             et = form_filtrage.cleaned_data['type_filtrage']
             min_priorite = form_filtrage.cleaned_data['min_priorite']
             que_evt = form_filtrage.cleaned_data['que_evt']
