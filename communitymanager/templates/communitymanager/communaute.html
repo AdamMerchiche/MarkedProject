@@ -35,16 +35,18 @@
     {# Affichage des posts #}
     {% for post in posts %}
         {% include 'communitymanager/un_post.html' with bg_color="transparent" btn_like=True %}
+    {% empty %}
+        {% if filtre %}
+            Aucun post ne correspond à ces critères.
+        {% endif %}
     {% endfor %}
-{% if not communaute.ferme%}
-    {% if filtre %}
-        Aucun post ne correspond à ces critères.
-    {% else %}
-        {# Section pour créer un nouveau post s'il n'y en a pas #}
+
+    {# Lien pour créer un nouveau post (si la communauté n'est pas fermée) #}
+    {% if not communaute.ferme%}
         <h3 class="text-center">Vous souhaitez créer votre post ?
          <a href="{% url 'nouveau_post' %}"><i class="far fa-edit"></i></a> </h3>
-    {% endif %}
-{%else%}
-Cette communauté est FERMÉE. Vous ne pouvez plus publier de POSTs ni COMMENTER.
-{%endif%}
+    {%else%}
+        Cette communauté est FERMÉE. Vous ne pouvez plus publier de POSTs ni COMMENTER.
+    {%endif%}
+
 {% endblock h3 %}
