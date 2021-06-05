@@ -13,12 +13,9 @@
         {% csrf_token %}
         <label for="id_min_priorite" class="mr-sm-2">Priorité minimale: </label>
         <select class="custom-select" id="id_min_priorite" name="min_priorite">
+            <option value="{{ dft_priorite.id }}" selected>-- pas de filtre --</option>
             {% for priorite in list_priorite %}
-                {% if priorite == dft_priorite %}
-                    <option value="{{ priorite.id }}" selected>{{ priorite }}</option>
-                {% else %}
-                    <option value="{{ priorite.id }}">{{ priorite }}</option>
-                {% endif %}
+                <option value="{{ priorite.id }}">{{ priorite }}</option>
             {% endfor %}
         </select>
         <select class="custom-select mx-4" id="id_type_filtrage" name="type_filtrage">
