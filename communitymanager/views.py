@@ -41,8 +41,13 @@ def liste_communautes(request):
             Q(name__icontains=query) |
             Q(description__icontains=query))
 
-
-    communautes = [(commu, Post.objects.filter(communaute=commu).exclude(lecteurs__username=request.user.username).count()) for commu in communautes]
+    nb_posts_non_lus = []
+    for i in range(len(communautes)):
+        if request.user == communautes[i].createur:
+            nb_posts_non_lus.append(Post.objects.filter(communaute=communautes[i]).exclude(lecteurs__username=request.user.username).count())
+        else:
+            nb_posts_non_lus.append(Post.objects.filter(communaute=communautes[i], visible=True).exclude(lecteurs__username=request.user.username).count())
+    communautes = [(communautes[i], nb_posts_non_lus[i]) for i in range(len(communautes))]
     return render(request, 'communitymanager/list_communautes.html', locals())
 
 
