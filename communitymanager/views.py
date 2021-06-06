@@ -107,35 +107,20 @@ def communaute(request, communaute_id):
         return redirect('list_communautes')
 
     elif not Communaute.objects.get(id=communaute_id).ferme_invisible:
-
-        # Block du formulaire de recherche global renvoyant vers la page de recherche preremplie
+        date_now = timezone.now()
+        # Données et form pour recherche générale
         action_large_search = reverse('feed_abonnements')
         large_search = SimpleSearchForm(request.POST or None, prefix='large_search')
-        if large_search.is_valid():
-            large_query = large_search.cleaned_data['simple_query']
-            request.session["large_query"] = large_query
-            return redirect('recherche')
-
-
+        # Données et form pour recherche des posts de la communauté par chaîne de charactères
         initial_list = Post.objects.filter(communaute_id=communaute_id)
-        posts = initial_list
-        #Formulaire pour afficher une liste de post contenant une chaine de caractères
         search = SimpleSearchForm(request.POST or None)
         action_url = reverse('communaute', args=[communaute_id])
-        if search.is_valid():
-            query = search.cleaned_data['simple_query']
-            posts = initial_list.filter(
-                Q(title__icontains=query) |
-                Q(description__icontains=query))
-
-        date_now = timezone.now()
-
+        # Données et form pour filtrage des posts de la communautés par priorités et événementiel
         list_priorite = Priorite.objects.all()
-
         dft_priorite = list_priorite.get(rang=list_priorite.count())
-
-        # Form pour filtrer les posts affiches
         form_filtrage = FiltragePostCommunauteForm(request.POST or None)
+
+        # Form pour filtrer les posts affiches par priorites et evenementiel
         if form_filtrage.is_valid():
             posts = Post.objects.filter(communaute_id=communaute_id)
             et = form_filtrage.cleaned_data['type_filtrage']
@@ -149,6 +134,23 @@ def communaute(request, communaute_id):
             else:
                 posts = posts.filter(priorite__rang__lte=min_priorite.rang)
             filtre = True
+            return render(request, 'communitymanager/communaute.html', locals())
+
+        posts = initial_list
+        # Formulaire pour afficher une liste de post contenant une chaine de caractères
+        if search.is_valid():
+            query = search.cleaned_data['simple_query']
+            posts = initial_list.filter(
+                Q(title__icontains=query) |
+                Q(description__icontains=query))
+            return render(request, 'communitymanager/communaute.html', locals())
+
+        # Block du formulaire de recherche global renvoyant vers la page de recherche preremplie
+        if large_search.is_valid():
+            large_query = large_search.cleaned_data['simple_query']
+            request.session["large_query"] = large_query
+            return redirect('recherche')
+
         return render(request, 'communitymanager/communaute.html', locals())
     else:
         return redirect("list_communautes")
@@ -498,7 +500,7 @@ def marquer_non_lu(request, post_id, url_name):
     if request.user in post.lecteurs.all():
         post.lecteurs.remove(request.user)
 
-    # Redirecting toward last page displayed
+    # Redirige vers la page qui a fait appel à cette view
     if url_name == 'communaute':
         path = reverse(url_name, args=[post.communaute.id])
     else:
