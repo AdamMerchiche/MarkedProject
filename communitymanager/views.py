@@ -251,7 +251,7 @@ def nouveau_post(request):
 # si la modification du POST est lancée par un autre utilisateur que l'auteur.
 @login_required(login_url='/accounts/login/')
 def modification_post(request, post_id):
-    date_now = timezone.now().strftime("%Y-%m-%dT%H:%M")
+    date_now = timezone.now().strftime("%Y-%m-%dT%H:%M")        #date minimale pour un evenement, cad au moment du post. On ne peut pas mettre un evnt au passé.
 
     # Block du formulaire de recherche global renvoyant vers la page de recherche preremplie
     action_large_search = reverse('feed_abonnements')
@@ -264,7 +264,7 @@ def modification_post(request, post_id):
     try:
         post = Post.objects.get(id=post_id)
     except Http404:
-        redirect(nouveau_post)
+        return redirect(nouveau_post)
 
     list_priorite = Priorite.objects.all()
     communautes = Communaute.objects.filter(abonnes=request.user, ferme=False, ferme_invisible=False)
@@ -356,7 +356,7 @@ def modification_communaute(request, communaute_id):
     try:
         communaute = Communaute.objects.get(id=communaute_id)
     except Http404:
-        redirect(liste_communautes)
+        return redirect(liste_communautes)
     alert_flag = True
     if communaute.createur == request.user:
         alert_flag = False
@@ -424,6 +424,8 @@ def liker(request, post_id):
 #Permet à l'utilisateur de faire une recherche
 @login_required(login_url='/accounts/login/')
 def recherche(request):
+    date_now = timezone.now()
+
     # Block du formulaire de recherche global renvoyant vers la page de recherche preremplie
     action_large_search = reverse('feed_abonnements')
     large_search = SimpleSearchForm(request.POST or None, prefix='large_search')
@@ -437,6 +439,23 @@ def recherche(request):
     except:
         redirect('accueil')                             #permet de bloquerl'accès forcé par l'url
 
+
+    #Traitement de la recherche des communaute
+    communautes = Communaute.objects.filter(
+        Q(name__icontains=large_query) |
+        Q(description__icontains=large_query))
+    nb_posts_non_lus = []
+    for i in range(len(communautes)):
+        if request.user == communautes[i].createur:
+            nb_posts_non_lus.append(Post.objects.filter(communaute=communautes[i]).exclude(lecteurs__username=request.user.username).count())
+        else:
+            nb_posts_non_lus.append(Post.objects.filter(communaute=communautes[i], visible=True).exclude(lecteurs__username=request.user.username).count())
+    communautes = [(communautes[i], nb_posts_non_lus[i]) for i in range(len(communautes))]
+
+    #Traitement de la recherche des communaute des posts
+    posts = Post.objects.filter(
+            Q(title__icontains=large_query) |
+            Q(description__icontains=large_query))
 
     return render(request, 'communitymanager/recherche.html', locals())
 

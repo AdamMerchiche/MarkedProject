@@ -6,10 +6,22 @@
 
 {% block h3 %}
 
-{# Affichage des posts #}
-    {% for post in posts %}
-        {% include 'communitymanager/un_post.html' with bg_color="transparent" btn_like=True %}
-    {% empty %}
+{# Affichage des communautes #}
+<hr>
+<h2>Communaute{{communautes|pluralize}}</h2><br>
+{% for communaute, nb_posts_non_lus in communautes %}
+    {% include "communitymanager/une_communaute.html" %}
+{% empty %}
 
-    {% endfor %}
+{% endfor %}
+
+{# Affichage des posts #}
+<hr>
+<h2>Post{{posts|pluralize}}</h2>
+{% for post in posts %}
+    {% include 'communitymanager/un_post.html' with bg_color="transparent" btn_like=True %}
+{% empty %}
+
+{% endfor %}
+
 {% endblock %}
