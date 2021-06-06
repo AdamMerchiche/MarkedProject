@@ -7,20 +7,22 @@
 {% endcomment %}
 
 <div class="slideInContenu">
-{% if post.visible or post.communaute.createur == request.user %} {# Le post n'est visible selon son statut de visibilité ou par le créateur de la communauté #}
-    <div class="{%if post.avertissement%} alert alert-warning {%endif%} {{ bg_color }} mb-4">
+    {% if post.visible or request.user in post.communaute.list_CMs.all %}
+        {# Le post n'est visible selon son statut de visibilité ou par les CMs de la communauté #}
+        <div {% if request.user in post.lecteurs.all %} class="{{ bg_color }} mb-4 "{% else %}
+                                                        class="bg-light mb-4 "{% endif %}>
 
-    <div class="row py-2 px-1">
+            <div class="row py-2 px-1">
 
-        <div class="col-sm-3 m-b-15 d-block"> {# colonne 1: priorité, info evenementiel et bouton like #}
-            {% if request.user not in post.lecteurs.all %}
-                <h3 class="text-left text-dark font-italic">
-                    <i class="fa fa-circle " style="font-size:20px;color:blue"></i>
-                    Nouveau post !
-                </h3>
-            {% endif %}
-            <h3 class="text-left text-dark">Priorite {{ post.priorite }}</h3>
-            <span class="comment-widgets">
+                <div class="col-sm-3 m-b-15 d-block"> {# colonne 1: priorité, info evenementiel et bouton like #}
+                    {% if request.user not in post.lecteurs.all %}
+                        <h3 class="text-left text-dark font-italic">
+                            <i class="fa fa-circle " style="font-size:20px;color:blue"></i>
+                            Nouveau post !
+                        </h3>
+                    {% endif %}
+                    <h3 class="text-left text-dark">Priorite {{ post.priorite }}</h3>
+                    <span class="comment-widgets">
                 {% if post.evenementiel %}
                     <h4 class="font-medium text-left">
                         <i class="fas fa-glass-cheers mr-2 my-1"></i> EVENT <br>
@@ -28,8 +30,8 @@
 
                     </h4>
                 {% endif %}
-                {% if btn_like %}
-                    <h4 class="font-medium text-left">
+                        {% if btn_like %}
+                            <h4 class="font-medium text-left">
                         {% if request.user in post.likes.all %}
                             <a href="{% url 'liker' post.id %}" data-toggle="tooltip" title="Unlike">
                                 <i class="fas fa-thumbs-up mt-3 " style='font-size:20px'></i>
@@ -39,90 +41,121 @@
                                 <i class="far fa-thumbs-up mt-3" style='font-size:20px'></i>
                             </a>
                         {% endif %}
-                        {{ post.likes.count }}
+                                {{ post.likes.count }}
                     </h4>
-                {% endif %}
+                        {% endif %}
             </span>
-            {%if post.avertissement%}
-                <i class="fas fa-exclamation-circle"
-                      style="color:indianred ; float:left; position: relative; font-size: 5em; opacity: 40%"></i><br><br><br><br>
-            {%endif%}
-            {% if page == 'feed_abonnements' or page == 'communaute' or page == 'recherche'%}
-                {% if request.user in post.lecteurs.all %} {# Possibilité de marquer le post comme non lu #}
-                    <p class="text-left">
-                    <a href="{% url 'marquer_non_lu' url_name=page post_id=post.id %}" data-toggle="tooltip" title="Marquer comme non lu">Marquer comme non lu</a>
-                    </p>
-                {% endif %}
-            {%endif%}
-        </div>
+                    {% if post.avertissement %}
+                        <i class="fas fa-exclamation-circle"
+                           style="color:indianred ; float:left; position: relative; font-size: 5em; opacity: 40%"></i>
+                        <br><br><br><br>
+                    {% endif %}
+                    {% if page == 'feed_abonnements' or page == 'communaute' or page == 'recherche' %}
+                        {% if request.user in post.lecteurs.all %} {# Possibilité de marquer le post comme non lu #}
+                            <p class="text-left">
+                                <a href="{% url 'marquer_non_lu' url_name=page post_id=post.id %}" data-toggle="tooltip"
+                                   title="Marquer comme non lu">Marquer comme non lu</a>
+                            </p>
+                        {% endif %}
+                    {% endif %}
+                </div>
 
-        <div class="col-sm-6"> {# colonne 2: titre et description #}
-            <h3 class="m-b-15 d-block">
+                <div class="col-sm-6"> {# colonne 2: titre et description #}
+                    <h3 class="m-b-15 d-block">
                 <span class="text-center">
-                    {% if request.user == post.communaute.createur%} {# Gestion du status de visibilité du post #}
-                        {% if post.visible%}
-                            <a span href="{% url 'visibilite_post' post.id %}" data-toggle="tooltip" title="Rendre le POST invisible"><i class="far fa-eye"></i></a>
-                        {%else%}
-                            <a span href="{% url 'visibilite_post' post.id %}"data-toggle="tooltip" title="Rendre le POST visible"><i class="far fa-eye-slash"></i></a>
-                        {%endif%}
-                    {%endif%}
-                    <a class="{% if request.user in post.lecteurs.all and page != 'post' %} {# Change font si le post a été lu et que ce n'est pas la page du post #}
+                    {% if request.user in post.communaute.list_CMs.all %} {# Gestion du status de visibilité du post #}
+                        {% if post.visible %}
+                            <a span href="{% url 'visibilite_post' post.id %}" data-toggle="tooltip"
+                               title="Rendre le POST invisible"><i class="far fa-eye"></i></a>
+                        {% else %}
+                            <a span href="{% url 'visibilite_post' post.id %}" data-toggle="tooltip"
+                               title="Rendre le POST visible"><i class="far fa-eye-slash"></i></a>
+                        {% endif %}
+                    {% endif %}
+                    <a class="{% if request.user in post.lecteurs.all and page != 'post' %}
+                        {# Change font si le post a été lu et que ce n'est pas la page du post #}
                         font-weight-normal text-body
                     {% else %}
                         font-weight-bold text-dark
                     {% endif %}"
-                        href="{% url "post" post_id=post.id %}" data-toggle="tooltip" title="Accéder au post">
+                       href="{% url "post" post_id=post.id %}" data-toggle="tooltip" title="Accéder au post">
                         {% if post.avertissement %}
-                            <div class="cylon_eye">{{ post.title|capfirst }}</div>
-                        {% else %}
-                            {{ post.title|capfirst }}
-                        {% endif %}
-                    </a>
-                    {% if user == post.auteur %}
-                        <a href="{% url 'update_post' post.id %}" data-toggle="tooltip" title="Modifier le POST">
+                            {% if request.user in post.lecteurs.all %}
+                            <div class="view_port ">
+  <div class="polling_message text-center">
+   {{ post.title|capfirst }}                    {% if user == post.auteur %}
+      <a href="{% url 'update_post' post.id %}" data-toggle="tooltip" title="Modifier le POST">
                         <i class="far fa-edit"></i>
                         </a>
-                    {% endif %}
+  {% endif %}
+  </div><div class="cylon_eye"></div>
+</div>
+                                {% else %}
+
+                                                         <div class="view_port2 ">
+  <div class="polling_message2 text-center">
+   {{ post.title|capfirst }}                    {% if user == post.auteur %}
+      <a href="{% url 'update_post' post.id %}" data-toggle="tooltip" title="Modifier le POST">
+                        <i class="far fa-edit"></i>
+                        </a>
+  {% endif %}
+  </div><div class="cylon_eye2"></div>
+</div>
+                                {% endif %}
+                        {% else %}
+                            {{ post.title|capfirst }}                    {% if user == post.auteur %}
+                            <a href="{% url 'update_post' post.id %}" data-toggle="tooltip" title="Modifier le POST">
+                        <i class="far fa-edit"></i>
+                        </a>
+                        {% endif %}
+                        {% endif %}
+                    </a>
+
                 </span>
-            </h3>
-            <span class="m-b-15 d-block"> <p class="text-justify">
+                    </h3>
+                    <span class="m-b-15 d-block"> <p class="text-justify">
                 {% if page == 'post' %}
                     {{ post.description |linebreaks }}
                 {% else %}
                     {{ post.description |truncatewords:30 |linebreaks }}
                 {% endif %}
             </p></span>
-        </div>
+                </div>
 
-        <div class="col-sm-3"> {# colonne 3: temps depuis la creation du post, communaute, auteur et lien vers les commentaires ... #}
-            <div class="comment-footer">
+                <div class="col-sm-3">
+                    {# colonne 3: temps depuis la creation du post, communaute, auteur et lien vers les commentaires ... #}
+                    <div class="comment-footer">
                 <span class="text-muted float-right">
                     <i class="far fa-clock"></i> {{ post.date_creation|timesince:date_now|linebreaks }}
-                    <i class="fas fa-users"></i> <a class="text-muted" href="{% url "communaute" post.communaute.id %}" data-toggle="tooltip" title="Accéder à cette communauté">
+                    <i class="fas fa-users"></i> <a class="text-muted" href="{% url "communaute" post.communaute.id %}"
+                                                    data-toggle="tooltip" title="Accéder à cette communauté">
                         {{ post.communaute|linebreaks }}
                     </a>
                     <i class="fas fa-user-edit"></i> {{ post.auteur }} <br>
-                    {% if request.user == post.communaute.createur%}
-                        {# possibilité de Bannir un utilisateur si l'utilisateur est toujours dans la communauté #}
-                        {%if not post.auteur.is_superuser and not post.auteur == post.communaute.createur %}
-                            <a span href="{% url 'bannir' communaute_id=post.communaute.id user_id=post.auteur.id %}" data-toggle="tooltip" title="Bannir l'utilisateur">
+                    {% if request.user in post.communaute.list_CMs.all %}
+                        {# possibilité de Bannir un utilisateur si l'utilisateur est toujours dans la communauté uniquement si ce n'est pas le créateur de la communauté #}
+                        {% if not post.auteur.is_superuser and not post.auteur == post.communaute.createur %}
+                            <a span href="{% url 'bannir' communaute_id=post.communaute.id user_id=post.auteur.id %}"
+                               data-toggle="tooltip" title="Bannir l'utilisateur">
                                 <i class="fas fa-ban"></i>
                             </a> <br>
-                        {%endif%}
-                    {%endif%}
+                        {% endif %}
+                    {% endif %}
                     {% if page != 'post' %}
                         <a href="{% url "post" post_id=post.id %}">Lire les commentaires</a><br>
                     {% endif %}
-                    {% if request.user == post.communaute.createur %} {# Bouton pour supprimer le post #}
-                        <a class="mx-1" href="{% url 'supprimer_post' post.id %}" data-toggle="tooltip" title="Supprimer le POST"><i class="far fa-trash-alt"></i></a>
-                    {%endif%}
+                    {% if request.user in post.communaute.list_CMs.all %} {# Bouton pour supprimer le post #}
+                        <a class="mx-1" href="{% url 'supprimer_post' post.id %}" data-toggle="tooltip"
+                           title="Supprimer le POST"><i class="far fa-trash-alt"></i></a>
+                    {% endif %}
                 </span>
+                    </div>
+                </div>
+
             </div>
         </div>
-
-    </div></div>
-<hr> {# delimitation pour marquer la fin du post #}
-{% comment %}
+        <hr> {# delimitation pour marquer la fin du post #}
+        {% comment %}
 {% else %}
     {% if post.communaute.createur == request.user %}
 
@@ -235,6 +268,6 @@
 
     {% endif %}
 {% endcomment %}
-{%endif%}
+    {% endif %}
 </div>
 

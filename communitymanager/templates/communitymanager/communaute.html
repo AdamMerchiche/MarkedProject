@@ -34,7 +34,7 @@
 
     {# Affichage des posts #}
     {% for post in posts %}
-        {% include 'communitymanager/un_post.html' with bg_color="transparent" page='communaute' btn_like=True %}
+            {% include 'communitymanager/un_post.html' with  bg_color="bg-transparent" page='communaute' btn_like=True %}
     {% empty %}
         {% if filtre %}
             Aucun post ne correspond à ces critères.

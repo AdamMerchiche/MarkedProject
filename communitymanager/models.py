@@ -8,6 +8,7 @@ class Communaute(models.Model):
     name = models.CharField(max_length=30)
     abonnes = models.ManyToManyField(User, related_name="abonnements", blank=True)
     list_bannis = models.ManyToManyField(User, related_name="bannis", blank=True)
+    list_CMs = models.ManyToManyField(User, related_name="CMs", blank=True)
     createur = models.ForeignKey(User, on_delete="models.DO_NOTHING")
     description = models.CharField(max_length=2500, blank=False)
     ferme= models.BooleanField(default=False)

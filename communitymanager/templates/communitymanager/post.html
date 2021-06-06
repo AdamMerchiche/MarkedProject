@@ -7,7 +7,7 @@
 {% block h3 %}
 
     {# Inclusion template pour afficher le post #}
-    {% include 'communitymanager/un_post.html' with bg_color="bg-light" page='post' btn_like=True %}
+    {% include 'communitymanager/un_post.html' with  page='post' btn_like=True %}
 
 {# Affichage des commentaires du post #}
 {% for commentaire in commentaires %}
@@ -18,15 +18,15 @@
     <div class="media-body">
         <p>{{ commentaire.contenu }}</p>
         <h4><i class="fas fa-user-edit"></i> {{ commentaire.auteur }}
-            {% if request.user == post.communaute.createur %}
+            {% if request.user in post.communaute.list_CMs.all %}
 {# possibilité de Bannir un utilisateur si l'utilisateur est toujours dans la communauté #}
-                       {%if not commentaire.auteur.is_superuser and not commentaire.auteur.id in post.communaute.abonnes.user_id %}
+                       {%if not commentaire.auteur.is_superuser and not commentaire.auteur.id in post.communaute.list_CMs.user_id %}
                         <a span href="{% url 'bannir' communaute_id=post.communaute.id user_id=commentaire.auteur.id %}"><i
                                 class="fas fa-ban"></i></a>
                     {%endif%}
             {% endif%}
             <small><i>{{ commentaire.date_creation }}</i></small>
-            {% if request.user == post.communaute.createur %}
+            {% if request.user in post.communaute.list_CMs.all %}
             <a span href="{% url 'visibilite_commentaire' commentaire.id %}"><i class="far fa-eye"></i></a>
             {% endif%}
         </h4>
@@ -37,20 +37,20 @@
 
 {%else%}
 
-{% if request.user == post.communaute.createur %}
+{% if request.user in post.communaute.list_CMs.all %}
 <div class="media p-3">
     <div class="media-body">
         <p>{{ commentaire.contenu }}</p>
         <h4><i class="fas fa-user-edit"></i> {{ commentaire.auteur }}
-            {% if request.user == post.communaute.createur %}
+            {% if request.user in post.communaute.list_CM.all %}
 {# possibilité de Bannir un utilisateur si l'utilisateur est toujours dans la communauté #}
-                       {%if not commentaire.auteur.is_superuser and not commentaire.auteur.id in post.communaute.abonnes.user_id %}
+                       {%if not commentaire.auteur.is_superuser and not commentaire.auteur.id in post.communaute.list_CMs.user_id %}
                         <a span href="{% url 'bannir' communaute_id=post.communaute.id user_id=commentaire.auteur.id %}"><i
                                 class="fas fa-ban"></i></a>
                     {%endif%}
             {% endif%}
             <small><i>{{ commentaire.date_creation }}</i></small>
-            {% if request.user == post.communaute.createur %}
+            {% if request.user in post.communaute.list_CMs.all %}
             <a span href="{% url 'visibilite_commentaire' commentaire.id %}"><i class="far fa-eye-slash"></i></a>
             {% endif%}
         </h4>

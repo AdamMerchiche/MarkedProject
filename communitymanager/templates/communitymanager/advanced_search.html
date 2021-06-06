@@ -1,0 +1,5 @@
+<form class="" method="POST" action='{% url 'recherche' %}'>
+    {% csrf_token %}
+    {{ advanced_search }}
+    <button type="submit" value="Submit"><i class="fas fa-search"></i>Rechercher</button>
+</form><br>

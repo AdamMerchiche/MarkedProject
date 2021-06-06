@@ -1,19 +1,19 @@
-.polling_message {
+.polling_message2 {
   color: black;
   margin-right: 2%;
 }
 
-.view_port {
-  background-color: #ffffff;
+.view_port2 {
+  background-color: rgba(246, 246, 246, 0.76);
   height: 25px;
   width: 100%;
   overflow: hidden;
 }
 
-.cylon_eye {
+.cylon_eye2 {
   background-color: red;
-  background-image:         linear-gradient(to right, rgb(255, 255, 255) 25%, rgba(255, 255, 255, 0.73) 50%, rgb(255, 255, 255) 75%);
-  color: white;
+  background-image:         linear-gradient(to right, rgb(246, 246, 246) 25%, rgba(255, 255, 255, 0.73) 50%, rgb(246, 246, 246) 75%);
+  color: rgba(255, 255, 255, 0.78);
   height: 100%;
   width: 20%;
 

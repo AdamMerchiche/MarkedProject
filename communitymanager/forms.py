@@ -39,6 +39,8 @@ class PostForm(forms.ModelForm):
         except Communaute.DoesNotExist:
             self.add_error("commu", "Cette communaute n'existe pas!")
             communaute = None
+        except:
+            communaute = Communaute.objects.filter(name=self.cleaned_data.get('commu'))[0]
         # Verification que l'utilisateur soit abonne pour poster dans une communaute s'il force l'acces
         else:
             if communaute not in self.user.abonnements.all():
@@ -57,7 +59,7 @@ class PostForm(forms.ModelForm):
     def save(self, user):
         nouveau_post = super().save(commit=False)
         nouveau_post.auteur = user
-        nouveau_post.communaute = Communaute.objects.get(name=self.cleaned_data.get('commu'))
+        nouveau_post.communaute = Communaute.objects.filter(name=self.cleaned_data.get('commu'))[0]
         nouveau_post.save()
         return nouveau_post
 
@@ -87,21 +89,13 @@ class CommunauteForm(forms.ModelForm):
         nouvelle_communaute.save()
         return nouvelle_communaute
 
-    def modifCommunaute(self, id):
-        cleaned_data = self.clean()
-        modif_communaute = Communaute.objects.filter(id=id)
-        modif_communaute.update(name=cleaned_data.get('name'),
-                                description=cleaned_data.get('description'),
-                                ferme=cleaned_data.get('ferme'),
-                                )
-        return modif_communaute
 
 
 class ModificationCommunauteForm(forms.ModelForm):
     class Meta:
         model = Communaute
         exclude = ["createur", "abonnes",
-                   "ferme_invisible"]  # Possible de modifier la description, le titre, et de bannir des abonnés de la commu
+                   "ferme_invisible", "list_CMs"]  # Possible de modifier la description, le titre, et de bannir des abonnés de la commu
 
 
 class FiltragePostCommunauteForm(forms.Form):
