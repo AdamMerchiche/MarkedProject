@@ -11,7 +11,7 @@
     EDITEZ votre Post !{% endif %}
     {% if alert_flag %}
         <script>alert("Vous n'êtes pas le créateur de ce POST! Retournez à votre feed.")
-        window.location.href = " http://127.0.0.1:8000/communitymanager/feed_abonnements"
+        window.location.href = "{% url 'feed_abonnements' %}"
         </script>
     {% endif %}
     {% if not alert_flag %}

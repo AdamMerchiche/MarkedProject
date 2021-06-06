@@ -1,23 +1,23 @@
 {% extends "base.html" %}
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>{% block title %} Publiez votre nouveau post !{% endblock title %}</title>
-</head>
+
+{% block title %} Publiez votre nouveau post !{% endblock title %}
+
 {% block h1 %}Formulez votre POST{% endblock h1 %}
-<body class="">
-{% block h3 %}{% if envoi %}Votre post a bien été envoyé !{% endif %}
+
+{% block h3 %}
+
+    {% if envoi %}Votre post a bien été envoyé !{% endif %}
     Formulez votre Post !
-{% if alert_flag %}
-        <script>alert("Vous n'êtes pas le créateur de ce Communauté! Retournez à votre feed.")
-        window.location.href = " http://127.0.0.1:8000/communitymanager/feed_abonnements"
+    {% if alert_flag %}
+        <script>alert("Vous n'êtes pas le créateur de cette Communauté! Retournez à votre feed.")
+        window.location.href = "{% url 'feed_abonnements' %}"
         </script>
     {% endif %}
-{% if not alert_flag %}
-     <form action="{% url  'nouveau_post'  %}" method="post">
-        {% include 'communitymanager/form_post.html' %}
-    </form>
-{% endif %}
+    {% if not alert_flag %}
+         <form action="{% url  'nouveau_post'  %}" method="post">
+            {% include 'communitymanager/form_post.html' %}
+        </form>
+    {% endif %}
+
 {% endblock h3 %}
-</body>
 

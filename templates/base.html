@@ -40,7 +40,7 @@ tout en ajoutant dnas les templates de l'application, des fonctionnalités inté
         <div class="breadcrumbs bg-secondary">
             {% if user.is_authenticated %}
             <nav class="navbar navbar-expand-sm navbar-white pull-right ">
-                <span class="miniTxt"><a class="navbar-brand" href="/accounts/logout" data-toggle="tooltip"
+                <span class="miniTxt"><a class="navbar-brand" href="{% url 'logout' %}" data-toggle="tooltip"
                                          title="Déconnexion"><i class="fas fa-sign-out-alt "></i></a></span>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
                     <span class="navbar-toggler-icon"></span>
@@ -77,7 +77,7 @@ tout en ajoutant dnas les templates de l'application, des fonctionnalités inté
                 </div>
             </nav>
             {% else %}
-            <a class="navbar-brand" href="/accounts/login" data-toggle="tooltip" title="Déconnexion"><i
+            <a class="navbar-brand" href="{% url 'login' %}" data-toggle="tooltip" title="Connexion"><i
                     class="fas fa-sign-in-alt "></i></a>
             {% endif %}
         </div>
