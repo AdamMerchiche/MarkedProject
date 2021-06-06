@@ -336,6 +336,7 @@ def creation_communaute(request):
         # Le créateur est directement abonné et ajouté à la liste des CMs
         communaute.abonnes.add(request.user)
         communaute.list_CMs.add(request.user)
+        communaute.save()
         envoi = True
         return redirect('list_communautes')
 

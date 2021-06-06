@@ -30,7 +30,7 @@
                                 {# Ajout d'un CM en cliquant sur son nom. #}
                         {% if request.user == communaute.createur  %}
                         <a span href="{% url 'ajouter_CM' communaute_id=communaute.id user_id=u.id %}" data-toggle="tooltip"  {% if u in communaute.list_CMs.all %}title="Retirer l'utilisateur de la liste des CMS" style
-                           ="opacity: 100%"{% else %}title="Ajouter l'utilisateur à la liste des CMS" style="opacity: 30%"
+                           ="color:darkblue"{% else %}title="Ajouter l'utilisateur à la liste des CMS" style="color:#64adbd"
                            {% endif %}>
                                 {{ u.get_username }}
                         </a>
