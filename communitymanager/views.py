@@ -6,6 +6,7 @@ from django.contrib.auth.decorators import login_required
 from django.http import Http404
 from django.db.models import Q
 
+
 # Renvoie le feed d'un utilisateur, avec tous les posts des communautés auxquelles il est abonné
 @login_required()
 def accueil(request):
@@ -23,7 +24,6 @@ def accueil(request):
             Q(title__icontains=query) |
             Q(description__icontains=query))
 
-
     #Block du formulaire de recherche global renvoyant vers la page de recherche preremplie
     action_large_search = reverse('feed_abonnements')
     large_search = SimpleSearchForm(request.POST or None, prefix='large_search')
@@ -35,7 +35,7 @@ def accueil(request):
 
 
 # Renvoie la liste de toutes les communautés
-@login_required(login_url='/accounts/login/')
+@login_required()
 def liste_communautes(request):
     date_now = timezone.now()
     initial_list = Communaute.objects.all()             #2 listes differentes posts et initial posts pour des raisons d'affichages
@@ -70,7 +70,7 @@ def liste_communautes(request):
 
 
 # Permet à l'utilisateur de s'abonner ou se désabonner d'une communauté
-@login_required(login_url='/accounts/login/')
+@login_required()
 def abonner(request, communaute_id):
     date_now = timezone.now()
 
@@ -81,6 +81,7 @@ def abonner(request, communaute_id):
         if not request.user in communaute.list_bannis.all():
             communaute.abonnes.add(request.user)
     return redirect('list_communautes')
+
 
 #Permet au CM de bannir un utilisateur si ce dernier fait toujours parti de la communauté.
 #On pourra le bannir à partir d'un POST ou d'un commentaire. Tous ses posts et commentaires seront supprimés.
@@ -96,9 +97,10 @@ def bannir(request, communaute_id, user_id):
         commentaire.delete()
     return redirect('communaute', communaute_id=communaute_id)
 
+
 # Renvoie l'ensemble des posts d'une communauté. Précisons le cas où la communauté est rendue invisible par
 #l'admin : on ne pourrait plus avoir accès aux posts.
-@login_required(login_url='/accounts/login/')
+@login_required()
 def communaute(request, communaute_id):
 
     communaute = Communaute.objects.get(id=communaute_id)
@@ -156,10 +158,9 @@ def communaute(request, communaute_id):
         return redirect("list_communautes")
 
 
-
 # Permet à l'utilisateur connecté de créer un commentaire. Il sera prérempli au niveau de la section Auteur,
 # et POST.
-@login_required(login_url='/accounts/login/')
+@login_required()
 def commentaire(request, post_id):
     date_now = timezone.now()
     post = Post.objects.get(id=post_id)
@@ -191,6 +192,7 @@ def commentaire(request, post_id):
 
     return render(request, 'communitymanager/post.html', locals())
 
+
 #Permet de rendre un commentaire visible ou non à l'ensemble des autres utilisateurs
 def visibilite_commentaire(request, commentaire_id):
    commentaire = Commentaire.objects.get(id=commentaire_id)
@@ -202,11 +204,11 @@ def visibilite_commentaire(request, commentaire_id):
        commentaire.save()
    return redirect('post', post_id=commentaire.post_id)
 
+
 # Permet à l'utilisateur connecté de créer un POST. Il sera prérempli au niveau de la section Auteur,
 # et les choix de la communauté (lieu de publication) seront limités. L'utilisateur ne pourra poster que dans les
 # communautés auxquelles il est abonné.
-
-@login_required(login_url='/accounts/login/')
+@login_required()
 def nouveau_post(request):
     date_now = timezone.now().strftime("%Y-%m-%dT%H:%M")
     date_evnt = None
@@ -243,7 +245,7 @@ def nouveau_post(request):
 # Permet à l'utilisateur connecté de modifier son POST. La vue prend en compte l'auteur du post, et renvoie une erreur si
 # l'utilisateur tente de modifier un POST dont il n'est pas l'auteur. Le paramètre alert_flag renvoie un booléen. Il est FALSE
 # si la modification du POST est lancée par un autre utilisateur que l'auteur.
-@login_required(login_url='/accounts/login/')
+@login_required()
 def modification_post(request, post_id):
     date_now = timezone.now().strftime("%Y-%m-%dT%H:%M")        #date minimale pour un evenement, cad au moment du post. On ne peut pas mettre un evnt au passé.
 
@@ -288,7 +290,7 @@ def visibilite_post(request, post_id):
    return redirect('communaute', communaute_id=post.communaute_id)
 
 # Permet de renvoyer tous les POSTs dont l'utilisateur est l'auteur.
-@login_required(login_url='/accounts/login/')
+@login_required()
 def voir_posts(request):
     initial_list = Post.objects.filter(auteur=request.user)
     posts = initial_list
@@ -314,7 +316,7 @@ def voir_posts(request):
 
 
 # Vue permettant de créer une communauté, avec l'utilisateur comme auteur
-@login_required(login_url='/accounts/login/')
+@login_required()
 def creation_communaute(request):
     communautes = Communaute.objects.all()
     form = CommunauteForm(
@@ -337,7 +339,7 @@ def creation_communaute(request):
 
 
 # Vue permettant de modifier une communauté que l'utilisateur a créée
-@login_required(login_url='/accounts/login/')
+@login_required()
 def modification_communaute(request, communaute_id):
     # Block du formulaire de recherche global renvoyant vers la page de recherche preremplie
     action_large_search = reverse('feed_abonnements')
@@ -365,7 +367,7 @@ def modification_communaute(request, communaute_id):
     return render(request, 'communitymanager/update_communaute.html', locals())
 
 # Vue permettant de fermer une communauté que l'utilisateur a créée. Il n'y sera plus possible d'y publier des commentaires ou des posts
-@login_required(login_url='/accounts/login/')
+@login_required()
 def fermer_communaute(request, communaute_id):
     communaute = Communaute.objects.get(id=communaute_id)
     if communaute.ferme:
@@ -376,7 +378,7 @@ def fermer_communaute(request, communaute_id):
         communaute.save()
     return redirect('list_communautes')
 
-@login_required(login_url='/accounts/login/')
+@login_required()
 def fermer_invisible_communaute(request, communaute_id):
     communaute = Communaute.objects.get(id=communaute_id)
     if communaute.ferme_invisible:
@@ -388,13 +390,13 @@ def fermer_invisible_communaute(request, communaute_id):
     return redirect('list_communautes')
 
 #Vue permettant de détruire une communauté que l'utilisateur a créée
-@login_required(login_url='/accounts/login/')
+@login_required()
 def detruire_communaute(request, communaute_id):
     Communaute.objects.get(id=communaute_id).delete()
     return redirect('list_communautes')
 
 #Vue permettant de supprimer un post d'une communauté
-@login_required(login_url='/accounts/login/')
+@login_required()
 def supprimer_post(request, post_id):
     post = Post.objects.get(id=post_id)
     post.delete()
@@ -402,7 +404,7 @@ def supprimer_post(request, post_id):
 
 
 # Permet à l'utilisateur de liker/unliker un post
-@login_required(login_url='/accounts/login/')
+@login_required()
 def liker(request, post_id):
     post = Post.objects.get(id=post_id)
 
@@ -416,7 +418,7 @@ def liker(request, post_id):
 
 
 #Permet à l'utilisateur de faire une recherche
-@login_required(login_url='/accounts/login/')
+@login_required()
 def recherche(request):
     date_now = timezone.now()
 
@@ -435,9 +437,6 @@ def recherche(request):
 
     communautes, posts, communautes_par_createur,posts_par_auteur = resultats_recherche(large_query, request)
     return render(request, 'communitymanager/recherche.html', locals())
-
-
-
 
 
 #Fonction de traitement de la recherche pour alleger la vue
@@ -480,11 +479,8 @@ def resultats_recherche(large_query, request):
     return communautes,posts,communautes_par_createur,posts_par_auteur
 
 
-
-
-
 # Permet à l'utilisateur de marquer un post comme non lu
-@login_required(login_url='/accounts/login/')
+@login_required()
 def marquer_non_lu(request, post_id, url_name):
     post = Post.objects.get(id=post_id)
 
