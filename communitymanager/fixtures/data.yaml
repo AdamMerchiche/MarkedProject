@@ -1,375 +1,403 @@
-- model: communitymanager.communaute
-  pk: 7
-  fields:
-    name: Test
-    abonnes:
-    - 2
-    - 7
-- model: communitymanager.communaute
-  pk: 8
-  fields:
-    name: TEST2
-    abonnes:
-    - 2
-- model: communitymanager.communaute
-  pk: 9
-  fields:
-    name: Sport
-    abonnes: []
-- model: communitymanager.priorite
+- model: auth.permission
   pk: 1
   fields:
-    labels: blanche"
-- model: communitymanager.priorite
+    name: Can add log entry
+    content_type: 1
+    codename: add_logentry
+- model: auth.permission
   pk: 2
   fields:
-    labels: rouge
-- model: communitymanager.priorite
+    name: Can change log entry
+    content_type: 1
+    codename: change_logentry
+- model: auth.permission
   pk: 3
   fields:
-    labels: jaune
-- model: communitymanager.priorite
+    name: Can delete log entry
+    content_type: 1
+    codename: delete_logentry
+- model: auth.permission
   pk: 4
   fields:
-    labels: orange
-- model: communitymanager.priorite
+    name: Can view log entry
+    content_type: 1
+    codename: view_logentry
+- model: auth.permission
   pk: 5
   fields:
-    labels: ecarlate
-- model: communitymanager.post
-  pk: 2
-  fields:
-    description: "Ceci est un test. J'ai chang\xE9 un peu le template des commentaires
-      pour que cela s'affiche un peu comme ce que l'on pourrait trouver dans un forum.
-      N\xE9anmoins, il serait peut \xEAtre mieux d'aligner les informations situ\xE9es
-      \xE0 la gauche de l'\xE9cran avec la description, afin d'\xE9viter les gros
-      blancs que l'on peut avoir ici"
-    title: POST presque final
-    date_creation: 2021-02-22 13:44:33+00:00
-    evenementiel: false
-    date_evenement: null
-    communaute: 7
-    priorite: 5
-    auteur: 7
-- model: communitymanager.post
-  pk: 3
-  fields:
-    description: raz
-    title: reazreaarze
-    date_creation: 2021-05-22 16:48:52+00:00
-    evenementiel: false
-    date_evenement: null
-    communaute: 8
-    priorite: 2
-    auteur: 2
-- model: communitymanager.post
-  pk: 4
-  fields:
-    description: eraz
-    title: "MODIFI\xC9 LA"
-    date_creation: 2021-05-22 16:49:10+00:00
-    evenementiel: false
-    date_evenement: null
-    communaute: 7
-    priorite: 5
-    auteur: 7
-- model: communitymanager.post
-  pk: 5
-  fields:
-    description: "Test pour voir si ce sera le plus r\xE9cent ??"
-    title: "+ r\xE9cent ??"
-    date_creation: 2021-05-23 17:44:33+00:00
-    evenementiel: false
-    date_evenement: null
-    communaute: 7
-    priorite: 5
-    auteur: 7
-- model: communitymanager.post
+    name: Can add permission
+    content_type: 2
+    codename: add_permission
+- model: auth.permission
   pk: 6
   fields:
-    description: nnj
-    title: EVENEMENT
-    date_creation: 2021-05-22 13:32:28+00:00
-    evenementiel: true
-    date_evenement: null
-    communaute: 8
-    priorite: 3
-    auteur: 7
-- model: communitymanager.post
+    name: Can change permission
+    content_type: 2
+    codename: change_permission
+- model: auth.permission
   pk: 7
   fields:
-    description: "Petit \xE9v\xE9nement des familles"
-    title: EVENT avec date ?
-    date_creation: 2021-05-24 18:55:57+00:00
-    evenementiel: true
-    date_evenement: 2021-05-27 00:00:00+00:00
-    communaute: 7
-    priorite: 2
-    auteur: 2
-- model: communitymanager.post
+    name: Can delete permission
+    content_type: 2
+    codename: delete_permission
+- model: auth.permission
   pk: 8
   fields:
-    description: Est-ce que ca marche ??
-    title: "Sans date \xE9v\xE8nement"
-    date_creation: 2021-05-24 18:58:19+00:00
-    evenementiel: false
-    date_evenement: null
-    communaute: 8
-    priorite: 5
-    auteur: 7
-- model: communitymanager.post
+    name: Can view permission
+    content_type: 2
+    codename: view_permission
+- model: auth.permission
   pk: 9
   fields:
-    description: "Post sans \xE9v\xE9nement"
-    title: "Post sans \xE9v\xE9nement"
-    date_creation: 2021-05-25 08:15:49+00:00
-    evenementiel: false
-    date_evenement: null
-    communaute: 8
-    priorite: 2
-    auteur: 7
-- model: communitymanager.post
+    name: Can add group
+    content_type: 3
+    codename: add_group
+- model: auth.permission
   pk: 10
   fields:
-    description: "Post avec \xE9v\xE9nement mais sans date"
-    title: "Post avec \xE9v\xE9nement mais sans date"
-    date_creation: 2021-05-25 08:15:49+00:00
-    evenementiel: true
-    date_evenement: null
-    communaute: 8
-    priorite: 2
-    auteur: 7
-- model: communitymanager.post
+    name: Can change group
+    content_type: 3
+    codename: change_group
+- model: auth.permission
   pk: 11
   fields:
-    description: test
-    title: test
-    date_creation: 2021-05-25 09:42:03+00:00
-    evenementiel: false
-    date_evenement: null
-    communaute: 7
-    priorite: 1
-    auteur: 7
-- model: communitymanager.post
+    name: Can delete group
+    content_type: 3
+    codename: delete_group
+- model: auth.permission
   pk: 12
   fields:
-    description: reareazraezra
-    title: rearaez
-    date_creation: 2021-05-25 10:43:36+00:00
-    evenementiel: false
-    date_evenement: null
-    communaute: 7
-    priorite: 3
-    auteur: 7
-- model: communitymanager.post
+    name: Can view group
+    content_type: 3
+    codename: view_group
+- model: auth.permission
   pk: 13
   fields:
-    description: rezareaz
-    title: erareaz
-    date_creation: 2021-05-25 10:46:40+00:00
-    evenementiel: true
-    date_evenement: 2021-02-22 13:44:33+00:00
-    communaute: 7
-    priorite: 2
-    auteur: 7
-- model: communitymanager.post
+    name: Can add user
+    content_type: 4
+    codename: add_user
+- model: auth.permission
   pk: 14
   fields:
-    description: "On teste voir si le template est bien pass\xE9 ou pas ?"
-    title: Template ok ou pas ?
-    date_creation: 2021-05-25 20:39:17+00:00
-    evenementiel: false
-    date_evenement: null
-    communaute: 8
-    priorite: 2
-    auteur: 7
-- model: communitymanager.post
+    name: Can change user
+    content_type: 4
+    codename: change_user
+- model: auth.permission
   pk: 15
   fields:
-    description: "On teste une nouvelle version de post. A voir si cela passe visuellement.
-      Je l'esp\xE8re....."
-    title: "Template am\xE9lior\xE9 du POST ?"
-    date_creation: 2021-05-26 08:32:04+00:00
-    evenementiel: false
-    date_evenement: null
-    communaute: 8
-    priorite: 5
-    auteur: 7
-- model: communitymanager.post
+    name: Can delete user
+    content_type: 4
+    codename: delete_user
+- model: auth.permission
   pk: 16
   fields:
-    description: "On veut poster un nouveau post en excluant la date de cr\xE9ation.
-      On va voir si cela fonctionne."
-    title: "Sans date de cr\xE9ation"
-    date_creation: 2021-05-26 09:29:55.270772+00:00
-    evenementiel: false
-    date_evenement: null
-    communaute: 8
-    priorite: 1
-    auteur: 7
-- model: communitymanager.post
+    name: Can view user
+    content_type: 4
+    codename: view_user
+- model: auth.permission
   pk: 17
   fields:
-    description: "Nouveau post pour tester si on ne met d'\xE9v\xE9nements, est-ce
-      qu'il y a quand m\xEAme None sur les cot\xE9s ??"
-    title: None ?
-    date_creation: 2021-05-26 09:33:45.672989+00:00
-    evenementiel: false
-    date_evenement: null
-    communaute: 8
-    priorite: 3
-    auteur: 7
-- model: communitymanager.post
+    name: Can add content type
+    content_type: 5
+    codename: add_contenttype
+- model: auth.permission
   pk: 18
   fields:
-    description: rearezareza
-    title: referred
-    date_creation: 2021-05-26 09:35:00.618376+00:00
-    evenementiel: false
-    date_evenement: null
-    communaute: 8
-    priorite: 3
-    auteur: 7
-- model: communitymanager.post
+    name: Can change content type
+    content_type: 5
+    codename: change_contenttype
+- model: auth.permission
   pk: 19
   fields:
-    description: zdzdz
-    title: dzdzdzd
-    date_creation: 2021-05-26 09:35:45.876585+00:00
-    evenementiel: false
-    date_evenement: null
-    communaute: 8
-    priorite: 3
-    auteur: 7
-- model: communitymanager.post
+    name: Can delete content type
+    content_type: 5
+    codename: delete_contenttype
+- model: auth.permission
   pk: 20
   fields:
-    description: "TEstttttt d'un \xE9v\xE9nement avec date"
-    title: Event avec date ?
-    date_creation: 2021-05-26 16:27:02.389812+00:00
-    evenementiel: true
-    date_evenement: 2021-02-22 13:44:33+00:00
-    communaute: 7
-    priorite: 5
-    auteur: 7
-- model: communitymanager.post
+    name: Can view content type
+    content_type: 5
+    codename: view_contenttype
+- model: auth.permission
   pk: 21
   fields:
-    description: "Test en mettant la date cr\xE9ation False"
-    title: "Date cr\xE9ation"
-    date_creation: 2021-05-26 19:37:22.651755+00:00
-    evenementiel: false
-    date_evenement: null
-    communaute: 9
-    priorite: 3
-    auteur: 7
-- model: communitymanager.post
+    name: Can add session
+    content_type: 6
+    codename: add_session
+- model: auth.permission
   pk: 22
   fields:
-    description: Dernier essai de post avant de poster l'exemplaire finalllll
-    title: Dernier testttt
-    date_creation: 2021-05-26 22:25:30.876540+00:00
+    name: Can change session
+    content_type: 6
+    codename: change_session
+- model: auth.permission
+  pk: 23
+  fields:
+    name: Can delete session
+    content_type: 6
+    codename: delete_session
+- model: auth.permission
+  pk: 24
+  fields:
+    name: Can view session
+    content_type: 6
+    codename: view_session
+- model: auth.permission
+  pk: 25
+  fields:
+    name: Can add communaute
+    content_type: 7
+    codename: add_communaute
+- model: auth.permission
+  pk: 26
+  fields:
+    name: Can change communaute
+    content_type: 7
+    codename: change_communaute
+- model: auth.permission
+  pk: 27
+  fields:
+    name: Can delete communaute
+    content_type: 7
+    codename: delete_communaute
+- model: auth.permission
+  pk: 28
+  fields:
+    name: Can view communaute
+    content_type: 7
+    codename: view_communaute
+- model: auth.permission
+  pk: 29
+  fields:
+    name: Can add post
+    content_type: 8
+    codename: add_post
+- model: auth.permission
+  pk: 30
+  fields:
+    name: Can change post
+    content_type: 8
+    codename: change_post
+- model: auth.permission
+  pk: 31
+  fields:
+    name: Can delete post
+    content_type: 8
+    codename: delete_post
+- model: auth.permission
+  pk: 32
+  fields:
+    name: Can view post
+    content_type: 8
+    codename: view_post
+- model: auth.permission
+  pk: 33
+  fields:
+    name: Can add priorite
+    content_type: 9
+    codename: add_priorite
+- model: auth.permission
+  pk: 34
+  fields:
+    name: Can change priorite
+    content_type: 9
+    codename: change_priorite
+- model: auth.permission
+  pk: 35
+  fields:
+    name: Can delete priorite
+    content_type: 9
+    codename: delete_priorite
+- model: auth.permission
+  pk: 36
+  fields:
+    name: Can view priorite
+    content_type: 9
+    codename: view_priorite
+- model: auth.permission
+  pk: 37
+  fields:
+    name: Can add commentaire
+    content_type: 10
+    codename: add_commentaire
+- model: auth.permission
+  pk: 38
+  fields:
+    name: Can change commentaire
+    content_type: 10
+    codename: change_commentaire
+- model: auth.permission
+  pk: 39
+  fields:
+    name: Can delete commentaire
+    content_type: 10
+    codename: delete_commentaire
+- model: auth.permission
+  pk: 40
+  fields:
+    name: Can view commentaire
+    content_type: 10
+    codename: view_commentaire
+- model: auth.user
+  pk: 1
+  fields:
+    password: pbkdf2_sha256$150000$2gYKZkgpHQqx$yvkJPxEmw2buYtRmv33SzQ5Gm+PzO8d+9h+fF07LL9A=
+    last_login: 2021-06-06 10:43:43.000881+00:00
+    is_superuser: true
+    username: claire
+    first_name: ''
+    last_name: ''
+    email: ''
+    is_staff: true
+    is_active: true
+    date_joined: 2021-06-06 10:43:36.149794+00:00
+    groups: []
+    user_permissions: []
+- model: auth.user
+  pk: 2
+  fields:
+    password: pbkdf2_sha256$150000$sgzpSF7iiJUj$sJbHfXOjEOSVSjQLJ4yAAcTtssdVU1OtkJOlNYBGVDA=
+    last_login: 2021-06-06 11:55:29.678386+00:00
+    is_superuser: true
+    username: bb
+    first_name: ''
+    last_name: ''
+    email: ''
+    is_staff: true
+    is_active: true
+    date_joined: 2021-06-06 10:53:28.903621+00:00
+    groups: []
+    user_permissions: []
+- model: communitymanager.communaute
+  pk: 1
+  fields:
+    name: commu 1
+    createur: 1
+    description: premiere communaute
+    ferme: false
+    ferme_invisible: false
+    abonnes:
+    - 1
+    - 2
+    list_bannis: []
+- model: communitymanager.communaute
+  pk: 2
+  fields:
+    name: Sport
+    createur: 1
+    description: communaute pour tous les clubs de sport
+    ferme: false
+    ferme_invisible: false
+    abonnes:
+    - 1
+    - 2
+    list_bannis: []
+- model: communitymanager.priorite
+  pk: 1
+  fields:
+    labels: high
+    rang: 1
+- model: communitymanager.priorite
+  pk: 2
+  fields:
+    labels: medium
+    rang: 2
+- model: communitymanager.priorite
+  pk: 3
+  fields:
+    labels: low
+    rang: 3
+- model: communitymanager.post
+  pk: 1
+  fields:
+    description: Voici le premier post sur la branche master !
+    title: premier post
+    date_creation: 2021-06-06 10:47:41.980232+00:00
     evenementiel: true
-    date_evenement: 2021-02-22 13:44:33+00:00
-    communaute: 8
-    priorite: 4
-    auteur: 2
+    date_evenement: 2021-08-27 14:00:00+00:00
+    communaute: 1
+    priorite: 1
+    auteur: 1
+    collant: false
+    visible: true
+    avertissement: false
+    lecteurs:
+    - 1
+    likes:
+    - 1
+- model: communitymanager.post
+  pk: 2
+  fields:
+    description: hello
+    title: "deuxi\xE8me post"
+    date_creation: 2021-06-06 10:48:53.188774+00:00
+    evenementiel: false
+    date_evenement: null
+    communaute: 1
+    priorite: 2
+    auteur: 1
+    collant: false
+    visible: true
+    avertissement: true
+    lecteurs:
+    - 1
+    likes: []
+- model: communitymanager.post
+  pk: 3
+  fields:
+    description: yo
+    title: "troisi\xE8me post"
+    date_creation: 2021-06-06 10:49:15.727552+00:00
+    evenementiel: false
+    date_evenement: null
+    communaute: 1
+    priorite: 3
+    auteur: 1
+    collant: true
+    visible: true
+    avertissement: false
+    lecteurs:
+    - 1
+    likes: []
+- model: communitymanager.post
+  pk: 4
+  fields:
+    description: hello
+    title: "quatri\xE8me post"
+    date_creation: 2021-06-06 10:49:59.400956+00:00
+    evenementiel: true
+    date_evenement: 2021-09-05 12:00:00+00:00
+    communaute: 1
+    priorite: 2
+    auteur: 1
+    collant: false
+    visible: false
+    avertissement: false
+    lecteurs: []
+    likes: []
+- model: communitymanager.post
+  pk: 5
+  fields:
+    description: L'ENAC et l'ISAE Supaero s'affrontent !
+    title: rencontre EAG
+    date_creation: 2021-06-06 10:51:20.122446+00:00
+    evenementiel: false
+    date_evenement: null
+    communaute: 2
+    priorite: 1
+    auteur: 1
+    collant: true
+    visible: true
+    avertissement: false
+    lecteurs:
+    - 1
+    - 2
+    likes: []
 - model: communitymanager.commentaire
   pk: 1
   fields:
-    date_creation: 2021-05-22 13:32:28+00:00
-    contenu: "Test avec ls nouveaux r\xE9glages"
-    auteur: 3
-    post: 2
-- model: communitymanager.commentaire
-  pk: 2
-  fields:
-    date_creation: 2021-05-22 13:32:28+00:00
-    contenu: "Test avec ls nouveaux r\xE9glages"
-    auteur: 3
-    post: 2
-- model: communitymanager.commentaire
-  pk: 3
-  fields:
-    date_creation: 2021-05-22 13:32:28+00:00
-    contenu: Test ca devrait en afficher qu'un exemplaire
-    auteur: 7
-    post: 2
-- model: communitymanager.commentaire
-  pk: 4
-  fields:
-    date_creation: 2021-05-23 14:11:18+00:00
-    contenu: deada
-    auteur: 7
-    post: 2
-- model: communitymanager.commentaire
-  pk: 5
-  fields:
-    date_creation: 2021-02-22 13:44:33+00:00
-    contenu: bibhbjhbh
-    auteur: 2
-    post: 2
-- model: communitymanager.commentaire
-  pk: 6
-  fields:
-    date_creation: 2021-02-22 13:44:33+00:00
-    contenu: raerae
-    auteur: 2
-    post: 2
-- model: communitymanager.commentaire
-  pk: 7
-  fields:
-    date_creation: 2021-02-22 13:44:33+00:00
-    contenu: "On voit si l'auteur pr\xE9d\xE9fini marche ??"
-    auteur: 2
-    post: 2
-- model: communitymanager.commentaire
-  pk: 8
-  fields:
-    date_creation: 2021-05-25 21:47:43+00:00
-    contenu: How are you bro ?
-    auteur: 7
-    post: 4
-- model: communitymanager.commentaire
-  pk: 9
-  fields:
-    date_creation: 2021-05-26 08:31:45+00:00
-    contenu: Incroyable ce site dis donc
-    auteur: 7
-    post: 2
-- model: communitymanager.commentaire
-  pk: 10
-  fields:
-    date_creation: 2021-05-26 08:37:20+00:00
-    contenu: "Est-ce que la section commentaire fonctionne toujours ? Sachant que
-      j'ai supprim\xE9 une vue qui me semblait inint\xE9ressante"
-    auteur: 7
-    post: 2
-- model: communitymanager.commentaire
-  pk: 11
-  fields:
-    date_creation: 2021-05-26 09:30:19.181861+00:00
-    contenu: "Ca a l'air de bien march\xE9 dis doncccc"
-    auteur: 7
-    post: 16
-- model: communitymanager.commentaire
-  pk: 12
-  fields:
-    date_creation: 2021-05-26 14:17:52.082191+00:00
-    contenu: dnzsdn
-    auteur: 7
-    post: 2
-- model: communitymanager.commentaire
-  pk: 13
-  fields:
-    date_creation: 2021-05-26 14:21:50.399126+00:00
-    contenu: salut
-    auteur: 7
-    post: 19
-- model: communitymanager.commentaire
-  pk: 14
-  fields:
-    date_creation: 2021-05-26 22:08:14.251739+00:00
-    contenu: Beau POST
-    auteur: 2
-    post: 20
+    date_creation: 2021-06-06 10:48:19.180013+00:00
+    contenu: premier commentaire
+    auteur: 1
+    post: 1
+    invisible: false
