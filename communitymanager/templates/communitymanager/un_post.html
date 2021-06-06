@@ -81,7 +81,7 @@
                        href="{% url "post" post_id=post.id %}" data-toggle="tooltip" title="Accéder au post">
                         {% if post.avertissement %}
                             {% if request.user in post.lecteurs.all %}
-                            <div class="view_port ">
+                                <div class="view_port ">
   <div class="polling_message text-center">
    {{ post.title|capfirst }}                    {% if user == post.auteur %}
       <a href="{% url 'update_post' post.id %}" data-toggle="tooltip" title="Modifier le POST">
@@ -90,9 +90,9 @@
   {% endif %}
   </div><div class="cylon_eye"></div>
 </div>
-                                {% else %}
+                            {% else %}
 
-                                                         <div class="view_port2 ">
+                                <div class="view_port2 ">
   <div class="polling_message2 text-center">
    {{ post.title|capfirst }}                    {% if user == post.auteur %}
       <a href="{% url 'update_post' post.id %}" data-toggle="tooltip" title="Modifier le POST">
@@ -101,7 +101,7 @@
   {% endif %}
   </div><div class="cylon_eye2"></div>
 </div>
-                                {% endif %}
+                            {% endif %}
                         {% else %}
                             {{ post.title|capfirst }}                    {% if user == post.auteur %}
                             <a href="{% url 'update_post' post.id %}" data-toggle="tooltip" title="Modifier le POST">
