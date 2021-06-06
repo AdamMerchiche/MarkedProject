@@ -114,7 +114,9 @@ class SearchForm(forms.Form):
 
     is_post = forms.BooleanField(required=False, label="Contenu")
     is_auteur = forms.BooleanField(required=False, label="Auteur")
-    is_commentaire = forms.BooleanField(required=False, label="Commentaires")
+
+    is_commentaire = forms.BooleanField(required=False, label="Contenu")
+    is_commentaire_auteur = forms.BooleanField(required=False, label="Auteur")
 
     is_abonnement = forms.BooleanField(required=False, label="Mes Abonnements")
     is_commu = forms.BooleanField(required=False, label="Contenu")

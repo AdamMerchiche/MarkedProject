@@ -475,8 +475,14 @@ def recherche(request):
     advanced_search.fields['query'].initial = large_query
     if advanced_search.is_valid():
         search_form_dict = advanced_search.cleaned_data
+        large_query = search_form_dict['query']
+        request.session['large_query'] = large_query
 
-    communautes, posts, communautes_par_createur, posts_par_auteur = resultats_recherche(request, search_form_dict)
+    communautes, posts, commentaires, communautes_par_createur, posts_par_auteur, commentaires_par_auteur = resultats_recherche(request, search_form_dict)
+    if communautes or posts or commentaires or communautes_par_createur or posts_par_auteur or commentaires_par_auteur:
+        smth2show = True
+    else:
+        smth2show = False
     return render(request, 'communitymanager/recherche.html', locals())
 
 
@@ -486,8 +492,15 @@ def resultats_recherche(request, form_field):
     # Traitement de la recherche
     large_query = form_field['query']
 
+    # Initialisation des communautes dans lesquelles on cherche selon si c'est dans les abonnements ou non de l'utilisateur
+    if len(form_field) and form_field['is_abonnement']:
+        accessible_communautes = request.user.abonnements.all()
+    else:
+        accessible_communautes = Communaute.objects.all()
+
+
     # Recherche dans les communautes
-    communautes = Communaute.objects.filter(
+    communautes = accessible_communautes.filter(
         Q(name__icontains=large_query) |
         Q(description__icontains=large_query))
     nb_posts_non_lus = []  # Liste pour l'affichage d'une communaute
@@ -500,9 +513,9 @@ def resultats_recherche(request, form_field):
                 lecteurs__username=request.user.username).count())
     communautes = [(communautes[i], nb_posts_non_lus[i]) for i in range(len(communautes))]
 
-    # Recherche dans les createur de communaute
-    communautes_par_createur = Communaute.objects.filter(
-        Q(createur__username=large_query))
+    # Recherche dans les createurs de communaute
+    communautes_par_createur = accessible_communautes.filter(
+        Q(createur__username__icontains=large_query))
     nb_posts_non_lus_createur = []  # Liste pour l'affichage d'une communaute
     for i in range(len(communautes_par_createur)):
         if request.user == communautes_par_createur[i].createur:
@@ -515,17 +528,71 @@ def resultats_recherche(request, form_field):
     communautes_par_createur = [(communautes_par_createur[i], nb_posts_non_lus_createur[i]) for i in
                                 range(len(communautes_par_createur))]
 
-    accessible_posts = Post.objects.filter(communaute__in=request.user.abonnements.all(),
-                                           visible=True)  # On ne regarde que dans les posts des abonnements de l'utilisateur
-    # Traitement de la recherche des communaute des posts
+
+    # Initialisation des posts pour la recherche
+    accessible_posts = Post.objects.filter(communaute__in=request.user.abonnements.all(), visible=True)  # On ne regarde que dans les posts visibles des abonnements de l'utilisateur
+    if len(form_field) > 1:           # Signifie que l'on a fait la recherche depuis la page de recherche et non le menu nav
+        # Filtrage de la recherche sur les dates entrée si elles existent gtl/inverse car initialement mal compris
+        if form_field['date_evnt_gte']:
+            accessible_posts = accessible_posts.filter(date_evenement__lte=form_field['date_evnt_gte'])
+        if form_field['date_evnt_lte']:
+            accessible_posts = accessible_posts.filter(date_evenement__gte=form_field['date_evnt_lte'])
+        if form_field['date_post_gte']:
+            accessible_posts = accessible_posts.filter(date_creation__lte=form_field['date_post_gte'])
+        if form_field['date_post_lte']:
+            accessible_posts = accessible_posts.filter(date_creation__gte=form_field['date_post_lte'])
+
+
+    # Traitement de la recherche des posts dans le contenu
     posts = accessible_posts.filter(
         Q(title__icontains=large_query) |
         Q(description__icontains=large_query))
-    # Traitement de la recherche des communautes par auteur de post
-    posts_par_auteur = accessible_posts.filter(
-        Q(auteur__username=large_query))
 
-    return communautes, posts, communautes_par_createur, posts_par_auteur
+    # Traitement de la recherche des posts par auteur
+    posts_par_auteur = accessible_posts.filter(
+        Q(auteur__username__icontains=large_query))
+
+
+
+    # Initialisation des commentaires dans lesquels on recherche
+    accessible_commentaires = Commentaire.objects.filter(post__in=accessible_posts,invisible=False)
+
+    if len(form_field) > 1:           # Signifie que l'on a fait la recherche depuis la page de recherche et non le menu nav
+        # Filtrage de la recherche sur les dates entrée si elles existent gtl/inverse car initialement mal compris
+        if form_field['date_post_gte']:
+            accessible_commentaires = accessible_commentaires.filter(date_creation__lte=form_field['date_post_gte'])
+        if form_field['date_post_lte']:
+            accessible_commentaires = accessible_commentaires.filter(date_creation__gte=form_field['date_post_lte'])
+
+
+    # Traitement de la recherche commentaire dans le contenu
+    commentaires = accessible_commentaires.filter(
+        Q(contenu__icontains=large_query))
+
+    # Traitement de la recherche de commentaire par auteur
+    commentaires_par_auteur = accessible_commentaires.filter(Q(auteur__username__icontains=large_query))
+
+
+    if len(form_field) > 1:           # Signifie que l'on a fait la recherche depuis la page de recherche et non le menu nav
+        # Filtrage pour ne garder que les listes qui interessent l'utilisateur si spécifié sinon tout est gardé
+        if form_field['is_post'] or form_field['is_auteur'] \
+                or form_field['is_commentaire'] or form_field['is_commu'] \
+                or form_field['is_createur'] or form_field['is_commentaire_auteur']:
+
+            if not form_field['is_post']:
+                posts = None
+            if not form_field['is_auteur']:
+                posts_par_auteur = None
+            if not form_field['is_commentaire']:
+                commentaires = None
+            if not form_field['is_commentaire_auteur']:
+                commentaires_par_auteur = None
+            if not form_field['is_commu']:
+                communautes = None
+            if not form_field['is_createur']:
+                communautes_par_createur = None
+
+    return communautes, posts, commentaires, communautes_par_createur, posts_par_auteur, commentaires_par_auteur
 
 
 # Permet à l'utilisateur de marquer un post comme non lu

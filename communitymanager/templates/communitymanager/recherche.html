@@ -17,16 +17,15 @@
             {# Affichage des communautes #}
             {% if communautes %}
                 <hr>
-                <h2>Dans Communaute{{communautes|pluralize}}</h2><br>
+                <h5>Dans Communaute{{communautes|pluralize}} par contenu</h5><br>
                 {% for communaute, nb_posts_non_lus in communautes %}
-
                     {% include "communitymanager/une_communaute.html" %}
                 {% endfor %}
             {% endif %}
 
             {% if communautes_par_createur %}
                 <hr>
-                <h2>Dans Communaute{{communautes|pluralize}} par createur</h2>
+                <h5>Dans Communaute{{communautes|pluralize}} par createur</h5>
                 {% for communaute, nb_posts_non_lus in communautes_par_createur %}
                     {% include "communitymanager/une_communaute.html" %}
                 {% endfor %}
@@ -35,18 +34,39 @@
             {# Affichage des posts #}
             {% if posts %}
                 <hr>
-                <h2>Post{{posts|pluralize}}</h2>
+                <h5>Dans Post{{posts|pluralize}} par contenu</h5>
                 {% for post in posts %}
                     {% include 'communitymanager/un_post.html' with bg_color="transparent" page='recherche' btn_like=True %}
                 {% endfor %}
             {% endif %}
 
-            {% if communautes_par_createur %}
+            {% if posts_par_auteur %}
                 <hr>
-                <h2>Dans Post{{posts_par_auteur|pluralize}} par auteur</h2>
+                <h5>Dans Post{{posts_par_auteur|pluralize}} par auteur</h5>
                 {% for post in posts_par_auteur %}
                     {% include 'communitymanager/un_post.html' with bg_color="transparent" page='recherche' btn_like=True %}
                 {% endfor %}
+            {% endif %}
+
+            {% if commentaires %}
+                <hr>
+                <h5>Dans Commentaire{{commentaires|pluralize}} par contenu</h5>
+                {% for commentaire in commentaires %}
+                    {% include 'communitymanager/un_post.html' with post=commentaire.post %}
+                    {% include 'communitymanager/un_commentaire.html' with comm=commentaire post=commentaire.post %}
+                {% endfor %}
+            {% endif %}
+
+            {% if commentaires_par_auteur %}
+                <hr>
+                <h5>Dans Commentaire{{commentaires_par_auteur|pluralize}} par auteur</h5>
+                {% for commentaire in commentaires_par_auteur %}
+                    {% include 'communitymanager/un_post.html' with post=commentaire.post %}
+                    {% include 'communitymanager/un_commentaire.html' with comm=commentaire post=commentaire.post %}
+                {% endfor %}
+            {% endif %}
+            {% if not smth2show %}
+                <p>Aucun resultat trouvé, essayez de modifier les parametres de recherche !</p>
             {% endif %}
         </div>
     </div>
