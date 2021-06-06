@@ -43,7 +43,7 @@
     </p>
     <div class="errorPr"><p>{{ form.evenementiel.errors }}</p></div>
 
-    <p class="form_fieldsH">{{ form.date_evenement.value| date:"c" }}
+    <p class="form_fieldsH">
         <label class="form_fieldsLabel" for="id_date_evenement">Date evenement (AAAA-MM-JJ HH:MM) :</label>
         <input type="datetime-local" min="{{ date_now }}" name="date_evenement" id="id_date_evenement" value="{{ form.date_evenement.value| date:'c' }}">
     </p>

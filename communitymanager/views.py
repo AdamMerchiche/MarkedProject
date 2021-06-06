@@ -442,10 +442,18 @@ def recherche(request):
 
     try:
         large_query = request.session.get('large_query')
+        search_form_dict = {'query': large_query}
+        communautes, posts, communautes_par_createur, posts_par_auteur = resultats_recherche(search_form_dict, request)
     except:
-        redirect('accueil')                             #permet de bloquerl'accès forcé par l'url
+        redirect('feed_abonnements')                             #permet de bloquerl'accès forcé par l'url
 
-    communautes, posts, communautes_par_createur,posts_par_auteur = resultats_recherche(large_query, request)
+
+    advanced_search = SearchForm(request.POST or None)
+    advanced_search.fields['query'].initial = large_query
+    if advanced_search.is_valid():
+        search_form_dict = SearchForm.cleaned_data
+
+    communautes, posts, communautes_par_createur,posts_par_auteur = resultats_recherche(request, search_form_dict)
     return render(request, 'communitymanager/recherche.html', locals())
 
 
@@ -453,12 +461,16 @@ def recherche(request):
 
 
 #Fonction de traitement de la recherche pour alleger la vue
-def resultats_recherche(large_query, request):
-    # Traitement de la recherche des communaute
+def resultats_recherche(request, form_field):
+
+    # Traitement de la recherche
+    large_query = form_field['query']
+
+    #Recherche dans les communautes
     communautes = Communaute.objects.filter(
         Q(name__icontains=large_query) |
         Q(description__icontains=large_query))
-    nb_posts_non_lus = []
+    nb_posts_non_lus = []               #Liste pour l'affichage d'une communaute
     for i in range(len(communautes)):
         if request.user == communautes[i].createur:
             nb_posts_non_lus.append(Post.objects.filter(communaute=communautes[i]).exclude(
@@ -468,31 +480,30 @@ def resultats_recherche(large_query, request):
                 lecteurs__username=request.user.username).count())
     communautes = [(communautes[i], nb_posts_non_lus[i]) for i in range(len(communautes))]
 
+    #Recherche dans les createur de communaute
     communautes_par_createur = Communaute.objects.filter(
         Q(createur__username=large_query))
-    nb_posts_non_lus_createur = []
+    nb_posts_non_lus_createur = []          #Liste pour l'affichage d'une communaute
     for i in range(len(communautes_par_createur)):
         if request.user == communautes_par_createur[i].createur:
             nb_posts_non_lus_createur.append(Post.objects.filter(communaute=communautes_par_createur[i]).exclude(
                 lecteurs__username=request.user.username).count())
         else:
             nb_posts_non_lus_createur.append(Post.objects.filter(communaute=communautes_par_createur[i],
-                                                                 visible=True).exclude(lecteurs__username=request.user.username).count())
+                                        visible=True).exclude(lecteurs__username=request.user.username).count())
     communautes_par_createur = [(communautes_par_createur[i], nb_posts_non_lus_createur[i]) for i in range(len(communautes_par_createur))]
 
+
+    accessible_posts = Post.objects.filter(communaute__in=request.user.abonnements.all(),visible=True)  #On ne regarde que dans les posts des abonnements de l'utilisateur
     # Traitement de la recherche des communaute des posts
-    posts = Post.objects.filter(
+    posts = accessible_posts.filter(
         Q(title__icontains=large_query) |
         Q(description__icontains=large_query))
-
-    posts_par_auteur = Post.objects.filter(
+    # Traitement de la recherche des communautes par auteur de post
+    posts_par_auteur = accessible_posts.filter(
         Q(auteur__username=large_query))
 
-
     return communautes,posts,communautes_par_createur,posts_par_auteur
-
-
-
 
 
 # Permet à l'utilisateur de marquer un post comme non lu

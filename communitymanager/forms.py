@@ -39,6 +39,8 @@ class PostForm(forms.ModelForm):
         except Communaute.DoesNotExist:
             self.add_error("commu", "Cette communaute n'existe pas!")
             communaute = None
+        except:
+            communaute = Communaute.objects.filter(name=self.cleaned_data.get('commu'))[0]
         # Verification que l'utilisateur soit abonne pour poster dans une communaute s'il force l'acces
         else:
             if communaute not in self.user.abonnements.all():
@@ -57,7 +59,7 @@ class PostForm(forms.ModelForm):
     def save(self, user):
         nouveau_post = super().save(commit=False)
         nouveau_post.auteur = user
-        nouveau_post.communaute = Communaute.objects.get(name=self.cleaned_data.get('commu'))
+        nouveau_post.communaute = Communaute.objects.filter(name=self.cleaned_data.get('commu'))[0]
         nouveau_post.save()
         return nouveau_post
 
