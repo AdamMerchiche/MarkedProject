@@ -15,7 +15,7 @@ def accueil(request):
     initial_list = Post.objects.filter(communaute__abonnes=request.user)       #2 listes differentes posts et initial posts pour des raisons d'affichages
     posts = initial_list
     # Formulaire pour afficher une liste de post contenant une chaine de caractères
-    search = SimpleSearchForm(request.POST or None)
+    search = SimpleSearchForm(request.POST or None,prefix='local_search')
     action_url = reverse('feed_abonnements')
     if search.is_valid():
         query = search.cleaned_data['simple_query']
@@ -41,7 +41,7 @@ def liste_communautes(request):
     initial_list = Communaute.objects.all()             #2 listes differentes posts et initial posts pour des raisons d'affichages
     communautes = initial_list
     #Gestion form pour chercher une communaute precise
-    search = SimpleSearchForm(request.POST or None)
+    search = SimpleSearchForm(request.POST or None,prefix='local_search')
     action_url = reverse('list_communautes') #Variable pour le template "search_form.html"
     if search.is_valid():
         query = search.cleaned_data['simple_query']
@@ -114,7 +114,7 @@ def communaute(request, communaute_id):
         large_search = SimpleSearchForm(request.POST or None, prefix='large_search')
         # Données et form pour recherche des posts de la communauté par chaîne de charactères
         initial_list = Post.objects.filter(communaute_id=communaute_id)
-        search = SimpleSearchForm(request.POST or None)
+        search = SimpleSearchForm(request.POST or None,prefix='local_search')
         action_url = reverse('communaute', args=[communaute_id])
         # Données et form pour filtrage des posts de la communautés par priorités et événementiel
         list_priorite = Priorite.objects.all()
@@ -180,14 +180,6 @@ def commentaire(request, post_id):
     # Le post est considéré comme lu quand l'utilisateur accède à cette vue
     post.lecteurs.add(request.user)
     post.save()
-
-    #Block du formulaire de recherche global renvoyant vers la page de recherche preremplie
-    action_large_search = reverse('feed_abonnements')
-    large_search = SimpleSearchForm(request.POST or None, prefix='large_search')
-    if large_search.is_valid():
-        large_query = large_search.cleaned_data['simple_query']
-        request.session["large_query"] = large_query
-        return redirect('recherche')
 
     # Block du formulaire de recherche global renvoyant vers la page de recherche preremplie
     action_large_search = reverse('feed_abonnements')
@@ -301,7 +293,7 @@ def voir_posts(request):
     initial_list = Post.objects.filter(auteur=request.user)
     posts = initial_list
     # Formulaire pour afficher une liste de post contenant une chaine de caractères
-    search = SimpleSearchForm(request.POST or None)
+    search = SimpleSearchForm(request.POST or None,prefix='local_search')
     action_url = reverse('feed_abonnements')
     if search.is_valid():
         query = search.cleaned_data['simple_query']

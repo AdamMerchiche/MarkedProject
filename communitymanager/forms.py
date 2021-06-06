@@ -110,7 +110,7 @@ class FiltragePostCommunauteForm(forms.Form):
     que_evt = forms.BooleanField(required=False)
 
 class SimpleSearchForm(forms.Form):
-    simple_query = forms.CharField(max_length=50, required=False, label='Rechercher')
+    simple_query = forms.CharField(max_length=50, label='Rechercher')
 
 class SearchForm(forms.Form):
     query = forms.CharField(max_length=50, required=False, label='Rechercher')
