@@ -6,7 +6,6 @@ from django.contrib.auth.decorators import login_required
 from django.http import Http404
 from django.db.models import Q
 
-
 # Renvoie le feed d'un utilisateur, avec tous les posts des communautés auxquelles il est abonné
 @login_required()
 def accueil(request):
@@ -329,7 +328,6 @@ def creation_communaute(request):
     communautes = Communaute.objects.all()
     form = CommunauteForm(
         request.POST or None)
-    form.fields['list_CMs'].initial = request.user
     if form.is_valid():
         communaute = form.save(user=request.user)
         # Le créateur est directement abonné et ajouté à la liste des CMs
@@ -383,6 +381,9 @@ def modification_communaute(request, communaute_id):
         form = ModificationCommunauteForm(request.POST or None, instance=communaute)
         if form.is_valid():
             communaute = form.save()
+            #On ajoute les CMs dans la liste des abonnés
+            for u in communaute.list_CMs.all():
+                communaute.abonnes.add(u)
             #On supprime l'utilisateur banni de la liste des abonnés
             for u in communaute.list_bannis.all():
                 communaute.abonnes.remove(u)
@@ -473,7 +474,7 @@ def recherche(request):
     advanced_search = SearchForm(request.POST or None)
     advanced_search.fields['query'].initial = large_query
     if advanced_search.is_valid():
-        search_form_dict = SearchForm.cleaned_data
+        search_form_dict = advanced_search.cleaned_data
 
     communautes, posts, communautes_par_createur, posts_par_auteur = resultats_recherche(request, search_form_dict)
     return render(request, 'communitymanager/recherche.html', locals())
