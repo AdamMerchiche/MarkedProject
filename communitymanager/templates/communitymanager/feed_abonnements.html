@@ -1,10 +1,12 @@
 {% extends "base.html" %}
+{% comment %}
+    Template servant à afficher le feed d'un utilisateur. Il ira chercher l'ensemble des posts des communautés auxquelles l'utilisateur
+    est abonné
+{% endcomment %}
 
 {% block title %}ACCUEIL : Voici la liste de vos communautés préférées !{% endblock title %}
 
 {% block h1 %} Bienvenue {{ request.user.get_username }} sur votre page  ! {% endblock h1 %}
-
-<hr class="my-4"/> {# Je ne suis pas sure que ce morceau de code soit pris en compte (il est en dehors des blocks) #}
 
 {% block h3 %}
     {% include 'communitymanager/search_form.html' with search_form=search action_url=action_url list_objet=initial_list%}
