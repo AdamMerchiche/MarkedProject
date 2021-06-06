@@ -85,6 +85,7 @@ def abonner(request, communaute_id):
 
 #Permet au CM de bannir un utilisateur si ce dernier fait toujours parti de la communauté.
 #On pourra le bannir à partir d'un POST ou d'un commentaire. Tous ses posts et commentaires seront supprimés.
+@login_required()
 def bannir(request, communaute_id, user_id):
     communaute = Communaute.objects.get(id=communaute_id)
     communaute.abonnes.remove(user_id)
@@ -194,6 +195,7 @@ def commentaire(request, post_id):
 
 
 #Permet de rendre un commentaire visible ou non à l'ensemble des autres utilisateurs
+@login_required()
 def visibilite_commentaire(request, commentaire_id):
    commentaire = Commentaire.objects.get(id=commentaire_id)
    if commentaire.invisible:
@@ -278,7 +280,9 @@ def modification_post(request, post_id):
         alert_flag = True
     return render(request, 'communitymanager/update_post.html', locals())
 
-#Permet de rendre un POST visible ou non à l'ensemble des autres utilisateurs
+
+# Permet de rendre un POST visible ou non à l'ensemble des autres utilisateurs
+@login_required()
 def visibilite_post(request, post_id):
    post = Post.objects.get(id=post_id)
    if post.visible:
@@ -340,6 +344,7 @@ def creation_communaute(request):
         return redirect('recherche')
     return render(request, 'communitymanager/nouvelle_communaute.html', locals())
 
+@login_required()
 def ajouter_CM(request, user_id, communaute_id):
     communaute = Communaute.objects.get(id=communaute_id)
     if communaute.list_CMs.filter(id=user_id).exists():
@@ -347,7 +352,6 @@ def ajouter_CM(request, user_id, communaute_id):
     else:
         communaute.list_CMs.add(user_id)
     return redirect('list_communautes')
-
 
 
 # Vue permettant de modifier une communauté que l'utilisateur a créée
@@ -460,6 +464,7 @@ def recherche(request):
 
 
 #Fonction de traitement de la recherche pour alleger la vue
+@login_required()
 def resultats_recherche(request, form_field):
 
     # Traitement de la recherche

@@ -8,16 +8,9 @@
 
     {% if envoi %}Votre post a bien été envoyé !{% endif %}
     Formulez votre Post !
-    {% if alert_flag %}
-        <script>alert("Vous n'êtes pas le créateur de cette Communauté! Retournez à votre feed.")
-        window.location.href = "{% url 'feed_abonnements' %}"
-        </script>
-    {% endif %}
-    {% if not alert_flag %}
-         <form action="{% url  'nouveau_post'  %}" method="post">
-            {% include 'communitymanager/form_post.html' %}
-        </form>
-    {% endif %}
+    <form action="{% url  'nouveau_post'  %}" method="post">
+        {% include 'communitymanager/form_post.html' %}
+    </form>
 
 {% endblock h3 %}
 
