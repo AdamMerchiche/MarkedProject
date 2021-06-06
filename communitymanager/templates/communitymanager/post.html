@@ -7,7 +7,7 @@
 {% block h3 %}
 
     {# Inclusion template pour afficher le post #}
-    {% include 'communitymanager/un_post.html' with bg_color="bg-light" page_post=True btn_like=True %}
+    {% include 'communitymanager/un_post.html' with bg_color="bg-light" page='post' btn_like=True %}
 
 {# Affichage des commentaires du post #}
 {% for commentaire in commentaires %}

@@ -2,7 +2,7 @@
     Template à inclure pour afficher un post
     Args: post, données du post à afficher
           bg_color, couleur du background du post
-          page_post, booleen pour spécifier si on est sur la page de détails du post (par défaut à False)
+          page, string pour spécifier la page sur laquelle on affiche le post, correspond au name de l'url
           btn_like, booleen pour spécifier si le bouton pour liker le post doit être présent (par défaut à False)
 {% endcomment %}
 
@@ -47,10 +47,12 @@
                 <i class="fas fa-exclamation-circle"
                       style="color:indianred ; float:left; position: relative; font-size: 5em; opacity: 40%"></i><br><br><br><br>
             {%endif%}
-            {% if not page_post and request.user in post.lecteurs.all %} {# Possibilité de marquer le post comme non lu #}
-                <p class="text-left">
-                <a href="{% url 'marquer_non_lu' post.id %}" data-toggle="tooltip" title="Marquer comme non lu">Marquer comme non lu</a>
-                </p>
+            {% if page == 'feed_abonnements' or page == 'communaute' or page == 'recherche'%}
+                {% if request.user in post.lecteurs.all %} {# Possibilité de marquer le post comme non lu #}
+                    <p class="text-left">
+                    <a href="{% url 'marquer_non_lu' url_name=page post_id=post.id %}" data-toggle="tooltip" title="Marquer comme non lu">Marquer comme non lu</a>
+                    </p>
+                {% endif %}
             {%endif%}
         </div>
 
@@ -64,7 +66,7 @@
                             <a span href="{% url 'visibilite_post' post.id %}"data-toggle="tooltip" title="Rendre le POST visible"><i class="far fa-eye-slash"></i></a>
                         {%endif%}
                     {%endif%}
-                    <a class="{% if request.user in post.lecteurs.all and not page_post %} {# Change font si le post a été lu et que ce n'est pas la page du post #}
+                    <a class="{% if request.user in post.lecteurs.all and page != 'post' %} {# Change font si le post a été lu et que ce n'est pas la page du post #}
                         font-weight-normal text-body
                     {% else %}
                         font-weight-bold text-dark
@@ -84,7 +86,7 @@
                 </span>
             </h3>
             <span class="m-b-15 d-block"> <p class="text-justify">
-                {% if page_post %}
+                {% if page == 'post' %}
                     {{ post.description |linebreaks }}
                 {% else %}
                     {{ post.description |truncatewords:30 |linebreaks }}
@@ -108,7 +110,7 @@
                             </a> <br>
                         {%endif%}
                     {%endif%}
-                    {% if not page_post %}
+                    {% if page != 'post' %}
                         <a href="{% url "post" post_id=post.id %}">Lire les commentaires</a><br>
                     {% endif %}
                     {% if request.user == post.communaute.createur %} {# Bouton pour supprimer le post #}

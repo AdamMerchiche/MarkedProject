@@ -30,7 +30,7 @@
     <hr>
     <h2>Post{{posts|pluralize}}</h2>
     {% for post in posts %}
-        {% include 'communitymanager/un_post.html' with bg_color="transparent" btn_like=True %}
+        {% include 'communitymanager/un_post.html' with bg_color="transparent" page='recherche' btn_like=True %}
     {% endfor %}
 {% endif %}
 
@@ -38,7 +38,7 @@
     <hr>
     <h2>Dans Post{{posts_par_auteur|pluralize}} par auteur</h2>
     {% for post in posts_par_auteur %}
-        {% include 'communitymanager/un_post.html' with bg_color="transparent" btn_like=True %}
+        {% include 'communitymanager/un_post.html' with bg_color="transparent" page='recherche' btn_like=True %}
     {% endfor %}
 {% endif %}
 

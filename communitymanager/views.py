@@ -491,13 +491,18 @@ def resultats_recherche(large_query, request):
 
 # Permet à l'utilisateur de marquer un post comme non lu
 @login_required(login_url='/accounts/login/')
-def marquer_non_lu(request, post_id):
+def marquer_non_lu(request, post_id, url_name):
     post = Post.objects.get(id=post_id)
 
     # Mise à jour de la liste des utilisateurs qui ont lu le post
     if request.user in post.lecteurs.all():
         post.lecteurs.remove(request.user)
 
-    return redirect(reverse('communaute', args=[post.communaute.id]))
+    # Redirecting toward last page displayed
+    if url_name == 'communaute':
+        path = reverse(url_name, args=[post.communaute.id])
+    else:
+        path = reverse(url_name)
+    return redirect(path)
 
 

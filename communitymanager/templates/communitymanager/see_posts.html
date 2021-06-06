@@ -7,7 +7,7 @@
 {% block h3 %}
     {% include 'communitymanager/search_form.html' with search_form=search action_url=action_url list_objet=initial_list %}
     {% for post in posts %}
-        {% include 'communitymanager/un_post.html' with bg_color="transparent" btn_like=True %}
+        {% include 'communitymanager/un_post.html' with bg_color="transparent" btn_like=True page='see_posts'%}
     {% endfor %}
 {% endblock h3 %}
 
