@@ -98,7 +98,7 @@ class ModificationCommunauteForm(forms.ModelForm):
     class Meta:
         model = Communaute
         exclude = ["createur", "abonnes",
-                   "ferme_invisible", "list_CMs"]  # Possible de modifier la description, le titre, et de bannir des abonnés de la commu
+                   "ferme_invisible", "list_CMs"]  # Possible de modifier la description, le titre, et de débannir les utilisateurs
 
 
 class FiltragePostCommunauteForm(forms.Form):

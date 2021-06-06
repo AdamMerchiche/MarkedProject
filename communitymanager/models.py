@@ -48,7 +48,7 @@ class Post(models.Model):
     # On choisira d'ordonner l'ensemble des POSTs en fonction de leur date de publication.
     # Plus un POST est ancien, plus il faudra descendre sur la page pour le voir.
     class Meta:
-        ordering = ['-collant', '-date_creation']
+        ordering = ['-avertissement','-collant', '-date_creation']
 
 
 # Modèle du Commentaire, renseignant l'ensemble des variables demandées.

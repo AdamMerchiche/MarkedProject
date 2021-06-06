@@ -383,6 +383,9 @@ def modification_communaute(request, communaute_id):
         form = ModificationCommunauteForm(request.POST or None, instance=communaute)
         if form.is_valid():
             communaute = form.save()
+            #On supprime l'utilisateur banni de la liste des abonnés
+            for u in communaute.list_bannis.all():
+                communaute.abonnes.remove(u)
             envoi = True
             return redirect(liste_communautes)
     else:

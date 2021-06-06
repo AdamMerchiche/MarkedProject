@@ -241,99 +241,214 @@
 - model: auth.user
   pk: 1
   fields:
-    password: pbkdf2_sha256$150000$2gYKZkgpHQqx$yvkJPxEmw2buYtRmv33SzQ5Gm+PzO8d+9h+fF07LL9A=
-    last_login: 2021-06-06 10:43:43.000881+00:00
+    password: pbkdf2_sha256$150000$lmhDuvqWCXgO$YpKKK/Cyh+U/ibU4sspU73/z4W9LZ585zTI4FFzqxIA=
+    last_login: 2021-06-06 17:54:31.439505+00:00
     is_superuser: true
-    username: claire
+    username: bb
     first_name: ''
     last_name: ''
-    email: ''
+    email: bb@gmail.com
     is_staff: true
     is_active: true
-    date_joined: 2021-06-06 10:43:36.149794+00:00
+    date_joined: 2021-06-06 16:25:09.307390+00:00
     groups: []
     user_permissions: []
 - model: auth.user
   pk: 2
   fields:
-    password: pbkdf2_sha256$150000$sgzpSF7iiJUj$sJbHfXOjEOSVSjQLJ4yAAcTtssdVU1OtkJOlNYBGVDA=
-    last_login: 2021-06-06 11:55:29.678386+00:00
-    is_superuser: true
-    username: bb
+    password: pbkdf2_sha256$150000$bmjbOdTFcOl0$FUvLNpv1YfGL+YGGhwma60OJLt0rjXv/jWF0aFHsD5E=
+    last_login: 2021-06-06 18:32:17.834815+00:00
+    is_superuser: false
+    username: Claire
     first_name: ''
     last_name: ''
     email: ''
-    is_staff: true
+    is_staff: false
     is_active: true
-    date_joined: 2021-06-06 10:53:28.903621+00:00
+    date_joined: 2021-06-06 16:25:40.749261+00:00
+    groups: []
+    user_permissions: []
+- model: auth.user
+  pk: 3
+  fields:
+    password: pbkdf2_sha256$150000$TCOkyfwWYxUS$4qD3OLWu9hfPT/eyDLqRYWA8ghuPXmv5d+5qbPKWMMs=
+    last_login: 2021-06-06 18:32:35.618916+00:00
+    is_superuser: false
+    username: Guilhem
+    first_name: ''
+    last_name: ''
+    email: ''
+    is_staff: false
+    is_active: true
+    date_joined: 2021-06-06 16:25:53.540248+00:00
+    groups: []
+    user_permissions: []
+- model: auth.user
+  pk: 4
+  fields:
+    password: pbkdf2_sha256$150000$2oG8hKOgT5EP$9M7NeqWuLINEN7Az6VNA38J1BHc1aNYmmCbwjJt08rc=
+    last_login: 2021-06-06 17:59:36.942708+00:00
+    is_superuser: false
+    username: adam
+    first_name: ''
+    last_name: ''
+    email: ''
+    is_staff: false
+    is_active: true
+    date_joined: 2021-06-06 17:38:33.059593+00:00
     groups: []
     user_permissions: []
 - model: communitymanager.communaute
-  pk: 1
+  pk: 4
   fields:
-    name: commu 1
-    createur: 1
-    description: premiere communaute
+    name: "Communaut\xE9 de Claire"
+    createur: 2
+    description: "Communaut\xE9 cr\xE9\xE9e par un utilisateur lambda"
     ferme: false
     ferme_invisible: false
     abonnes:
     - 1
     - 2
-    list_bannis: []
+    - 4
+    list_bannis:
+    - 3
+    list_CMs:
+    - 2
 - model: communitymanager.communaute
-  pk: 2
+  pk: 5
   fields:
-    name: Sport
+    name: "Communaut\xE9 d'un admin"
     createur: 1
-    description: communaute pour tous les clubs de sport
+    description: "Ceci est une communaut\xE9 permettant d'illustrer les fonctionnalit\xE9s
+      auxquelles l'administrateur a acc\xE8s"
     ferme: false
     ferme_invisible: false
     abonnes:
     - 1
     - 2
-    list_bannis: []
+    - 3
+    list_bannis:
+    - 2
+    list_CMs:
+    - 1
+    - 2
+- model: communitymanager.communaute
+  pk: 6
+  fields:
+    name: "Communaut\xE9 de Guilhem"
+    createur: 3
+    description: "Ma communaut\xE9?"
+    ferme: false
+    ferme_invisible: false
+    abonnes:
+    - 3
+    list_bannis:
+    - 2
+    list_CMs:
+    - 3
 - model: communitymanager.priorite
   pk: 1
   fields:
-    labels: high
+    labels: High
     rang: 1
 - model: communitymanager.priorite
   pk: 2
   fields:
-    labels: medium
+    labels: Medium
     rang: 2
 - model: communitymanager.priorite
   pk: 3
   fields:
-    labels: low
+    labels: Low
     rang: 3
 - model: communitymanager.post
-  pk: 1
+  pk: 11
   fields:
-    description: Voici le premier post sur la branche master !
-    title: premier post
-    date_creation: 2021-06-06 10:47:41.980232+00:00
-    evenementiel: true
-    date_evenement: 2021-08-27 14:00:00+00:00
-    communaute: 1
-    priorite: 1
-    auteur: 1
-    collant: false
+    description: Ceci est un post collant test. Je me situe tout en haut de la page,
+      mais je reste moins important qu'un poste d'avertissement.
+    title: "Post collant d'un cr\xE9ateur"
+    date_creation: 2021-06-06 17:42:00.496738+00:00
+    evenementiel: false
+    date_evenement: null
+    communaute: 4
+    priorite: 2
+    auteur: 2
+    collant: true
     visible: true
     avertissement: false
     lecteurs:
     - 1
-    likes:
-    - 1
+    - 2
+    likes: []
 - model: communitymanager.post
-  pk: 2
+  pk: 12
   fields:
-    description: hello
-    title: "deuxi\xE8me post"
-    date_creation: 2021-06-06 10:48:53.188774+00:00
+    description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut rutrum,
+      ante vitae placerat porta, arcu dui rutrum ipsum, quis vestibulum neque urna
+      id turpis. Integer eu pulvinar mauris. Cras id odio magna. Class aptent taciti
+      sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Donec
+      dictum orci et tempor porttitor. Cras vulputate, ante et scelerisque pharetra,
+      mauris diam hendrerit mi, ut hendrerit risus sem ut nunc. Vestibulum non lorem
+      elit.\r\n\r\nAenean non nisl tempus, venenatis orci non, tempor velit. Pellentesque
+      quis libero ac nulla fermentum vestibulum id quis sapien. Integer mattis gravida
+      est at pulvinar. Donec nunc purus, varius ut rutrum sed, tincidunt sed massa.
+      Duis mattis ipsum elit, id semper ex rutrum sed. Nunc viverra felis a tortor
+      venenatis placerat. Etiam odio ex, suscipit id quam at, ultricies luctus augue.
+      Praesent interdum mauris eu orci fermentum egestas. Maecenas imperdiet pellentesque
+      dui quis elementum. In hac habitasse platea dictumst. Duis suscipit, metus quis
+      ultricies suscipit, nisi lacus volutpat risus, id sollicitudin nibh diam et
+      sem. Quisque ac nisl mauris.\r\n\r\nIn lobortis vitae lectus nec lobortis. Sed
+      venenatis rhoncus metus, sit amet elementum est ultrices in. Interdum et malesuada
+      fames ac ante ipsum primis in faucibus. Donec et laoreet dui, vel ultrices magna.
+      Suspendisse potenti. Mauris eu sapien eleifend, posuere nibh nec, lobortis urna.
+      Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos
+      himenaeos. Morbi dignissim ex eu tortor viverra imperdiet. In suscipit commodo
+      lectus vitae sodales. Curabitur suscipit sollicitudin consectetur. Donec quis
+      magna non odio ornare vulputate at eu elit. Ut at eleifend sem, bibendum vehicula
+      tellus.\r\n\r\nInterdum et malesuada fames ac ante ipsum primis in faucibus.
+      Quisque eget quam eu elit congue egestas. Aenean imperdiet ligula interdum orci
+      congue feugiat. Cras id metus vehicula, bibendum ante at, sollicitudin dui.
+      Cras at tellus ut dui varius efficitur. Aliquam finibus enim neque, non ornare
+      dolor tincidunt ut. Morbi neque libero, dapibus in velit et, ullamcorper commodo
+      risus. Phasellus aliquet justo leo, faucibus porta magna euismod vitae. Curabitur
+      aliquet vitae quam sed imperdiet. Pellentesque odio massa, condimentum eget
+      aliquam sagittis, aliquet maximus ante. Nullam arcu urna, facilisis aliquam
+      finibus in, tincidunt auctor lacus. Sed aliquet, sem a porttitor pellentesque,
+      erat nisi maximus ipsum, id hendrerit nunc nisi id lectus. In id tincidunt massa.
+      Aliquam condimentum nisl id tellus dictum, faucibus luctus elit euismod. Nam
+      gravida diam semper mi porttitor, ut sagittis arcu convallis. Cras a ante vel
+      est aliquam accumsan.\r\n\r\nVivamus molestie ex sit amet semper vestibulum.
+      Aliquam erat volutpat. Suspendisse accumsan ut lectus et auctor. Integer quam
+      dolor, scelerisque sit amet tincidunt id, varius sed justo. Praesent urna orci,
+      posuere non elit at, suscipit scelerisque sem. Interdum et malesuada fames ac
+      ante ipsum primis in faucibus. In non purus in justo pellentesque rhoncus eget
+      at augue. Pellentesque posuere ut est quis vulputate. Proin malesuada imperdiet
+      diam, sit amet gravida enim pretium a. Integer iaculis placerat pretium. Nullam
+      aliquet, odio non aliquet porttitor, tellus tellus bibendum nibh, vel auctor
+      eros mi nec ipsum."
+    title: Post long
+    date_creation: 2021-06-06 17:42:35.355607+00:00
     evenementiel: false
     date_evenement: null
-    communaute: 1
+    communaute: 4
+    priorite: 2
+    auteur: 2
+    collant: false
+    visible: true
+    avertissement: false
+    lecteurs:
+    - 2
+    likes: []
+- model: communitymanager.post
+  pk: 13
+  fields:
+    description: "Ceci est un post d'avertissement. Il est situ\xE9 en haut de page,
+      au-dessus du post collant."
+    title: Post d'avertissement
+    date_creation: 2021-06-06 17:45:26.397283+00:00
+    evenementiel: false
+    date_evenement: null
+    communaute: 5
     priorite: 2
     auteur: 1
     collant: false
@@ -341,63 +456,48 @@
     avertissement: true
     lecteurs:
     - 1
+    - 2
     likes: []
 - model: communitymanager.post
-  pk: 3
+  pk: 14
   fields:
-    description: yo
-    title: "troisi\xE8me post"
-    date_creation: 2021-06-06 10:49:15.727552+00:00
+    description: "Ceci est un post collant d'un CM autre que le cr\xE9ateur de la
+      communaut\xE9"
+    title: Post collant d'un CM
+    date_creation: 2021-06-06 17:48:26.339136+00:00
     evenementiel: false
     date_evenement: null
-    communaute: 1
-    priorite: 3
-    auteur: 1
-    collant: true
-    visible: true
-    avertissement: false
-    lecteurs:
-    - 1
-    likes: []
-- model: communitymanager.post
-  pk: 4
-  fields:
-    description: hello
-    title: "quatri\xE8me post"
-    date_creation: 2021-06-06 10:49:59.400956+00:00
-    evenementiel: true
-    date_evenement: 2021-09-05 12:00:00+00:00
-    communaute: 1
+    communaute: 5
     priorite: 2
-    auteur: 1
-    collant: false
-    visible: false
-    avertissement: false
-    lecteurs: []
-    likes: []
-- model: communitymanager.post
-  pk: 5
-  fields:
-    description: L'ENAC et l'ISAE Supaero s'affrontent !
-    title: rencontre EAG
-    date_creation: 2021-06-06 10:51:20.122446+00:00
-    evenementiel: false
-    date_evenement: null
-    communaute: 2
-    priorite: 1
-    auteur: 1
+    auteur: 2
     collant: true
     visible: true
     avertissement: false
     lecteurs:
-    - 1
+    - 2
+    likes: []
+- model: communitymanager.post
+  pk: 15
+  fields:
+    description: Post classique....
+    title: Post classique
+    date_creation: 2021-06-06 17:49:11.650276+00:00
+    evenementiel: true
+    date_evenement: 2021-06-08 08:40:00+00:00
+    communaute: 5
+    priorite: 2
+    auteur: 2
+    collant: false
+    visible: true
+    avertissement: false
+    lecteurs:
     - 2
     likes: []
 - model: communitymanager.commentaire
-  pk: 1
+  pk: 5
   fields:
-    date_creation: 2021-06-06 10:48:19.180013+00:00
-    contenu: premier commentaire
+    date_creation: 2021-06-06 17:46:13.435671+00:00
+    contenu: "Bien coll\xE9 ce post !"
     auteur: 1
-    post: 1
+    post: 11
     invisible: false
