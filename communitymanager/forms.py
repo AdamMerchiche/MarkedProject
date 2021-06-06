@@ -46,13 +46,17 @@ class PostForm(forms.ModelForm):
             if communaute not in self.user.abonnements.all():
                 self.add_error("commu",
                                "Vous ne pouvez pas poster dans cette communaute car vous n'etes pas abonne!")
-
             collant = cleaned_data["collant"]
             avertissement = cleaned_data["avertissement"]
             duplicat = Post.objects.filter(communaute_id=communaute.id).filter(collant=True)
 
+
             if collant and duplicat.exists():
                 self.add_error("collant", "Un post de la communauté est déjà collé! Veuillez réctifier la situation. ")
+
+            if collant and not self.user in communaute.list_CMs.all():
+                self.add_error("collant", "Vous ne pouvez pas coller votre POST car vous n'êtes pas un CM. ")
+
 
         return super().clean()
 
@@ -73,8 +77,7 @@ class PostForm(forms.ModelForm):
                           communaute=Communaute.objects.filter(name=cleaned_data.get('commu'))[0],
                           description=cleaned_data.get('description'),
                           collant=cleaned_data.get('collant'),
-                          avertissement=cleaned_data.get('avertissement'),
-                          visible=cleaned_data.get('visible'))
+                          avertissement=cleaned_data.get('avertissement'),)
         return modif_post[0]
 
 
