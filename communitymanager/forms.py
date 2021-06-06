@@ -107,12 +107,22 @@ class SimpleSearchForm(forms.Form):
     simple_query = forms.CharField(max_length=50, label='Rechercher')
 
 class SearchForm(forms.Form):
-    query = forms.CharField(max_length=50, required=False, label='Rechercher')
-    is_global = forms.BooleanField(required=False)
-    is_post = forms.BooleanField(required=False)
-    is_commu = forms.BooleanField(required=False)
-    date_evnt = forms.DateTimeField(input_formats=['%Y-%m-%dT%H:%M', '%Y-%m-%d %H:%M', '%Y-%m-%dT%H:%M:%S', '%Y-%m-%d %H:%M:%S'], required=False)
-    date_post = forms.DateTimeField(input_formats=['%Y-%m-%dT%H:%M', '%Y-%m-%d %H:%M', '%Y-%m-%dT%H:%M:%S', '%Y-%m-%d %H:%M:%S'], required=False)
+    query = forms.CharField(max_length=50, label='Rechercher')
+
+    is_post = forms.BooleanField(required=False, label="Contenu")
+    is_auteur = forms.BooleanField(required=False, label="Auteur")
+    is_commentaire = forms.BooleanField(required=False, label="Commentaires")
+
+    is_abonnement = forms.BooleanField(required=False, label="Mes Abonnements")
+    is_commu = forms.BooleanField(required=False, label="Contenu")
+    is_createur = forms.BooleanField(required=False, label="Createur")
+
+    date_evnt_gte = forms.DateTimeField(input_formats=['%Y-%m-%dT%H:%M', '%Y-%m-%d %H:%M', '%Y-%m-%dT%H:%M:%S', '%Y-%m-%d %H:%M:%S'], required=False)
+    date_evnt_lte = forms.DateTimeField(input_formats=['%Y-%m-%dT%H:%M', '%Y-%m-%d %H:%M', '%Y-%m-%dT%H:%M:%S', '%Y-%m-%d %H:%M:%S'], required=False)
+
+    date_post_gte = forms.DateTimeField(input_formats=['%Y-%m-%dT%H:%M', '%Y-%m-%d %H:%M', '%Y-%m-%dT%H:%M:%S', '%Y-%m-%d %H:%M:%S'], required=False)
+    date_post_lte = forms.DateTimeField(input_formats=['%Y-%m-%dT%H:%M', '%Y-%m-%d %H:%M', '%Y-%m-%dT%H:%M:%S', '%Y-%m-%d %H:%M:%S'], required=False)
+
 
     def clean(self):
         cleaned_data = super(SearchForm, self).clean()
