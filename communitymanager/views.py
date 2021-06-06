@@ -6,7 +6,6 @@ from django.contrib.auth.decorators import login_required
 from django.http import Http404
 from django.db.models import Q
 
-
 # Renvoie le feed d'un utilisateur, avec tous les posts des communautés auxquelles il est abonné
 @login_required()
 def accueil(request):
@@ -472,7 +471,7 @@ def recherche(request):
     advanced_search = SearchForm(request.POST or None)
     advanced_search.fields['query'].initial = large_query
     if advanced_search.is_valid():
-        search_form_dict = SearchForm.cleaned_data
+        search_form_dict = advanced_search.cleaned_data
 
     communautes, posts, communautes_par_createur, posts_par_auteur = resultats_recherche(request, search_form_dict)
     return render(request, 'communitymanager/recherche.html', locals())

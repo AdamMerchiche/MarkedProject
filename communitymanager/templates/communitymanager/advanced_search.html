@@ -1,5 +1,46 @@
-<form class="" method="POST" action='{% url 'recherche' %}'>
+<form style="margin-top:10px" class="" method="POST" action='{% url "recherche" %}'>
     {% csrf_token %}
-    {{ advanced_search }}
-    <button type="submit" value="Submit"><i class="fas fa-search"></i>Rechercher</button>
+
+    <h5>Rechercher :</h5><br>
+    <input type="text" placeholder="Rechercher" name="query" minlength="3" value="{{ large_query }}"><br>
+    <br>
+
+    <h5>Recherchez Post par :</h5>
+    {{ advanced_search.is_post.label_tag }}
+    {{ advanced_search.is_post }}<br>
+
+    {{ advanced_search.is_auteur.label_tag }}
+    {{ advanced_search.is_auteur }}<br>
+
+    {{ advanced_search.is_commentaire.label_tag }}
+    {{ advanced_search.is_commentaire }}<br>
+
+    <br><h5>Recherchez Communaute par :</h5>
+    {{ advanced_search.is_commu.label_tag }}
+    {{ advanced_search.is_commu }}<br>
+
+    {{ advanced_search.is_createur.label_tag }}
+    {{ advanced_search.is_createur }}<br>
+
+    {{ advanced_search.is_abonnement.label_tag }}
+    {{ advanced_search.is_abonnement }}<br>
+
+    <br><h5>Filtrer par dates evenements</h5>
+    <label class="" for="id_date_evenement_lte">Evenement après le: (AAAA-MM-JJ HH:MM) :</label><br>
+    <input type="datetime-local" name="date_evnt_lte" id="id_date_evenement_lte" value="{{ advanced_search.date_evenement_lte.value| date:'c' }}"><br>
+
+    <label class="" for="id_date_evenement_gte">Evenement avant le: (AAAA-MM-JJ HH:MM) :</label><br>
+    <input type="datetime-local" name="date_evnt_gte" id="id_date_evenement_gte" value="{{ advanced_search.date_evenement_gte.value| date:'c' }}"><br>
+
+    <br><h5>Filter par dates de creation</h5>
+    <label class="" for="id_date_post_lte">Créée après le: (AAAA-MM-JJ HH:MM) :</label><br>
+    <input type="datetime-local" name="date_post_lte" id="id_date_post_lte" value="{{ advanced_search.date_evenement_lte.value| date:'c' }}"><br>
+
+    <label class="" for="id_date_post_gte">Créée avant le: (AAAA-MM-JJ HH:MM) :</label><br>
+    <input type="datetime-local" name="date_post_gte" id="id_date_post_gte" value="{{ advanced_search.date_evenement_gte.value| date:'c' }}"><br>
+
+
+    <button class="btn btn-info" type="submit" value="Submit">
+        <i class="fas fa-search"></i>Rechercher
+    </button>
 </form><br>
