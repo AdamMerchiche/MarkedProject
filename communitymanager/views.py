@@ -319,10 +319,13 @@ def creation_communaute(request):
     communautes = Communaute.objects.all()
     form = CommunauteForm(
         request.POST or None)
+    form.fields['list_CMs'].initial=request.user
     if form.is_valid():
         form.save(user=request.user)
         communaute = form.save(user=request.user)
+        #Le créateur est directement abonné et ajouté à la liste des CMs
         communaute.abonnes.add(request.user)
+        communaute.list_CMs.add(request.user)
         envoi = True
         return redirect('list_communautes')
 
@@ -334,6 +337,15 @@ def creation_communaute(request):
         request.session["large_query"] = large_query
         return redirect('recherche')
     return render(request, 'communitymanager/nouvelle_communaute.html', locals())
+
+def ajouter_CM(request, user_id, communaute_id):
+    communaute = Communaute.objects.get(id=communaute_id)
+    if communaute.list_CMs.filter(id=user_id).exists():
+        communaute.list_CMs.remove(user_id)
+    else:
+        communaute.list_CMs.add(user_id)
+    return redirect('list_communautes')
+
 
 
 # Vue permettant de modifier une communauté que l'utilisateur a créée
@@ -352,11 +364,11 @@ def modification_communaute(request, communaute_id):
     except Http404:
         return redirect(liste_communautes)
     alert_flag = True
-    if communaute.createur == request.user:
+    if request.user in communaute.list_CMs.all():
         alert_flag = False
         form = ModificationCommunauteForm(request.POST or None, instance=communaute)
         if form.is_valid():
-            communaute = form.modifCommunaute(id=communaute.id)
+            communaute = form.save()
 
             envoi = True
             return redirect(liste_communautes)

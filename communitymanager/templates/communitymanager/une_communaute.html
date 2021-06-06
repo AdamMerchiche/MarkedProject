@@ -16,7 +16,7 @@
                 {{ communaute.name|capfirst }}
             {% endif %}
 
-            {% if request.user == communaute.createur %}
+            {% if request.user in communaute.list_CMs.all %}
                 <a href="{% url 'update_communaute' communaute.id %}" data-toggle="tooltip" title="Modifier cette communauté">
                     <i class="far fa-edit" style="opacity: 50%"></i>
                 </a>
@@ -26,7 +26,18 @@
             <div class="text-muted">
                 <p><i class="fas fa-users"></i>
                     {% for u in communaute.abonnes.all %}
-                        {{ u.get_username }}-
+                        {% if request.user == communaute.createur  %}
+                        <a span href="{% url 'ajouter_CM' communaute_id=communaute.id user_id=u.id %}" data-toggle="tooltip"  {% if u in communaute.list_CMs.all %}title="Retirer l'utilisateur de la liste des CMS" style
+                           ="opacity: 100%"{% else %}title="Ajouter l'utilisateur à la liste des CMS" style="opacity: 30%"
+                           {% endif %}>
+                                {{ u.get_username }}
+                        </a>
+                        -
+                        {% else %}
+
+                            {{ u.get_username }}-
+
+                        {% endif %}
                     {% endfor %}
                 </p>
             </div>
@@ -46,7 +57,7 @@
             {% endif %}<br>
 
             {# Section pour fermer/détruire une communauté si le créateur est l'utilisateur#}
-            {% if communaute.createur == request.user or request.user.is_superuser %}
+            {% if request.user in communaute.list_CMs.all or request.user.is_superuser %}
                 <a span href="{% url 'detruire' communaute.id %}" data-toggle="tooltip" title="Supprimer cette communauté!"><i class="fas fa-trash-alt" style="float:right; opacity: 50%; font-size: 25px"></i></a>
                 {% if communaute.ferme %}
                 <a span href="{% url 'fermer' communaute.id %}" data-toggle="tooltip" title="Ouvrir cette communauté"><i class="fas fa-lock" style="float:right;  font-size: 25px"></i></a>

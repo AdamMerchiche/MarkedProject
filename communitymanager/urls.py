@@ -8,6 +8,7 @@ urlpatterns = [
     path('fermer/<int:communaute_id>', views.fermer_communaute, name="fermer"),
     path('fermer_invisible/<int:communaute_id>', views.fermer_invisible_communaute, name="fermer_invisible"),
     path('fermer/<int:communaute_id>/<int:user_id>', views.bannir, name="bannir"),
+    path('ajouter_CMs/<int:communaute_id>/<int:user_id>', views.ajouter_CM, name="ajouter_CM"),
     path('detruire/<int:communaute_id>', views.detruire_communaute, name="detruire"),
     path('communaute/<int:communaute_id>/', views.communaute, name="communaute"),
     path('communaute/post/<int:post_id>', views.commentaire, name="post"),

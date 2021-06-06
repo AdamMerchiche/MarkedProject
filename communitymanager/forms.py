@@ -87,21 +87,13 @@ class CommunauteForm(forms.ModelForm):
         nouvelle_communaute.save()
         return nouvelle_communaute
 
-    def modifCommunaute(self, id):
-        cleaned_data = self.clean()
-        modif_communaute = Communaute.objects.filter(id=id)
-        modif_communaute.update(name=cleaned_data.get('name'),
-                                description=cleaned_data.get('description'),
-                                ferme=cleaned_data.get('ferme'),
-                                )
-        return modif_communaute
 
 
 class ModificationCommunauteForm(forms.ModelForm):
     class Meta:
         model = Communaute
         exclude = ["createur", "abonnes",
-                   "ferme_invisible"]  # Possible de modifier la description, le titre, et de bannir des abonnés de la commu
+                   "ferme_invisible", "list_CMs"]  # Possible de modifier la description, le titre, et de bannir des abonnés de la commu
 
 
 class FiltragePostCommunauteForm(forms.Form):
