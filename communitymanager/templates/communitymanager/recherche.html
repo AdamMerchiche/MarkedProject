@@ -7,21 +7,39 @@
 {% block h3 %}
 
 {# Affichage des communautes #}
-<hr>
-<h2>Communaute{{communautes|pluralize}}</h2><br>
-{% for communaute, nb_posts_non_lus in communautes %}
-    {% include "communitymanager/une_communaute.html" %}
-{% empty %}
+{% if communautes %}
+    <hr>
+    <h2>Dans Communaute{{communautes|pluralize}}</h2><br>
+    {% for communaute, nb_posts_non_lus in communautes %}
 
-{% endfor %}
+        {% include "communitymanager/une_communaute.html" %}
+    {% endfor %}
+{% endif %}
+
+{% if communautes_par_createur %}
+    <hr>
+    <h2>Dans Communaute{{communautes|pluralize}} par createur</h2>
+    {% for communaute, nb_posts_non_lus in communautes_par_createur %}
+        {% include "communitymanager/une_communaute.html" %}
+    {% endfor %}
+{% endif %}
+
 
 {# Affichage des posts #}
-<hr>
-<h2>Post{{posts|pluralize}}</h2>
-{% for post in posts %}
-    {% include 'communitymanager/un_post.html' with bg_color="transparent" btn_like=True %}
-{% empty %}
+{% if posts %}
+    <hr>
+    <h2>Post{{posts|pluralize}}</h2>
+    {% for post in posts %}
+        {% include 'communitymanager/un_post.html' with bg_color="transparent" btn_like=True %}
+    {% endfor %}
+{% endif %}
 
-{% endfor %}
+{% if communautes_par_createur %}
+    <hr>
+    <h2>Dans Post{{posts_par_auteur|pluralize}} par auteur</h2>
+    {% for post in posts_par_auteur %}
+        {% include 'communitymanager/un_post.html' with bg_color="transparent" btn_like=True %}
+    {% endfor %}
+{% endif %}
 
 {% endblock %}

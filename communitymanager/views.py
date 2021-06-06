@@ -439,25 +439,55 @@ def recherche(request):
     except:
         redirect('accueil')                             #permet de bloquerl'accès forcé par l'url
 
+    communautes, posts, communautes_par_createur,posts_par_auteur = resultats_recherche(large_query, request)
+    return render(request, 'communitymanager/recherche.html', locals())
 
-    #Traitement de la recherche des communaute
+
+
+
+
+#Fonction de traitement de la recherche pour alleger la vue
+def resultats_recherche(large_query, request):
+    # Traitement de la recherche des communaute
     communautes = Communaute.objects.filter(
         Q(name__icontains=large_query) |
         Q(description__icontains=large_query))
     nb_posts_non_lus = []
     for i in range(len(communautes)):
         if request.user == communautes[i].createur:
-            nb_posts_non_lus.append(Post.objects.filter(communaute=communautes[i]).exclude(lecteurs__username=request.user.username).count())
+            nb_posts_non_lus.append(Post.objects.filter(communaute=communautes[i]).exclude(
+                lecteurs__username=request.user.username).count())
         else:
-            nb_posts_non_lus.append(Post.objects.filter(communaute=communautes[i], visible=True).exclude(lecteurs__username=request.user.username).count())
+            nb_posts_non_lus.append(Post.objects.filter(communaute=communautes[i], visible=True).exclude(
+                lecteurs__username=request.user.username).count())
     communautes = [(communautes[i], nb_posts_non_lus[i]) for i in range(len(communautes))]
 
-    #Traitement de la recherche des communaute des posts
-    posts = Post.objects.filter(
-            Q(title__icontains=large_query) |
-            Q(description__icontains=large_query))
+    communautes_par_createur = Communaute.objects.filter(
+        Q(createur__username=large_query))
+    nb_posts_non_lus_createur = []
+    for i in range(len(communautes_par_createur)):
+        if request.user == communautes_par_createur[i].createur:
+            nb_posts_non_lus_createur.append(Post.objects.filter(communaute=communautes_par_createur[i]).exclude(
+                lecteurs__username=request.user.username).count())
+        else:
+            nb_posts_non_lus_createur.append(Post.objects.filter(communaute=communautes_par_createur[i],
+                                                                 visible=True).exclude(lecteurs__username=request.user.username).count())
+    communautes_par_createur = [(communautes_par_createur[i], nb_posts_non_lus_createur[i]) for i in range(len(communautes_par_createur))]
 
-    return render(request, 'communitymanager/recherche.html', locals())
+    # Traitement de la recherche des communaute des posts
+    posts = Post.objects.filter(
+        Q(title__icontains=large_query) |
+        Q(description__icontains=large_query))
+
+    posts_par_auteur = Post.objects.filter(
+        Q(auteur__username=large_query))
+
+
+    return communautes,posts,communautes_par_createur,posts_par_auteur
+
+
+
+
 
 # Permet à l'utilisateur de marquer un post comme non lu
 @login_required(login_url='/accounts/login/')
@@ -469,3 +499,5 @@ def marquer_non_lu(request, post_id):
         post.lecteurs.remove(request.user)
 
     return redirect(reverse('communaute', args=[post.communaute.id]))
+
+
