@@ -29,6 +29,14 @@
 
             <div class="form_fieldsH form_block">
                 <p class="form_fieldsH">
+                    <label class="form_fieldsLabel" >CMs :</label><br>
+                    {{ form.list_CMs }}
+                </p>
+                <div class="errorPr"><p>{{ form.list_CMs.errors }}</p></div>
+            </div><br>
+
+            <div class="form_fieldsH form_block">
+                <p class="form_fieldsH">
                     <label class="form_fieldsLabel" >Utilisateurs bannis :</label><br>
                     {{ form.list_bannis }}
                 </p>

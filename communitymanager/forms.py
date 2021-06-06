@@ -84,7 +84,7 @@ class PostForm(forms.ModelForm):
 class CommunauteForm(forms.ModelForm):
     class Meta:
         model = Communaute
-        exclude = ["list_bannis", "abonnes", "ferme_invisible", 'createur']
+        exclude = ["list_bannis", "abonnes", "ferme_invisible", 'createur', 'list_CMs']
 
     def save(self, user):
         nouvelle_communaute = super().save(commit=False)
@@ -98,7 +98,7 @@ class ModificationCommunauteForm(forms.ModelForm):
     class Meta:
         model = Communaute
         exclude = ["createur", "abonnes",
-                   "ferme_invisible", "list_CMs"]  # Possible de modifier la description, le titre, et de débannir les utilisateurs
+                   "ferme_invisible"]  # Possible de modifier la description, le titre, et de débannir les utilisateurs
 
 
 class FiltragePostCommunauteForm(forms.Form):
