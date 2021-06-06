@@ -108,6 +108,7 @@ def communaute(request, communaute_id):
 
     elif not Communaute.objects.get(id=communaute_id).ferme_invisible:
         date_now = timezone.now()
+        posts = Post.objects.filter(communaute_id=communaute_id)
         # Données et form pour recherche générale
         action_large_search = reverse('feed_abonnements')
         large_search = SimpleSearchForm(request.POST or None, prefix='large_search')
@@ -122,7 +123,6 @@ def communaute(request, communaute_id):
 
         # Form pour filtrer les posts affiches par priorites et evenementiel
         if form_filtrage.is_valid():
-            posts = Post.objects.filter(communaute_id=communaute_id)
             et = form_filtrage.cleaned_data['type_filtrage']
             min_priorite = form_filtrage.cleaned_data['min_priorite']
             que_evt = form_filtrage.cleaned_data['que_evt']
