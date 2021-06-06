@@ -441,6 +441,7 @@ def liker(request, post_id):
         post.likes.remove(request.user)
     else:
         post.likes.add(request.user)
+    post.save()
 
     return redirect(reverse('post', args=[post_id]))
 
@@ -530,6 +531,7 @@ def marquer_non_lu(request, post_id, url_name):
     # Mise à jour de la liste des utilisateurs qui ont lu le post
     if request.user in post.lecteurs.all():
         post.lecteurs.remove(request.user)
+        post.save()
 
     # Redirige vers la page qui a fait appel à cette view
     if url_name == 'communaute':
