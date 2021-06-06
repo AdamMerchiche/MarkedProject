@@ -7,7 +7,7 @@ from django.http import Http404
 from django.db.models import Q
 
 # Renvoie le feed d'un utilisateur, avec tous les posts des communautés auxquelles il est abonné
-@login_required(login_url='/accounts/login/')
+@login_required()
 def accueil(request):
     date_now = timezone.now()
 
