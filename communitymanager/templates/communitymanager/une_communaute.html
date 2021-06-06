@@ -51,7 +51,7 @@
                 {%endif%}
                 Vous avez <b>{{ nb_posts_non_lus }} posts</b> non lus.
             {% else %}
-                {%if not request.user in communaute.list_bannis.all%}
+                {%if not request.user.id in communaute.list_bannis.all%}
                     <a span href="{% url 'abonnements' communaute.id %}" data-toggle="tooltip" title="Abonnez-vous !"><i class="far fa-heart pull-right"></i></a><br>
                 {%else%}
                     Vous avez été banni.e de cette Communauté.<br>
@@ -60,11 +60,11 @@
 
             {# Section pour fermer/détruire une communauté si le créateur est l'utilisateur#}
             {% if request.user in communaute.list_CMs.all or request.user.is_superuser %}
-                <a span href="{% url 'detruire' communaute.id %}" data-toggle="tooltip" title="Supprimer cette communauté!"><i class="fas fa-trash-alt" style="float:right; opacity: 50%; font-size: 25px"></i></a>
+                <a span href="{% url 'detruire' communaute.id %}"  data-toggle="tooltip" title="Supprimer cette communauté!"><i class="fas fa-trash-alt" style="float:right; opacity: 50%; font-size: 25px;"></i></a>
                 {% if communaute.ferme %}
-                <a span href="{% url 'fermer' communaute.id %}" data-toggle="tooltip" title="Ouvrir cette communauté"><i class="fas fa-lock" style="float:right;  font-size: 25px"></i></a>
+                <a span href="{% url 'fermer' communaute.id %}" data-toggle="tooltip" title="Ouvrir cette communauté"><i class="fas fa-lock" style="float:right;padding-right: 15px;  font-size: 25px"></i></a>
                 {%else%}
-                <a span href="{% url 'fermer' communaute.id %}" data-toggle="tooltip" title="Fermer cette communauté"><i class="fas fa-lock-open" style="float:right;  font-size: 25px"></i></a>
+                <a span href="{% url 'fermer' communaute.id %}" data-toggle="tooltip" title="Fermer cette communauté"><i class="fas fa-lock-open" style="float:right; padding-right: 15px;  font-size: 25px"></i></a>
                 {%endif%}
                 {% if request.user.is_superuser%}
                     {% if communaute.ferme_invisible %}
@@ -78,3 +78,6 @@
     </div>
     </div>
     <hr class="my-4"/>
+
+
+

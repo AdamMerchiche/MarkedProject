@@ -331,12 +331,12 @@ def creation_communaute(request):
         request.POST or None)
     form.fields['list_CMs'].initial = request.user
     if form.is_valid():
-        form.save(user=request.user)
         communaute = form.save(user=request.user)
         # Le créateur est directement abonné et ajouté à la liste des CMs
-        communaute.abonnes.add(request.user)
-        communaute.list_CMs.add(request.user)
         communaute.save()
+        communaute.list_CMs.add(request.user)
+        for u in communaute.list_CMs.all():
+            communaute.abonnes.add(u)
         envoi = True
         return redirect('list_communautes')
 
@@ -386,6 +386,7 @@ def modification_communaute(request, communaute_id):
             #On supprime l'utilisateur banni de la liste des abonnés
             for u in communaute.list_bannis.all():
                 communaute.abonnes.remove(u)
+            communaute.save()
             envoi = True
             return redirect(liste_communautes)
     else:
