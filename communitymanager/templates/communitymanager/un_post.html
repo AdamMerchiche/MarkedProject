@@ -8,7 +8,7 @@
 
 <div class="slideInContenu">
 {% if post.visible or post.communaute.createur == request.user %} {# Le post n'est visible selon son statut de visibilité ou par le créateur de la communauté #}
-    <div class="{%if post.avertissement%} alert alert-warning {%endif%} {{ bg_color }} mb-4">
+    <div class="{{ bg_color }} mb-4">
 
     <div class="row py-2 px-1">
 
@@ -73,16 +73,24 @@
                     {% endif %}"
                         href="{% url "post" post_id=post.id %}" data-toggle="tooltip" title="Accéder au post">
                         {% if post.avertissement %}
-                            <div class="cylon_eye">{{ post.title|capfirst }}</div>
-                        {% else %}
-                            {{ post.title|capfirst }}
-                        {% endif %}
-                    </a>
-                    {% if user == post.auteur %}
+                            <div class="view_port ">
+  <div class="polling_message text-center" >
+   {{ post.title|capfirst }}                    {% if user == post.auteur %}
                         <a href="{% url 'update_post' post.id %}" data-toggle="tooltip" title="Modifier le POST">
                         <i class="far fa-edit"></i>
                         </a>
                     {% endif %}
+  </div><div class="cylon_eye"></div>
+</div>
+                        {% else %}
+                            {{ post.title|capfirst }}                    {% if user == post.auteur %}
+                        <a href="{% url 'update_post' post.id %}" data-toggle="tooltip" title="Modifier le POST">
+                        <i class="far fa-edit"></i>
+                        </a>
+                    {% endif %}
+                        {% endif %}
+                    </a>
+
                 </span>
             </h3>
             <span class="m-b-15 d-block"> <p class="text-justify">
