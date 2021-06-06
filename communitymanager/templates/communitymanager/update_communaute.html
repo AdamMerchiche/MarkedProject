@@ -9,6 +9,7 @@
 <a href="{% url "list_communautes" post_id=post.id %}">Retour aux Communautés </a>
 {% block h3 %}{% if envoi %}Votre communauté a bien été modifié !{% else %}
     EDITEZ votre Post !{% endif %}
+            {# La modification n'est possible que par les CMs #}
     {% if alert_flag %}
         <script>alert("Vous n'êtes pas le créateur de cette Communauté! Retournez à votre feed.")
         window.location.href = "{% url 'feed_abonnements' %}"

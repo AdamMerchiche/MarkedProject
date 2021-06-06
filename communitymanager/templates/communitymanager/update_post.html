@@ -9,8 +9,9 @@
 <a href="{% url "post" post_id=post.id %}">Retour aux POSTs de la communauté </a>
 {% block h3 %}{% if envoi %}Votre post a bien été modifié !{% else %}
     EDITEZ votre Post !{% endif %}
+    {# La modification n'est possible que par l'auteur du POST #}
     {% if alert_flag %}
-        <script>alert("Vous n'êtes pas le créateur de ce POST! Retournez à votre feed.")
+        <script>alert("Vous n'êtes pas l'auteur de ce POST! Retournez à votre feed.")
         window.location.href = "{% url 'feed_abonnements' %}"
         </script>
     {% endif %}

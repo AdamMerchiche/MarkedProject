@@ -6,6 +6,7 @@
     <div class="slideIn">
     <div class="communaute table-hover">
         <h1><b>
+                {# Si l'utilisateur est abonné, et que la communauté n'est pas fermée invisible, on aura accès au contenu de la Communauté#}
             {% if request.user in communaute.abonnes.all %}
                 {%if not communaute.ferme_invisible%}
                      <a href="{% url 'communaute' communaute.id %}" data-toggle="tooltip" title="Lire les posts">{{ communaute.name|capfirst }}</a>
@@ -15,7 +16,7 @@
             {% else %}
                 {{ communaute.name|capfirst }}
             {% endif %}
-
+        {# Modification de communauté possible si l'utilisateur est un CM #}
             {% if request.user in communaute.list_CMs.all %}
                 <a href="{% url 'update_communaute' communaute.id %}" data-toggle="tooltip" title="Modifier cette communauté">
                     <i class="far fa-edit" style="opacity: 50%"></i>
@@ -26,6 +27,7 @@
             <div class="text-muted">
                 <p><i class="fas fa-users"></i>
                     {% for u in communaute.abonnes.all %}
+                                {# Ajout d'un CM en cliquant sur son nom. #}
                         {% if request.user == communaute.createur  %}
                         <a span href="{% url 'ajouter_CM' communaute_id=communaute.id user_id=u.id %}" data-toggle="tooltip"  {% if u in communaute.list_CMs.all %}title="Retirer l'utilisateur de la liste des CMS" style
                            ="opacity: 100%"{% else %}title="Ajouter l'utilisateur à la liste des CMS" style="opacity: 30%"

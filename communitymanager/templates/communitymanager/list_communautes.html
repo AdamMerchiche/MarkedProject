@@ -1,23 +1,30 @@
 {% extends "base.html" %}
 {% load staticfiles %}
+{% comment %}
+        Template permettant l'affichage de la liste des communautés existantes, avec des attributs spécifiques : les abonnés;
+        le nombre de posts non lus, et la possibilité, en fonction du statut de l'utilisateur, de fermer/bloquer/supprimer
+        une communauté.
+{% endcomment %}
 
 {% block title %}ACCUEIL : Voici la liste de vos communautés préférées !{% endblock title %}
 
 {% block h1 %} Bienvenue {{ request.user.get_username }},  sur la page des communautés  ! {% endblock h1 %}
 
 {% block h3 %}
-{% include 'communitymanager/search_form.html' with search_form=search list_objet=initial_list %}
+    {% include 'communitymanager/search_form.html' with search_form=search list_objet=initial_list %}
 
-{% for communaute, nb_posts_non_lus in communautes %}
-    {% include "communitymanager/une_communaute.html" %}
-{% empty %}
-    <div class="slideIn">
-        <div class="communaute table-hover">
-        Créer la première communauté ?
-        <a href="{% url 'nouvelle_communaute'  %}"><i class="far fa-edit"></i></a>
+    {# On affiche toutes les communautés existantes ainsi que  le nombre de posts non lus #}
+    {% for communaute, nb_posts_non_lus in communautes %}
+        {% include "communitymanager/une_communaute.html" %}
+    {% empty %}
+        {# Effet animation #}
+        <div class="slideIn">
+            <div class="communaute table-hover">
+                Créer la première communauté ?
+                <a href="{% url 'nouvelle_communaute' %}"><i class="far fa-edit"></i></a>
+            </div>
         </div>
-    </div>
-{% endfor %}
+    {% endfor %}
 
 {% endblock h3 %}
 

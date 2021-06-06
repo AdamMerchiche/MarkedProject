@@ -1,6 +1,11 @@
+{% comment %}
+        Template permettant l'affichage d'un formulaire de création d'un POST. Il permet de mettre en forme l'affichage du formulaire,
+        et de renvoyer les erreurs adéquates.
+
+    {% endcomment %}
 {% csrf_token %}
 <div class="form_fieldsH form_block">
-    <p class="form_fieldsH form_fieldsTitle" >
+    <p class="form_fieldsH form_fieldsTitle">
         <label class="form_fieldsLabel">Titre :</label><br>
         {{ form.title }}
     </p>
@@ -11,29 +16,33 @@
         <label class="form_fieldsLabel" for="id_priorite">Importance :</label><br>
         <select class="form_fieldsH" name="priorite" id="id_priorite" required="required">
             {% for prt in list_priorite %}
-                <option class="" value="{{prt.pk}}" {% if forloop.counter == 2 %} selected="selected"{% endif %}>{{prt.labels|capfirst}}</option>
+                <option class="" value="{{ prt.pk }}" {% if forloop.counter == 2 %}
+                        selected="selected"{% endif %}>{{ prt.labels|capfirst }}</option>
             {% endfor %}
         </select></p>
     <div class="errorPr"><p>{{ form.priorite.errors }}</p></div>
 
     <p class="form_fieldsH form_fieldsTitle">
         <label class="form_fieldsLabel" for="id_communaute">Communaute :</label><br>
-        <input class="" id="id_communaute" name="commu" list="list_com" required="required" {% if form.commu.value != none %} value="{{ form.commu.value }}" {%endif%}>
+        <input class="" id="id_communaute" name="commu" list="list_com" required="required"
+                {% if form.commu.value != none %} value="{{ form.commu.value }}" {% endif %}>
         <datalist class="" id="list_com">
             {% for communaute in communautes %}
-                <option class="form_fieldsTitle" value="{{communaute.name}}">
+                <option class="form_fieldsTitle" value="{{ communaute.name }}">
             {% endfor %}
         </datalist>
     </p>
-    <div class="errorPr"><p>{{ form.commu.errors }}</p></div><hr>
+    <div class="errorPr"><p>{{ form.commu.errors }}</p></div>
+    <hr>
 </div>
 
 <div class="form_fieldsH form_block">
     <p class="form_fieldsH">
-        <label class="form_fieldsLabel" >Contenu du Post :</label><br>
+        <label class="form_fieldsLabel">Contenu du Post :</label><br>
         {{ form.description }}
     </p>
-    <div class="errorPr"><p>{{ form.description.errors }}</p></div><hr>
+    <div class="errorPr"><p>{{ form.description.errors }}</p></div>
+    <hr>
 </div>
 
 <div class="form_fieldsH form_block">
@@ -45,7 +54,8 @@
 
     <p class="form_fieldsH">
         <label class="form_fieldsLabel" for="id_date_evenement">Date evenement (AAAA-MM-JJ HH:MM) :</label>
-        <input type="datetime-local" min="{{ date_now }}" name="date_evenement" id="id_date_evenement" value="{{ form.date_evenement.value| date:'c' }}">
+        <input type="datetime-local" min="{{ date_now }}" name="date_evenement" id="id_date_evenement"
+               value="{{ form.date_evenement.value| date:'c' }}">
     </p>
     <div class="errorPr"><p>{{ form.date_evenement.errors }}</p></div>
 
@@ -55,14 +65,14 @@
     </p>
     <div class="errorPr"><p>{{ form.collant.errors }}</p></div>
 
-
-    {% if superuser%}
-    <p class="form_fieldsH">
-        <label class="form_fieldsLabel">À cocher si c'est un avertissement :</label>
-        {{ form.avertissement }}
-    </p>
-    <div class="errorPr"><p>{{ form.avertissement.errors }}</p></div>
-    {% endif%}
+    {# On rend impossible la création d'un post avertissement si l'utilisateur n'est pas l'admin #}
+    {% if superuser %}
+        <p class="form_fieldsH">
+            <label class="form_fieldsLabel">À cocher si c'est un avertissement :</label>
+            {{ form.avertissement }}
+        </p>
+        <div class="errorPr"><p>{{ form.avertissement.errors }}</p></div>
+    {% endif %}
 
     <input class="" type="submit" value="Publier"/>
 </div>

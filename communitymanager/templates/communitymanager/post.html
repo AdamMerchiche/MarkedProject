@@ -1,4 +1,8 @@
-{% extends "base.html" %}
+ {% extends "base.html" %}
+{% comment %}
+        Template permettant l'affichage de l'intégralité du POST ainsi que les commentaires qui lui sont associés.
+        Un utilisateur, en fonction de son niveau d'autorisation, aura accès à plusieurs fonctionnalités.
+{% endcomment %}
 
 {% block title %} Voici la liste des commentaires !{% endblock title %}
 
@@ -19,8 +23,8 @@
                     <h4>
                         <i class="fas fa-user-edit"></i> {{ commentaire.auteur }}
                         {% if request.user in post.communaute.list_CMs.all %}
-                        {# possibilité de Bannir un utilisateur si l'utilisateur est toujours dans la communauté #}
-                            {% if not commentaire.auteur.is_superuser and not commentaire.auteur.id in post.communaute.list_CMs.user_id %}
+                        {# possibilité de Bannir un utilisateur si l'utilisateur est toujours dans la communauté, si l'auteur n'est pas un CM, et si l'auteur du commentaire est dans la liste des abonnés #}
+                            {% if not commentaire.auteur.is_superuser and not commentaire.auteur.id in post.communaute.list_CMs.user_id and commentaire.auteur in post.communaute.abonnes.all %}
                                 <a span href="{% url 'bannir' communaute_id=post.communaute.id user_id=commentaire.auteur.id %}">
                                     <i class="fas fa-ban"></i>
                                 </a>
@@ -28,6 +32,7 @@
                         {% endif %}
                         <small><i>{{ commentaire.date_creation }}</i></small>
                         {% if request.user in post.communaute.list_CMs.all %}
+                        {# Si l'utilisateur est un CM, il pourra rendre visible/invisible un commentaire  #}
                             {% if commentaire.invisible %}
                                 <a span href="{% url 'visibilite_commentaire' commentaire.id %}"><i class="far fa-eye-slash"></i></a>
                             {% else %}
