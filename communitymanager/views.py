@@ -496,6 +496,8 @@ def resultats_recherche(request, form_field):
     if len(form_field)>1:
         if form_field['is_abonnement']:
             accessible_communautes = request.user.abonnements.all()
+        else:
+            accessible_communautes = Communaute.objects.all()
     else:
         accessible_communautes = Communaute.objects.all()
 
