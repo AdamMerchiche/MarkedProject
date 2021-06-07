@@ -493,8 +493,9 @@ def resultats_recherche(request, form_field):
     large_query = form_field['query']
 
     # Initialisation des communautes dans lesquelles on cherche selon si c'est dans les abonnements ou non de l'utilisateur
-    if len(form_field) and form_field['is_abonnement']:
-        accessible_communautes = request.user.abonnements.all()
+    if len(form_field)>1:
+        if form_field['is_abonnement']:
+            accessible_communautes = request.user.abonnements.all()
     else:
         accessible_communautes = Communaute.objects.all()
 
